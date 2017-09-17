@@ -1,0 +1,21 @@
+.views-field-row-admintools{
+  display: flex;
+  flex-wrap: nowrap;
+
+}
+
+
+a.vat-button{
+  padding: 2px 8px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+
+td.views-field.views-field-row-admintools a {
+  visibility: hidden;
+}
+
+tr:hover td.views-field.views-field-row-admintools a {
+  visibility: visible;
+}

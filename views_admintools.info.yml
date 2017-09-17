@@ -1,0 +1,7 @@
+name: Views Admintools
+type: module
+description: Provides buttons to create your own admin views.
+package: Views
+core: 8.x
+dependencies:
+  - drupal:views

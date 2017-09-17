@@ -1,0 +1,7 @@
+views_admintools.content:
+  path: '/admin/views_admintools'
+  defaults:
+    _controller: '\Drupal\views_admintools\Controller\ViewsAdmintoolsController::content'
+    _title: 'Views Admintools Controller'
+  requirements:
+    _permission: 'access content'
