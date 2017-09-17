@@ -10,8 +10,6 @@
 ### Class
 Add an CSS-Class to the Button. Default is **
 
-## Made your own button:
+### Make your own button:
 
 
-
-##
