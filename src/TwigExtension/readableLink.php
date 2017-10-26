@@ -47,7 +47,7 @@
      */
     public static function readableLink($string) {
 
-      if( empty($string)){
+      if( empty($string) ){
 
         $link = false;
       }
