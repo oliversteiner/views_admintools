@@ -47,23 +47,31 @@
      */
     public static function readableLink($string) {
 
-      $url = $string;
-      $readable_url = $string;
+      if( empty($string)){
 
-      // make readable Text
-      $readable_url = str_replace('https://www.', '', $readable_url);
-      $readable_url = str_replace('http://www.', '', $readable_url);
-      $readable_url = str_replace('https://', '', $readable_url);
-      $readable_url = str_replace('http://', '', $readable_url);
+        $link = false;
+      }
+      else{
+        $url = $string;
+        $readable_url = $string;
+
+        // make readable Text
+        $readable_url = str_replace('https://www.', '', $readable_url);
+        $readable_url = str_replace('http://www.', '', $readable_url);
+        $readable_url = str_replace('https://', '', $readable_url);
+        $readable_url = str_replace('http://', '', $readable_url);
 
 
-      // set options
-      $option_target = 'target="_blank"';
-      $option_no_follow = 'rel="nofollow"';
+        // set options
+        $option_target = 'target="_blank"';
+        $option_no_follow = 'rel="nofollow"';
 
 
-      // generate link
-      $link = '<a href="' . $url . '" ' . $option_target . ' ' . $option_no_follow . '>' . $readable_url . '</a>';
+        // generate link
+        $link = '<a href="' . $url . '" ' . $option_target . ' ' . $option_no_follow . '>' . $readable_url . '</a>';
+
+      }
+
 
       return $link;
 
