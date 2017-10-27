@@ -4,8 +4,10 @@
 
   use Drupal\Core\Form\FormStateInterface;
   use Drupal\node\Entity\NodeType;
+  use Drupal\taxonomy\Entity\Vocabulary;
   use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
   use Drupal\views\Views;
+  use function GuzzleHttp\Psr7\str;
 
 
   /**
@@ -33,13 +35,14 @@
 
       // Bundle
       $options['header_node_type'] = ['default' => 'article'];
+      $options['header_vocabulary'] = ['default' => ''];
 
 
       // Buttons
       $options['header_button_new'] = ['default' => TRUE];
       $options['header_button_sort'] = ['default' => FALSE];
-      $options['header_button_taxonomy'] = ['default' => FALSE];
       $options['header_button_text'] = ['default' => ''];
+      $options['header_destination'] = ['default' => ''];
 
 
       return $options;
@@ -52,11 +55,21 @@
       parent::buildOptionsForm($form, $form_state);
 
 
-      // load all bundles
+      // Nodes Types
       $types = NodeType::loadMultiple();
       $bundle_options = [];
+
       foreach ($types as $key => $type) {
         $bundle_options[$key] = $type->label();
+      }
+
+      // Taxonomy
+      $types = Vocabulary::loadMultiple();
+      $vocabulary_options = [];
+      $vocabulary_options[''] = '';
+
+      foreach ($types as $key => $type) {
+        $vocabulary_options[$key] = $type->label();
       }
 
       // Which Node Type ?
@@ -81,9 +94,16 @@
         '#default_value' => $this->options['pager_embed'],
       ];
 
+      // Destination
+      $form['header_destination'] = [
+        '#title' => $this->t('Destination'),
+        '#type' => 'textfield',
+        '#default_value' => $this->options['header_destination'],
+      ];
+
       // welche buttons?
       $form['text'] = [
-        '#markup' => $this->t('Choose Buttons:'),
+        '#markup' => $this->t('Buttons:'),
       ];
       // neu
       $form['header_button_new'] = [
@@ -98,18 +118,13 @@
         '#default_value' => $this->options['header_button_sort'],
       ];
       // taxonomy
-      $form['header_button_taxonomy'] = [
-        '#title' => $this->t('Taxonomy, comma-seperated'),
-        '#type' => 'textfield',
-        '#default_value' => $this->options['header_button_taxonomy'],
+      $form['header_vocabulary'] = [
+        '#title' => $this->t('Taxonomy'),
+        '#type' => 'select',
+        '#default_value' => $this->options['header_vocabulary'],
+        '#options' => $vocabulary_options,
       ];
 
-      // text
-      $form['text'] = [
-        '#title' => $this->t('Text'),
-        '#type' => 'textfield',
-        '#default_value' => $this->options['header_button_text'],
-      ];
 
     }
 
@@ -120,17 +135,33 @@
 
       if (!$empty || !empty($this->options['empty'])) {
 
-        // Get Current View
-        $view_id = \Drupal::routeMatch()->getParameter('view_id');
-        $destination = str_replace('_', '-', $view_id);
+
+
+        // Destination
+        if (empty($this->options['header_destination'])) {
+          $view_id = \Drupal::routeMatch()->getParameter('view_id');
+          $destination = str_replace('_', '-', $view_id);
+        }
+        else{
+          $destination = $this->options['header_destination'];
+        }
+
 
         // Taxonomy
-        if($this->options['header_button_taxonomy'] != false){
-          $taxonomy = explode(',', $this->options['header_button_taxonomy']);
+        if($this->options['header_vocabulary'] != false){
+          $taxonomy_term_name = explode(',', $this->options['header_vocabulary']);
 
         }
         else{
-          $taxonomy = false;
+          $taxonomy_term_name = false;
+        }
+
+        $taxonomy = [];
+
+        $i = 0;
+        foreach ($taxonomy_term_name as $item){
+          $taxonomy[$i]['machine_name'] = $item;
+          $taxonomy[$i]['title'] = self::_properTitle($item);
         }
 
 
@@ -168,5 +199,13 @@
       return '';
     }
 
+
+    private function _properTitle($string){
+
+      $string = str_replace('_', ' ', $string);
+      $string = ucwords($string);
+
+      return $string;
+    }
 
   }
