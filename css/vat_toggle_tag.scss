@@ -34,7 +34,7 @@
   border: 1px solid $color-smmg-tag-border-active;
 }
 // remove '*'
-.vat-toggle-tag.active span {
+.vat-toggle-tag span.active {
   display: none;
 }
 .vat-toggle-tag.active:hover {

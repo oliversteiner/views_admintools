@@ -1,21 +1,57 @@
-.views-field-row-admintools{
+.views-field-row-admintools {
   display: flex;
   flex-wrap: nowrap;
-
 }
-
-
-a.vat-button{
-  padding: 2px 8px;
+a.vat-button {
+  padding: 1px 4px;
   display: inline-block;
   margin-right: 4px;
+  font-size: 1em;
+  text-decoration: none;
 }
-
-
+.vat-button-sm {
+  font-size: 0.9em;
+}
+.vat-button-lg {
+  font-size: 1.3em;
+}
 td.views-field.views-field-row-admintools a {
   visibility: hidden;
 }
-
 tr:hover td.views-field.views-field-row-admintools a {
   visibility: visible;
+}
+.views-view-table a.link.vat-button,
+.views-view-table a.vat-button {
+  text-decoration: none;
+}
+.vat-button span.glyphicon,
+.vat-button i.fa {
+  opacity: 0.5;
+  margin-right: 2px;
+  color: gray;
+}
+.vat-button:hover span.glyphicon,
+.vat-button i.fa:hover {
+  opacity: 1;
+}
+.vat-button:hover span.glyphicon-pencil,
+.vat-button:hover i.fa-pencil {
+  color: green;
+}
+.vat-button:hover span.glyphicon-trash,
+.vat-button:hover i.fa-trash {
+  color: red;
+}
+
+
+.vat-views-option-group {
+  border-bottom: solid 1px gainsboro;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.vat-views-option-inline {
+  display: inline-block;
+  padding-right: 20px;
 }
