@@ -10,7 +10,6 @@
 
 
   use Drupal\Core\Entity\EntityInterface;
-  use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
   use Drupal\Core\Field\FieldItemListInterface;
   use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
   use Drupal\Core\Form\FormStateInterface;
@@ -79,70 +78,23 @@
     public function viewElements(FieldItemListInterface $items, $langcode) {
       $elements = [];
 
-      $entity = $items->getFieldDefinition();
       $field_name = $items->getFieldDefinition()->getName();
-
       $setting = $items->getFieldDefinition()->getSetting('handler_settings');
       $target_bundles = $setting['target_bundles'];
       $target_bundle = reset($target_bundles); // First Element's Value*/
-
       $node = $items->getEntity();
-
       $target_nid = $node->id();
-      $bundle = $node->bundle();
-      $entity_type = 'node';
-
-      /*
-            // Load Node
-            $node = \Drupal::entityTypeManager()
-              ->getStorage('node')
-              ->load($node_id);
-
-            $bundle = $node->bundle();
-
-            // Get Field Definition
-            $entityManager = \Drupal::service('entity_field.manager');
-            $fields = $entityManager->getFieldDefinitions($entity_type, $bundle);
-            $field_definition = $fields[$field_name];
-
-            // target_bundles
-            $setting = $field_definition->getSetting('handler_settings');
-            $target_bundles = $setting['target_bundles'];
-
-            // get first item from array
-            $target_bundle = reset($target_bundles); // First Element's Value*/
-
-
-      // load Options
-      //  $vocabulary = $referencedEntity->label();
-
       $vocabulary = $target_bundle;
-      // init renderoutput
 
       // Default CSS Classes
       $default_classes = ['use-ajax', 'vat-toggle-tag'];
-
-     // kint($vocabulary);
-
-
-      // init renderoutput
-      $elements = [];
-
-      // Default CSS Classes
-      $default_classes = ['use-ajax', 'vat-toggle-tag'];
-
 
       $default_tags = \Drupal::entityTypeManager()
         ->getStorage('taxonomy_term')
         ->loadTree($vocabulary);
 
-
-      // ToDo: Check if multiple
       $active_tags = $node->get($field_name)
         ->getValue();
-
-
-     // kint($active_tags);
 
       // save only tid
       $active_tids = [];
@@ -150,16 +102,10 @@
         $active_tids[] = $active_tag['target_id'];
       }
 
-      kint($active_tids);
-
-
       foreach ($default_tags as $default_tag) {
 
         $term_id = $default_tag->tid;
         $term_name = $default_tag->name;
-
-
-     //   kint($term_name);
 
         // url for SubscriberController::toggleSubsciberTag'
         $url = Url::fromRoute('views_admintools.vat_toggle_tag',
@@ -168,9 +114,6 @@
             'term_tid' => $term_id,
             'field_name' => $field_name,
           ]);
-
-      //  kint($url);
-
 
         // class
         if (in_array($term_id, $active_tids)) {
@@ -181,9 +124,7 @@
         else {
           $label = $term_name;
           $class = $default_classes;
-
         }
-
 
         // build
         $elements[] = [
@@ -196,60 +137,39 @@
           ],
         ];
 
-
+      }
+      // Add new
+      if ($this->getSetting('add_tag')) {
+        $elements[] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#attributes' => [
+            'class' => 'vat-toggle-tag vat-toggle-tag-add',
+            'id' => $field_name . '-' . $target_nid . '-add-' . $vocabulary,
+            'data-vocabulary_id' => $vocabulary,
+          ],
+          '#value' => '<i class="fa fa-plus-circle" aria-hidden="true"></i>',
+        ];
       }
 
 
-
-              // Add new
-              if ($this->getSetting('add_tag')) {
-                $elements[] = [
-                  '#type' => 'html_tag',
-                  '#tag' => 'span',
-                  '#attributes' => [
-                    'class' => 'vat-toggle-tag vat-toggle-tag-add',
-                    'id' => $field_name . '-' . $target_nid . '-add-' . $vocabulary,
-                    'data-vocabulary_id' => $vocabulary,
-                  ],
-                  '#value' => '<i class="fa fa-plus-circle" aria-hidden="true"></i>',
-                ];
-              }
-
-
-              // remove
-              if ($this->getSetting('remove_tag')) {
-                $elements[] = [
-                  '#type' => 'html_tag',
-                  '#tag' => 'span',
-                  '#attributes' => [
-                    'class' => 'vat-toggle-tag vat-toggle-tag-remove',
-                    'id' => $field_name . '-' . $target_nid . '-add-' . $vocabulary,
-                    'data-vocabulary_id' => $vocabulary,
-                  ],
-                  '#value' => '<i class="fa fa-minus-circle" aria-hidden="true"></i>',
-                ];
-              }
+      // remove
+      if ($this->getSetting('remove_tag')) {
+        $elements[] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#attributes' => [
+            'class' => 'vat-toggle-tag vat-toggle-tag-remove',
+            'id' => $field_name . '-' . $target_nid . '-add-' . $vocabulary,
+            'data-vocabulary_id' => $vocabulary,
+          ],
+          '#value' => '<i class="fa fa-minus-circle" aria-hidden="true"></i>',
+        ];
+      }
 
 
-     //  $elements['#attached']['library'][] = 'views_admintools/views_admintools.vat_toggle_tag';
+        $elements['#attached']['library'][] = 'views_admintools/views_admintools.vat_toggle_tag';
 
-/*
-      $elements['add_tag'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#value' => 'test',
-      ];*/
-
- /*     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
-        $label = $entity->label();
-        // If the link is to be displayed and the entity has a uri, display a
-        // link.
-
-        kint($delta);
-
-          $elements[$delta] = ['#plain_text' => $label];
-        $elements[$delta]['#cache']['tags'] = $entity->getCacheTags();
-      }*/
 
       return $elements;
     }
