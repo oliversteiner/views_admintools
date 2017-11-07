@@ -73,7 +73,7 @@
       ];
 
       $form['group_by_class'] = [
-        '#title' => $this->t('CSS Class'),
+        '#title' => $this->t('Custom CSS Class'),
         '#type' => 'textfield',
         '#default_value' => $this->options['group_by_class'],
       ];

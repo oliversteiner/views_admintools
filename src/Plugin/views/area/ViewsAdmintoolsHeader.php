@@ -19,6 +19,8 @@
    */
   class ViewsAdmintoolsHeader extends TokenizeAreaPluginBase {
 
+    private $options;
+
     /**
      * {@inheritdoc}
      */

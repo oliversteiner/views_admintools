@@ -11,7 +11,6 @@ views_admintools.enable:
       css/views_admintools.css: {}
   js:
     js/views_admintools.js: {}
-
   dependencies:
     - core/jquery
     - core/drupalSettings
@@ -24,7 +23,18 @@ views_admintools.group_by:
       css/vat_group_by.css: {}
   js:
     js/vat_group_by.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
 
+
+views_admintools.vat_toggle_tag:
+  version: 1
+  css:
+    theme:
+      css/vat_toggle_tag.css: {}
+  js:
+    js/vat_toggle_tag.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings

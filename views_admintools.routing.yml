@@ -5,3 +5,24 @@ views_admintools.content:
     _title: 'Views Admintools Controller'
   requirements:
     _permission: 'access content'
+
+
+views_admintools.vat_toggle_tag:
+  path: '/admin/vat/toggle_tag/{target_nid}/{term_tid}/{field_name}'
+  defaults:
+    _controller: '\Drupal\views_admintools\Controller\VatToggleTagController::toggleTag'
+    _title: 'Views Admintools Controller'
+    target_nid: null
+    term_tid: null
+    field_name: null
+  requirements:
+    _permission: 'access content'
+
+
+views_admintools.sandbox:
+  path: '/admin/vat/sandbox'
+  defaults:
+    _controller: '\Drupal\views_admintools\Controller\VatController::sandboxPage'
+    _title: 'Views Admin Tools Sandbox Page'
+  requirements:
+    _permission: 'access content'

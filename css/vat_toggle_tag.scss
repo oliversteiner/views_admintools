@@ -1,0 +1,44 @@
+@import 'variables';
+.vat-toggletag {
+}
+.vat-toggle-tag {
+  display: inline-block;
+  padding: 3px 6px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: $color-smmg-tag-text;
+  background: $color-smmg-tag-button;
+  border: 1px solid $color-smmg-tag-border;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+.vat-toggle-tag:hover {
+  text-decoration: none;
+  background-color: $color-smmg-tag-button-hover;
+  color: $color-smmg-tag-text-hover;
+}
+.vat-toggle-tag.active {
+  background-color: $color-smmg-tag-button-active;
+  color: $color-smmg-tag-text-active;
+  border: 1px solid $color-smmg-tag-border-active;
+}
+// remove '*'
+.vat-toggle-tag.active span {
+  display: none;
+}
+.vat-toggle-tag.active:hover {
+  background-color: $color-smmg-tag-button-active-hover;
+  color: $color-smmg-tag-text-active-hover;
+  border: 1px solid $color-smmg-tag-border-active-hover;
+}
