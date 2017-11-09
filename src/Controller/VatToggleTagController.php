@@ -29,7 +29,7 @@
      * @return \Drupal\Core\Ajax\AjaxResponse
      *
      */
-    public function toggleTag($target_nid, $term_tid, $field_name) {
+    public static function toggleTag($target_nid, $term_tid, $field_name) {
 
       $result = self::_toggleTag($target_nid, $term_tid, $field_name);
 

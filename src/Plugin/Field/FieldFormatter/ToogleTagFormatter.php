@@ -107,7 +107,7 @@
         $term_id = $default_tag->tid;
         $term_name = $default_tag->name;
 
-        // url for SubscriberController::toggleSubsciberTag'
+        // url for \Drupal\views_admintools\Controller\VatToggleTagController::toggleTag
         $url = Url::fromRoute('views_admintools.vat_toggle_tag',
           [
             'target_nid' => $target_nid,
