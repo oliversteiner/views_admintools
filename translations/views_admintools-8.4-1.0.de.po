@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: views_admintools\n"
+"POT-Creation-Date: 2017-11-09 14:47+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-KeywordsList: t\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/Controller/ViewsAdmintoolsController.php:12
+msgid "Hello, World!"
+msgstr "Hallo Welt"
+
+#: src/Plugin/Field/FieldFormatter/ToogleTagFormatter.php:50
+#: src/Plugin/views/field/VatFieldToggleTag.php:106
+msgid "Add \"New Tag\""
+msgstr "Taste \"Neuer Tag\""
+
+#: src/Plugin/Field/FieldFormatter/ToogleTagFormatter.php:58
+#: src/Plugin/views/field/VatFieldToggleTag.php:114
+msgid "Add \"remove Tag\""
+msgstr "Taste \"Tag entfernen\""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:79
+msgid "Node Type"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:87
+msgid "Heading"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:94
+msgid "Use Pager"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:101
+msgid "Destination"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:108
+msgid "Buttons:"
+msgstr "Tasten"
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:112
+msgid "New"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:118
+msgid "Sorting"
+msgstr ""
+
+#: src/Plugin/views/area/ViewsAdmintoolsHeader.php:124
+msgid "Taxonomy"
+msgstr ""
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:61
+msgid "Show Buttons"
+msgstr "Zeige diese Tasten"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:66
+msgid "Edit"
+msgstr ""
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:74
+msgid "delete"
+msgstr ""
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:86
+msgid "Chose Destination"
+msgstr "Wähle Ziel"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:97
+msgid "Chose destination after save"
+msgstr "Nach dem Speichern zu diesem Ziel springen"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:107
+msgid "Destination View id"
+msgstr "Name der Ziel-View"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:118
+msgid "Show"
+msgstr "Zeige"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:122
+msgid "label"
+msgstr "Text"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:130
+msgid "icon"
+msgstr "Icon"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:142
+msgid "Design:"
+msgstr "Aussehen"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:150
+msgid "Display as"
+msgstr "Anzeigen als"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:168
+msgid "Icon Set"
+msgstr "Icon Art"
+
+#: src/Plugin/views/field/VatFieldAdminButtons.php:188
+msgid "Icon Size"
+msgstr "Icon Grösse"
+
+#: src/Plugin/views/field/VatFieldItemCount.php:67
+msgid "Which field to Count the Items"
+msgstr "Von welchem Feld soll die Anzahl der Inhalte angezeigt werden"
+
+#: src/Plugin/views/field/VatFieldItemCount.php:75
+msgid "Output"
+msgstr "Ausgabe"
+
+#: src/Plugin/views/field/VatFieldItemCount.php:82
+msgid "CSS Class"
+msgstr "CSS Klasse"
+
+#: src/Plugin/views/field/VatFieldToggleTag.php:69
+#: src/Plugin/views/field/VatGroupByField.php:91
+msgid "Taxonomy Field"
+msgstr "Taxonomy Feld"
+
+#: src/Plugin/views/field/VatFieldToggleTag.php:97
+#: src/Plugin/views/field/VatGroupByField.php:62
+msgid "Field Name"
+msgstr "Feld Name"
+
+#: src/Plugin/views/field/VatFieldToggleTag.php:121
+#: src/Plugin/views/field/VatGroupByField.php:76
+msgid "Custom CSS Class"
+msgstr "Eigene CSS Klassen"
+
+#: src/Plugin/views/field/VatGroupByField.php:58
+msgid "Fieldname to group"
+msgstr "Feld das gruppiert werden soll"
+
+#: src/Plugin/views/field/VatGroupByField.php:69
+msgid "HTML Tag"
+msgstr "HTML Tag"

@@ -88,7 +88,7 @@
         $options_voc[$key] = $type->label();
       }
       $form['group_by_vocabulary'] = [
-        '#title' => $this->t('Taxonomy Feld'),
+        '#title' => $this->t('Taxonomy Field'),
         '#type' => 'select',
         '#default_value' => $this->options['group_by_vocabulary'],
         '#options' => $options_voc,

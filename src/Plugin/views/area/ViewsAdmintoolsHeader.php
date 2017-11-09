@@ -76,7 +76,7 @@
 
       // Which Node Type ?
       $form['header_node_type'] = [
-        '#title' => $this->t('Node Type'),
+        '#title' => $this->t('Content Type'),
         '#type' => 'select',
         '#default_value' => $this->options['header_node_type'],
         '#options' => $bundle_options,
