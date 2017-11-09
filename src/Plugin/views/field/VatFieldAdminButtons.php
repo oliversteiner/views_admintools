@@ -1,7 +1,8 @@
 <?php
   /**
    * @file
-   * Definition of Drupal\views_admintools\Plugin\views\field\VatFieldAdminButtons
+   * Definition of
+   * Drupal\views_admintools\Plugin\views\field\VatFieldAdminButtons
    */
 
   namespace Drupal\views_admintools\Plugin\views\field;
@@ -41,6 +42,10 @@
       $options['row_button_tag'] = ['default' => 'button'];
       $options['row_button_class'] = ['default' => FALSE];
       $options['row_button_destination'] = ['default' => FALSE];
+      $options['destination'] = ['default' => 0]; // active View
+      $options['icon_set'] = ['default' => 0];    // Automatic
+      $options['icon_size'] = ['default' => 1];  // normal
+
 
       return $options;
     }
@@ -50,47 +55,148 @@
      */
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
 
-      $form['text'] = [
-        '#markup' => $this->t('Choose Buttons:'),
+      // Destination
+      // ------------------------------
+      $form['group_buttons'] = [
+        '#markup' => '<div class="vat-views-option-group">'.$this->t('Choose Buttons:').'</div>',
       ];
+
 
       $form['row_button_edit'] = [
         '#title' => $this->t('Edit'),
         '#type' => 'checkbox',
         '#default_value' => $this->options['row_button_edit'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
       ];
 
       $form['row_button_delete'] = [
         '#title' => $this->t('delete'),
         '#type' => 'checkbox',
         '#default_value' => $this->options['row_button_delete'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+
       ];
 
 
-      $form['text_look'] = [
-        '#markup' => $this->t('Button look '),
+
+      // Destination
+      // ------------------------------
+      $form['group_destination'] = [
+        '#markup' => '<div class="vat-views-option-group">'.$this->t('Chose Destination:').'</div>',
+      ];
+
+      $options_destination = [
+        'Show Content',
+        'View:' => ['this view', '<content_type>_admin', 'other view'],
+      ];
+
+      $form['destination'] = [
+        '#title' => $this->t('Chose destination after save'),
+        '#type' => 'select',
+        '#default_value' => $this->options['destination'],
+        '#options' => $options_destination,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+
+      ];
+
+      $form['destination_other'] = [
+        '#title' => $this->t('Destination View id'),
+        '#type' => 'textfield',
+        '#default_value' => '',
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      // Button Look
+      // ------------------------------
+
+      $form['group_elements'] = [
+        '#markup' => '<div class="vat-views-option-group">'.$this->t('Show:').'</div>',
       ];
 
       $form['row_button_label'] = [
-        '#title' => $this->t('show icon'),
+        '#title' => $this->t('label'),
         '#type' => 'checkbox',
-        '#default_value' => $this->options['row_button_icon'],
+        '#default_value' => $this->options['row_button_label'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
       ];
 
       $form['row_button_icon'] = [
-        '#title' => $this->t('show label'),
+        '#title' => $this->t('icon'),
         '#type' => 'checkbox',
-        '#default_value' => $this->options['row_button_label'],
+        '#default_value' => $this->options['row_button_icon'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
       ];
 
-      $options = ['button', 'link'];
 
+
+      // Design
+      // ------------------------------
+
+      $form['group_design'] = [
+        '#markup' => '<div class="vat-views-option-group">'.$this->t('Design:').'</div>',
+      ];
+
+
+      // Link or Button
+
+      $options = ['button', 'link'];
       $form['row_button_tag'] = [
         '#title' => $this->t('Display as'),
         '#type' => 'select',
         '#default_value' => $this->options['row_button_tag'],
         '#options' => $options,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
       ];
+
+      // Icon Set
+
+      $options_icon_set = [
+        'automatic',
+        'Font Awesome',
+        'Twitter Bootstrap',
+        'Drupal / jQuery Ui',
+      ];
+
+      $form['icon_set'] = [
+        '#title' => $this->t('Icon Set'),
+        '#type' => 'select',
+        '#default_value' => $this->options['icon_set'],
+        '#options' => $options_icon_set,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+
+      // Icon Size
+      // ------------------------------
+
+
+      $options_icon_size = [
+        'Large',
+        'Normal',
+        'Small',
+      ];
+
+      $form['icon_size'] = [
+        '#title' => $this->t('Icon Size'),
+        '#type' => 'select',
+        '#default_value' => $this->options['icon_size'],
+        '#options' => $options_icon_size,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      $form['group_end'] = [
+        '#markup' => '<div class="vat-views-option-group"></div>',
+      ];
+
 
       parent::buildOptionsForm($form, $form_state);
     }
@@ -114,6 +220,30 @@
         $view_display_destination = $this->options['row_button_destination'];
       }
 
+      // Options Class
+      $option_class = $this->options['row_button_class'];
+
+      // Size Class
+      switch ($this->options['icon_size']) {
+        case 0:
+          $option_class[] = 'vat-button-sm';
+          break;
+        case 1:
+          $option_class[] = 'vat-button-md';
+          break;
+        case 2:
+          $option_class[] = 'vat-button-lg';
+          break;
+        default:
+          $option_class[] = '';
+          break;
+
+      }
+
+
+      // All Classes
+      $class = ['use-ajax', 'vat-button', $option_class];
+
 
       foreach ($buttons as $button_name) {
 
@@ -124,23 +254,28 @@
 
 
           $link = 'href="node/' . $nid;
+          $icon = '<span></span>';
+          $label = '';
 
-          // Options Class
-          $option_class = $this->options['row_button_class'];
-          $class = ['use-ajax', 'vat-button', $option_class];
 
           // Link
           switch ($button_name) {
 
             case 'edit':
               $link = 'node/' . $nid . '/edit?destination=' . $view_display_destination;
-              $icon_name = 'pencil';
+              $icon_name['font_awesome'] = 'pencil';
+              $icon_name['twitter_bootstrap'] = 'pencil';
+              $icon_name['drupal'] = 'pencil';
+
               $class[] = 'vat-button-edit';
               break;
 
             case 'delete':
               $link = 'node/' . $nid . '/delete?destination=' . $view_display_destination;
-              $icon_name = 'trash';
+              $icon_name['font_awesome'] = 'trash';
+              $icon_name['twitter_bootstrap'] = 'trash';
+              $icon_name['drupal'] = 'trash';
+
               $class[] = 'vat-button-delete';
               break;
 
@@ -154,7 +289,57 @@
 
           // Options: Icon
           if ($this->options['row_button_icon']) {
-            $icon = '<span class="glyphicon glyphicon-' . $icon_name . '" aria-hidden="true"></span>';
+
+            /*
+                        0)  'automatic'
+                        1)  'Font Awesome'
+                        2)  'Bootstrap'
+                        3)  'Drupal / jQuery Ui'
+            */
+
+            $icon_elem['font_awesome'] = '<i class="fa fa-' . $icon_name['font_awesome'] . '" aria-hidden="true"></i>';
+            $icon_elem['twitter_bootstap'] = '<span class="glyphicon glyphicon-' . $icon_name['twitter_bootstrap'] . '" aria-hidden="true"></span>';
+            $icon_elem['drupal'] = '<span class="ui-icon ui-icon-' . $icon_name['drupal'] . '" aria-hidden="true"></span>';
+
+
+            switch ($this->options['icon_set']) {
+
+              // 'Font Awesome'
+              case 1:
+                $icon = $icon_elem['font_awesome'];
+                break;
+
+              // 'Bootstrap'
+              case 2:
+                $icon = $icon_elem['twitter_bootstrap'];
+                break;
+
+              // 'Drupal / jQuery Ui'
+              case 3:
+                $icon = $icon_elem['drupal'];
+                break;
+
+              //'automatic'
+              default:
+
+                // Font Awesome
+                //
+                if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
+                  $icon = $icon_elem['font_awesome'];
+                }
+                // Twitter Bootstap 3
+                elseif (\Drupal::moduleHandler()
+                  ->moduleExists('bootstrap_library')) {
+                  $icon = $icon_elem['twitter_bootstap'];
+                }
+                // Drupal Default / jQuery UI Icons
+                else {
+                  $icon = $icon_elem['drupal'];
+                }
+                break;
+
+            }
+
           }
 
           // Options: Label
@@ -176,23 +361,23 @@
               $class[] = 'btn-default';
               break;
           }
+          // kint($icon);
 
+          $title = ['#markup' => $icon . $label];
 
           $elements[$button_name] = [
-            '#title' => $this->t($button_name),
+            '#title' => $title,
             '#type' => 'link',
             '#url' => Url::fromUri('internal:/' . $link),
             '#attributes' => [
               'class' => $class,
               'data-dialog-type' => 'modal',
-              'data-vat-icon' => $icon_name,
-              'type' => 'button',
             ],
           ];
         }
       }
 
-      $elements['#attached']['library'][] ='views_admintools/views_admintools.enable';
+      $elements['#attached']['library'][] = 'views_admintools/views_admintools.enable';
 
       return $elements;
 
