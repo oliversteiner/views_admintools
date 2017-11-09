@@ -58,7 +58,7 @@
       // Destination
       // ------------------------------
       $form['group_buttons'] = [
-        '#markup' => '<div class="vat-views-option-group">'.$this->t('Choose Buttons:').'</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Choose Buttons:') . '</div>',
       ];
 
 
@@ -80,11 +80,10 @@
       ];
 
 
-
       // Destination
       // ------------------------------
       $form['group_destination'] = [
-        '#markup' => '<div class="vat-views-option-group">'.$this->t('Chose Destination:').'</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Chose Destination:') . '</div>',
       ];
 
       $options_destination = [
@@ -114,7 +113,7 @@
       // ------------------------------
 
       $form['group_elements'] = [
-        '#markup' => '<div class="vat-views-option-group">'.$this->t('Show:').'</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show:') . '</div>',
       ];
 
       $form['row_button_label'] = [
@@ -134,12 +133,11 @@
       ];
 
 
-
       // Design
       // ------------------------------
 
       $form['group_design'] = [
-        '#markup' => '<div class="vat-views-option-group">'.$this->t('Design:').'</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Design:') . '</div>',
       ];
 
 
@@ -215,10 +213,39 @@
       $elements = [];
 
 
-      // Destination Display
-      if ($this->options['row_button_destination'] != FALSE) {
-        $view_display_destination = $this->options['row_button_destination'];
+      /*
+       *  Destination View Options
+       *     0) Show Content
+       *     1) this view
+       *     2) content_type>_admin
+       *     3) other view
+      */
+
+      if ($this->options['destination'] != FALSE) {
+
+        switch ($this->options['destination']) {
+          case 1:
+            // this view
+            $destination = '?destination=vat-button-sm';
+            break;
+          case 2:
+            // <content_type>_admin
+            $destination = '?destination=' . $bundle . '_admin';
+            break;
+          case 3:
+            // other view
+            $path_other = $this->options['destination_other'];
+            $destination = '?destination=' . $path_other;
+            break;
+          default:
+            //Show Content
+            $destination = '';
+            break;
+
+        }
+
       }
+
 
       // Options Class
       $option_class = $this->options['row_button_class'];
@@ -262,7 +289,7 @@
           switch ($button_name) {
 
             case 'edit':
-              $link = 'node/' . $nid . '/edit?destination=' . $view_display_destination;
+              $link = 'node/' . $nid . '/edit' . $destination;
               $icon_name['font_awesome'] = 'pencil';
               $icon_name['twitter_bootstrap'] = 'pencil';
               $icon_name['drupal'] = 'pencil';
@@ -271,7 +298,7 @@
               break;
 
             case 'delete':
-              $link = 'node/' . $nid . '/delete?destination=' . $view_display_destination;
+              $link = 'node/' . $nid . '/delete?' . $destination;
               $icon_name['font_awesome'] = 'trash';
               $icon_name['twitter_bootstrap'] = 'trash';
               $icon_name['drupal'] = 'trash';
