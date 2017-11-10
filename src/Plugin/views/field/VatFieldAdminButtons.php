@@ -41,8 +41,8 @@
       $options['row_button_icon'] = ['default' => TRUE];
       $options['row_button_tag'] = ['default' => 'button'];
       $options['row_button_class'] = ['default' => FALSE];
-      $options['row_button_destination'] = ['default' => FALSE];
-      $options['destination'] = ['default' => 0]; // active View
+      $options['destination_options'] = ['default' => 1]; // active View
+      $options['destination_other'] = ['default' => '']; // active View
       $options['icon_set'] = ['default' => 0];    // Automatic
       $options['icon_size'] = ['default' => 1];  // normal
 
@@ -55,10 +55,10 @@
      */
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
 
-      // Destination
+      //
       // ------------------------------
       $form['group_buttons'] = [
-        '#markup' => '<div class="vat-views-option-group">' . $this->t('Choose Buttons:') . '</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show Buttons') . '</div>',
       ];
 
 
@@ -83,18 +83,20 @@
       // Destination
       // ------------------------------
       $form['group_destination'] = [
-        '#markup' => '<div class="vat-views-option-group">' . $this->t('Chose Destination:') . '</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Chose Destination') . '</div>',
       ];
 
       $options_destination = [
         'Show Content',
-        'View:' => ['this view', '<content_type>_admin', 'other view'],
+        'this view',
+        '<content_type>_admin',
+        'other view',
       ];
 
-      $form['destination'] = [
+      $form['destination_options'] = [
         '#title' => $this->t('Chose destination after save'),
         '#type' => 'select',
-        '#default_value' => $this->options['destination'],
+        '#default_value' => $this->options['destination_options'],
         '#options' => $options_destination,
         '#prefix' => '<div class="vat-views-option-inline">',
         '#suffix' => '</div>',
@@ -113,7 +115,7 @@
       // ------------------------------
 
       $form['group_elements'] = [
-        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show:') . '</div>',
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show') . '</div>',
       ];
 
       $form['row_button_label'] = [
@@ -207,11 +209,9 @@
       $node = $values->_entity;
       $bundle = $node->bundle();
       $nid = $values->_entity->id();
-      $view_display_destination = $bundle . '-admin';
-
+      $display_path = $this->displayHandler->getPath();
       $buttons = ['edit', 'delete'];
       $elements = [];
-
 
       /*
        *  Destination View Options
@@ -221,29 +221,26 @@
        *     3) other view
       */
 
-      if ($this->options['destination'] != FALSE) {
+      kint($this->options);
 
-        switch ($this->options['destination']) {
-          case 1:
-            // this view
-            $destination = '?destination=vat-button-sm';
-            break;
-          case 2:
-            // <content_type>_admin
-            $destination = '?destination=' . $bundle . '_admin';
-            break;
-          case 3:
-            // other view
-            $path_other = $this->options['destination_other'];
-            $destination = '?destination=' . $path_other;
-            break;
-          default:
-            //Show Content
-            $destination = '';
-            break;
-
-        }
-
+      switch ($this->options['destination_options']) {
+        case 1:
+          // this view
+          $destination = '?destination=' . $display_path;
+          break;
+        case 2:
+          // <content_type>_admin
+          $destination = '?destination=' . $bundle . '_admin';
+          break;
+        case 3:
+          // other view
+          $path_other = $this->options['destination_other'];
+          $destination = '?destination=' . $path_other;
+          break;
+        default:
+          //Show Content
+          $destination = '';
+          break;
       }
 
 
@@ -280,7 +277,6 @@
         if ($this->options[$options_button_active]) {
 
 
-          $link = 'href="node/' . $nid;
           $icon = '<span></span>';
           $label = '';
 
@@ -298,7 +294,7 @@
               break;
 
             case 'delete':
-              $link = 'node/' . $nid . '/delete?' . $destination;
+              $link = 'node/' . $nid . '/delete' . $destination;
               $icon_name['font_awesome'] = 'trash';
               $icon_name['twitter_bootstrap'] = 'trash';
               $icon_name['drupal'] = 'trash';
@@ -314,7 +310,7 @@
           }
 
 
-          // Options: Icon
+          // Options Icon
           if ($this->options['row_button_icon']) {
 
             /*
@@ -369,13 +365,13 @@
 
           }
 
-          // Options: Label
+          // Options Label
           if ($this->options['row_button_label']) {
             $label = $this->t($button_name);
           }
 
 
-          // Options: display
+          // Options display
           switch ($this->options['row_button_tag']) {
 
             case 'link':
