@@ -65,6 +65,8 @@
     public static function _toggleTag($target_nid, $term_tid, $field_name) {
 
 
+      // TODO check if mulifield or single
+
       $output = [
         'status' => FALSE,
         'mode' => FALSE,

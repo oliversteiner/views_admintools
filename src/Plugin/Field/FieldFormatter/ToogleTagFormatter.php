@@ -86,6 +86,8 @@
       $target_nid = $node->id();
       $vocabulary = $target_bundle;
 
+
+
       // Default CSS Classes
       $default_classes = ['use-ajax', 'vat-toggle-tag'];
 

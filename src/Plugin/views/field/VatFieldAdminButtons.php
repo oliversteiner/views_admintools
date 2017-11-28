@@ -221,7 +221,7 @@
        *     3) other view
       */
 
-      kint($this->options);
+     // kint($this->options);
 
       switch ($this->options['destination_options']) {
         case 1:
