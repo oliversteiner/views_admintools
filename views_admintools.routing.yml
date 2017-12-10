@@ -8,13 +8,14 @@ views_admintools.content:
 
 
 views_admintools.vat_toggle_tag:
-  path: '/admin/vat/toggle_tag/{target_nid}/{term_tid}/{field_name}'
+  path: '/admin/vat/toggle_tag/{target_nid}/{term_tid}/{field_name}/{values}'
   defaults:
     _controller: '\Drupal\views_admintools\Controller\VatToggleTagController::toggleTag'
     _title: 'Views Admintools Controller'
     target_nid: null
     term_tid: null
     field_name: null
+    values: 1
   requirements:
     _permission: 'access content'
 

@@ -6,7 +6,9 @@
 
   namespace Drupal\views_admintools\Plugin\views\field;
 
+  use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
   use Drupal\Core\Form\FormStateInterface;
+  use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\taxonomy\Entity\Vocabulary;
   use Drupal\views\Plugin\views\field\FieldPluginBase;
   use Drupal\Core\Url;
@@ -92,7 +94,7 @@
         }
       }
 
-      // "Field Name""
+      // "Field Name"
       $form['entity_reference_field'] = [
         '#title' => $this->t('Field Name'),
         '#type' => 'select',
@@ -144,9 +146,13 @@
 
 
       // load all Tags
-      $default_tags = \Drupal::entityTypeManager()
-        ->getStorage('taxonomy_term')
-        ->loadTree($vocabulary);
+      try {
+        $default_tags = \Drupal::entityTypeManager()
+          ->getStorage('taxonomy_term')
+          ->loadTree($vocabulary);
+      } catch (InvalidPluginDefinitionException $e) {
+        drupal_set_message('vocabulary not found');
+      }
 
       // Load items from Row
       $node = $values->_entity;
@@ -156,7 +162,20 @@
 
       if ($node->hasField($field_name)) {
 
-        // ToDo: Check if multiple
+
+        $storageconfig = FieldStorageConfig::loadByName('node', $field_name);
+
+        $number_of_values = $storageconfig->getCardinality();
+
+        // is field width Multible Values:
+        if ($number_of_values === 1) {
+          $default_classes[] = 'vat-toggle-tag-single';
+        }
+        else {
+          $default_classes[] = 'vat-toggle-tag-multi';
+        }
+
+
         $active_tags = $values->_entity->get($field_name)
           ->getValue();
 
@@ -179,6 +198,7 @@
               'target_nid' => $target_nid,
               'term_tid' => $term_id,
               'field_name' => $field_name,
+              'multi' => $field_name,
             ]);
 
 

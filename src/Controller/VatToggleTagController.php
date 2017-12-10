@@ -2,6 +2,7 @@
 
   namespace Drupal\views_admintools\Controller;
 
+  use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
   use Drupal\Core\Ajax\AjaxResponse;
   use Drupal\Core\Ajax\InvokeCommand;
   use Drupal\Core\Ajax\ReplaceCommand;
@@ -29,27 +30,44 @@
      * @return \Drupal\Core\Ajax\AjaxResponse
      *
      */
-    public static function toggleTag($target_nid, $term_tid, $field_name) {
+    public static function toggleTag($target_nid, $term_tid, $field_name, $values) {
 
-      $result = self::_toggleTag($target_nid, $term_tid, $field_name);
+      $result = self::_toggleTag($target_nid, $term_tid, $field_name, $values);
 
       $response = new AjaxResponse();
       $selector = '#' . $field_name . '-' . $target_nid . '-' . $term_tid;
 
-      if ($result['mode'] == 'add') {
+
+      if ($values === 1) {
+
+        // remove all
+        $selector_all = '.' . $field_name.'-'.$target_nid . '.vat-toggle-tag-single';
+
+
+        $response->addCommand(new InvokeCommand($selector_all, 'removeClass', ['active']));
+
+        // activate new
         $response->addCommand(new InvokeCommand($selector, 'addClass', ['active']));
-      }
 
-      elseif ($result['mode'] == 'remove') {
-        $response->addCommand(new InvokeCommand($selector, 'removeClass', ['active']));
-      }
 
+      }
       else {
-        $message = 'Es ist ein Fehler aufgetreten beim ändern der Empfängergruppe';
-        $response->addCommand(new ReplaceCommand('.ajax-container',
-          '<div class="ajax-container">' . $message . '</div>'));
-      }
 
+        if ($result['mode'] == 'add') {
+          $response->addCommand(new InvokeCommand($selector, 'addClass', ['active']));
+        }
+
+        elseif ($result['mode'] == 'remove') {
+          $response->addCommand(new InvokeCommand($selector, 'removeClass', ['active']));
+        }
+
+
+        else {
+          $message = 'Es ist ein Fehler aufgetreten beim ändern der Empfängergruppe';
+          $response->addCommand(new ReplaceCommand('.ajax-container',
+            '<div class="ajax-container">' . $message . '</div>'));
+        }
+      }
       return $response;
 
     }
@@ -59,13 +77,13 @@
      * @param $term_tid
      * @param $field_name
      *
-     * @return array
+     * @param $value
      *
+     * @return array
+     * @throws \Drupal\Core\Entity\EntityStorageException
      */
-    public static function _toggleTag($target_nid, $term_tid, $field_name) {
+    public static function _toggleTag($target_nid, $term_tid, $field_name, $value) {
 
-
-      // TODO check if mulifield or single
 
       $output = [
         'status' => FALSE,
@@ -77,9 +95,12 @@
 
 
       // Load Node
-      $entity = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->load($target_nid);
+      try {
+        $entity = \Drupal::entityTypeManager()
+          ->getStorage('node')
+          ->load($target_nid);
+      } catch (InvalidPluginDefinitionException $e) {
+      }
 
       // Field OK?
       if (!empty($entity->{$field_name})) {
