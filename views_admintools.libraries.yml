@@ -10,7 +10,7 @@ views_admintools.enable:
     theme:
       css/views_admintools.css: {}
   js:
-    js/views_admintools.js: {}
+    js/vat_admintools.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings

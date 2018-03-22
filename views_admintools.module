@@ -2,7 +2,7 @@
 
   /**
    * @file
-   * This is the Calendar module for calendar filtering and display in views.
+   *
    */
 
   use Drupal\Core\Url;
