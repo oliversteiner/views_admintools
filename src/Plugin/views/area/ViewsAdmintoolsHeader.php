@@ -23,7 +23,7 @@
     /**
      * {@inheritdoc}
      */
-    protected function defineOptions() {
+     function defineOptions() {
       $options = parent::defineOptions();
 
       // Override defaults to from parent.
