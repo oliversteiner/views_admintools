@@ -23,7 +23,7 @@
     /**
      * {@inheritdoc}
      */
-     function defineOptions() {
+    protected function defineOptions() {
       $options = parent::defineOptions();
 
       // Override defaults to from parent.
@@ -36,14 +36,26 @@
 
       // Bundle
       $options['header_node_type'] = ['default' => 'article'];
-      $options['header_vocabulary'] = ['default' => ''];
-
 
       // Buttons
       $options['header_button_new'] = ['default' => TRUE];
       $options['header_button_sort'] = ['default' => FALSE];
       $options['header_button_text'] = ['default' => ''];
       $options['header_destination'] = ['default' => ''];
+      $options['seperator'] = ['default' => FALSE];
+
+      // Design
+      $options['button_label'] = ['default' => FALSE];
+      $options['button_icon'] = ['default' => TRUE];
+      $options['show_as'] = ['default' => 'Button'];
+      $options['button_class'] = ['default' => FALSE];
+      $options['icon_set'] = ['default' => 0];    // Automatic
+      $options['icon_size'] = ['default' => 1];  // normal
+
+      // Vocabularis
+      for ($i = 1; $i <= 5; $i++) {
+        $options['header_vocabulary_' . $i] = ['default' => ''];
+      }
 
 
       return $options;
@@ -118,12 +130,122 @@
         '#type' => 'checkbox',
         '#default_value' => $this->options['header_button_sort'],
       ];
-      // taxonomy
-      $form['header_vocabulary'] = [
-        '#title' => $this->t('Taxonomy'),
+
+      $form['group_taxonomy_title'] = [
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show') . '</div>',
+      ];
+
+
+      for ($i = 1; $i <= 5; $i++) {
+
+        // taxonomy 4
+        $form['header_vocabulary_' . $i] = [
+          '#title' => $this->t('Taxonomy ' . $i),
+          '#type' => 'select',
+          '#default_value' => $this->options['header_vocabulary_' . $i],
+          '#options' => $vocabulary_options,
+          '#prefix' => '<div class="vat-views-option-inline">',
+          '#suffix' => '</div>',
+        ];
+
+
+      }
+
+
+      // Button Look
+      // ------------------------------
+
+      $form['group_elements'] = [
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Show') . '</div>',
+      ];
+
+      $form['button_label'] = [
+        '#title' => $this->t('label'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->options['button_label'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      $form['button_icon'] = [
+        '#title' => $this->t('icon'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->options['button_icon'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+
+      // Design
+      // ------------------------------
+
+      $form['group_design'] = [
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Design:') . '</div>',
+      ];
+
+
+      // Link or Button
+
+      $options = ['Button', 'Link'];
+      $form['show_as'] = [
+        '#title' => $this->t('Display as'),
         '#type' => 'select',
-        '#default_value' => $this->options['header_vocabulary'],
-        '#options' => $vocabulary_options,
+        '#default_value' => $this->options['show_as'],
+        '#options' => $options,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      // Icon Set
+
+      $options_icon_set = [
+        'automatic',
+        'Font Awesome',
+        'Twitter Bootstrap',
+        'Drupal / jQuery Ui',
+      ];
+
+      $form['icon_set'] = [
+        '#title' => $this->t('Icon Set'),
+        '#type' => 'select',
+        '#default_value' => $this->options['icon_set'],
+        '#options' => $options_icon_set,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+
+      // Icon Size
+      // ------------------------------
+
+
+      $options_icon_size = [
+        'Small',
+        'Normal',
+        'Large',
+      ];
+
+      $form['icon_size'] = [
+        '#title' => $this->t('Icon Size'),
+        '#type' => 'select',
+        '#default_value' => $this->options['icon_size'],
+        '#options' => $options_icon_size,
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+
+      $form['seperator'] = [
+        '#title' => $this->t('Seperator'),
+        '#type' => 'checkbox',
+        '#default_value' => $this->options['seperator'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+
+      $form['group_end'] = [
+        '#markup' => '<div class="vat-views-option-group"></div>',
       ];
 
 
@@ -137,45 +259,132 @@
       if (!$empty || !empty($this->options['empty'])) {
 
 
-
         // Destination
         if (empty($this->options['header_destination'])) {
           $view_id = \Drupal::routeMatch()->getParameter('view_id');
           $destination = str_replace('_', '-', $view_id);
         }
-        else{
+        else {
           $destination = $this->options['header_destination'];
         }
 
 
         // Taxonomy
-        if($this->options['header_vocabulary'] != false){
-          $taxonomy_term_name = explode(',', $this->options['header_vocabulary']);
-
-        }
-        else{
-          $taxonomy_term_name = false;
-        }
-
         $taxonomy = [];
+        for ($i = 1; $i <= 5; $i++) {
 
-        $i = 0;
-        foreach ($taxonomy_term_name as $item){
-          $taxonomy[$i]['machine_name'] = $item;
-          $taxonomy[$i]['title'] = self::_properTitle($item);
+          if ($this->options['header_vocabulary_' . $i] != FALSE) {
+            $taxonomy_term_name = $this->options['header_vocabulary_' . $i];
+            $taxonomy[$i]['machine_name'] = $taxonomy_term_name;
+            $taxonomy[$i]['title'] = self::_properTitle($taxonomy_term_name);
+          }
+          else {
+            $taxonomy[$i] = FALSE;
+          }
+
+        }
+
+        // Design
+
+
+        // Size Class
+        switch ($this->options['icon_size']) {
+          case 0: // small
+            $size_class = 'btn-sm vat-button-sm';
+            break;
+
+          case 1:  // normal
+            $size_class = 'btn-md vat-button-md';
+            break;
+
+          case 2: // large
+            $size_class = 'btn-lg vat-button-lg';
+            break;
+
+          default:
+            $size_class = '';
+            break;
+        }
+
+        //  Icon Theme prefix
+        if ($this->options['button_icon']) {
+
+          switch ($this->options['icon_set']) {
+
+            case 1: // 'Font Awesome'
+              $prefix = 'fa fa-';
+              break;
+
+            case 2: // 'Bootstrap'
+              $prefix = 'glyphicon glyphicon-';
+              break;
+
+            case 3:  // 'Drupal / jQuery Ui'
+              $prefix = 'ui-icon ui-icon-';
+              break;
+
+            default: //'automatic'
+
+              // Font Awesome
+              //
+              if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
+                $prefix = 'fa fa-';
+              }
+              // Twitter Bootstap 3
+              elseif (\Drupal::moduleHandler()
+                ->moduleExists('bootstrap_library')) {
+                $prefix = 'glyphicon glyphicon-';
+              } // Drupal Default / jQuery UI Icons
+              else {
+                $prefix = 'ui-icon ui-icon-';
+              }
+              break;
+
+          }
         }
 
 
+        switch ($this->options['show_as']) {
+
+          case  0: // Button:
+            if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
+              $button_class = 'btn btn-default vat-button';
+            }
+            else {
+              $button_class = 'vat-button';
+            }
+            break;
+
+          case 1: // Link:
+            $button_class = 'vat-link';
+            break;
+
+          default:
+            $button_class = 'vat-default';
+            break;
+
+        }
 
         $vat = [
           'test_var' => 'test',
           'button_new' => $this->options['header_button_new'],
           'button_sort' => $this->options['header_button_sort'],
           'button_text' => $this->options['header_button_text'],
+          'seperator' => $this->options['seperator'],
           'list_taxonomy' => $taxonomy,
           'node_type' => $this->options['header_node_type'],
           'view_id' => $view_id,
           'destination' => $destination,
+          'button_label' => $this->options['button_label'],
+          'button_icon' => $this->options['button_icon'],
+          'show_as' => $this->options['show_as'],
+          'icon_set' => $this->options['icon_set'],
+          'icon_prefix' => $prefix,
+          'icon_size' => $this->options['icon_size'],
+          'button_class' => $button_class,
+          'size_class' => $size_class,
+
+
         ];
 
 
@@ -201,7 +410,7 @@
     }
 
 
-    private function _properTitle($string){
+    private function _properTitle($string) {
 
       $string = str_replace('_', ' ', $string);
       $string = ucwords($string);
