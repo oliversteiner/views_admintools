@@ -6,8 +6,6 @@
   use Drupal\node\Entity\NodeType;
   use Drupal\taxonomy\Entity\Vocabulary;
   use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
-  use Drupal\views\Views;
-  use function GuzzleHttp\Psr7\str;
 
 
   /**
@@ -52,7 +50,7 @@
       $options['icon_set'] = ['default' => 0];    // Automatic
       $options['icon_size'] = ['default' => 1];  // normal
 
-      // Vocabularis
+      // Vocabularies
       for ($i = 1; $i <= 5; $i++) {
         $options['header_vocabulary_' . $i] = ['default' => ''];
       }
@@ -114,16 +112,18 @@
         '#default_value' => $this->options['header_destination'],
       ];
 
-      // welche buttons?
+      // Title buttons?
       $form['text'] = [
         '#markup' => $this->t('Buttons:'),
       ];
+
       // neu
       $form['header_button_new'] = [
         '#title' => $this->t('New'),
         '#type' => 'checkbox',
         '#default_value' => $this->options['header_button_new'],
       ];
+
       // sort
       $form['header_button_sort'] = [
         '#title' => $this->t('Sorting'),
@@ -185,7 +185,6 @@
 
 
       // Link or Button
-
       $options = ['Button', 'Link'];
       $form['show_as'] = [
         '#title' => $this->t('Display as'),
@@ -197,7 +196,6 @@
       ];
 
       // Icon Set
-
       $options_icon_set = [
         'automatic',
         'Font Awesome',
@@ -217,7 +215,6 @@
 
       // Icon Size
       // ------------------------------
-
 
       $options_icon_size = [
         'Small',
@@ -326,15 +323,17 @@
             default: //'automatic'
 
               // Font Awesome
-              //
               if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
                 $prefix = 'fa fa-';
               }
+
               // Twitter Bootstap 3
               elseif (\Drupal::moduleHandler()
                 ->moduleExists('bootstrap_library')) {
                 $prefix = 'glyphicon glyphicon-';
-              } // Drupal Default / jQuery UI Icons
+              }
+
+              // Drupal Default / jQuery UI Icons
               else {
                 $prefix = 'ui-icon ui-icon-';
               }
@@ -348,7 +347,7 @@
 
           case  0: // Button:
             if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-              $button_class = 'btn btn-default vat-button';
+              $button_class = 'btn btn-default ';
             }
             else {
               $button_class = 'vat-button';

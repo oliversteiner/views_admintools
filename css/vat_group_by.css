@@ -1,16 +1,16 @@
 .vat-group {
-  font-weight: 700;
-  font-size: 1.1em;
+    font-weight: 700;
+    font-size: 1.1em;
 }
 .vat-group-new {
-  display: block;
-  padding-top: 10px;
-  height: 50px;
+    display: block;
+    padding-top: 10px;
+    height: 50px;
 }
 .vat-group-old {
 }
 .views-field.views-field-node-vat-group-by {
 }
 .table > tbody > tr > td.views-field {
-  vertical-align: bottom
+    vertical-align: bottom;
 }
