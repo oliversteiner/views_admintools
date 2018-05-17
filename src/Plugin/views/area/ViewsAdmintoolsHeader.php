@@ -6,8 +6,6 @@
   use Drupal\node\Entity\NodeType;
   use Drupal\taxonomy\Entity\Vocabulary;
   use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
-  use Drupal\views\Views;
-  use function GuzzleHttp\Psr7\str;
 
 
   /**
@@ -51,6 +49,11 @@
       $options['button_class'] = ['default' => FALSE];
       $options['icon_set'] = ['default' => 0];    // Automatic
       $options['icon_size'] = ['default' => 1];  // normal
+
+      // Icon Names for Iconfonts
+      $options['icon_new'] = ['default' => 'plus'];  // normal
+      $options['icon_sort'] = ['default' => 'sort'];  // normal
+      $options['icon_edit'] = ['default' => 'edit'];  // normal
 
       // Vocabularis
       for ($i = 1; $i <= 5; $i++) {
@@ -249,6 +252,44 @@
       ];
 
 
+
+      // Icon Names for Iconfonts
+      // ------------------------------
+
+      // Title
+      $form['group_design'] = [
+        '#markup' => '<div class="vat-views-option-group">' . $this->t('Icon Name (without prefix)') . '</div>',
+      ];
+
+      // new
+      $form['icon_new'] = [
+        '#title' => $this->t('new'),
+        '#type' => 'textfield',
+        '#attributes' => array('maxlength' => 10, 'size' => 10),
+        '#default_value' => $this->options['icon_new'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      // sort
+      $form['icon_sort'] = [
+        '#title' => $this->t('sort'),
+        '#type' => 'textfield',
+        '#attributes' => array('maxlength' => 10, 'size' => 10),
+        '#default_value' => $this->options['icon_sort'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
+
+      // edit
+      $form['icon_edit'] = [
+        '#title' => $this->t('edit'),
+        '#type' => 'textfield',
+        '#attributes' => array('maxlength' => 10, 'size' => 10),
+        '#default_value' => $this->options['icon_edit'],
+        '#prefix' => '<div class="vat-views-option-inline">',
+        '#suffix' => '</div>',
+      ];
     }
 
     /**
@@ -311,8 +352,8 @@
 
           switch ($this->options['icon_set']) {
 
-            case 1: // 'Font Awesome'
-              $prefix = 'fa fa-';
+            case 1: // 'Font Awesome 5'
+              $prefix = 'fas fa-';
               break;
 
             case 2: // 'Bootstrap'
@@ -328,7 +369,7 @@
               // Font Awesome
               //
               if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
-                $prefix = 'fa fa-';
+                $prefix = 'fas fa-';
               }
               // Twitter Bootstap 3
               elseif (\Drupal::moduleHandler()
@@ -383,6 +424,12 @@
           'icon_size' => $this->options['icon_size'],
           'button_class' => $button_class,
           'size_class' => $size_class,
+
+          // Icon names
+          'icon_new' => $this->options['icon_new'],
+          'icon_sort' => $this->options['icon_sort'],
+          'icon_edit' => $this->options['icon_edit'],
+
 
 
         ];

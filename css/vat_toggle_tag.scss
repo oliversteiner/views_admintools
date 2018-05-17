@@ -2,67 +2,66 @@
 .vat-toggletag {
 }
 .vat-toggle-tag {
-  display: inline-block;
-  padding: 3px 6px;
-  margin-bottom: 0;
-  font-size: 12px;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  color: $color-smmg-tag-text;
-  background: $color-smmg-tag-button;
-  border: 1px solid $color-smmg-tag-border;
-  border-radius: 4px;
-  margin-left: 5px;
+    display: inline-block;
+    padding: 3px 6px;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: $color-smmg-tag-text;
+    background: $color-smmg-tag-button;
+    border: 1px solid $color-smmg-tag-border;
+    border-radius: 4px;
+    margin-left: 5px;
 }
 .vat-toggle-tag:hover {
-  text-decoration: none;
-  background-color: $color-smmg-tag-button-hover;
-  color: $color-smmg-tag-text-hover;
+    text-decoration: none;
+    background-color: $color-smmg-tag-button-hover;
+    color: $color-smmg-tag-text-hover;
 }
 
 a.vat-toggle-tag-single:hover {
-  box-shadow: inset 0px 0px 3px rgba(0,0,0,0.4);
-
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
 }
 
 .vat-toggle-tag.active {
-  background-color: $color-smmg-tag-button-active;
-  color: $color-smmg-tag-text-active;
-  border: 1px solid $color-smmg-tag-border-active;
+    background-color: $color-smmg-tag-button-active;
+    color: $color-smmg-tag-text-active;
+    border: 1px solid $color-smmg-tag-border-active;
 }
 
-
 .vat-toggle-tag.active:hover {
-  background-color: $color-smmg-tag-button-active-hover;
-  color: $color-smmg-tag-text-active-hover;
-  border: 1px solid $color-smmg-tag-border-active-hover;
+    background-color: $color-smmg-tag-button-active-hover;
+    color: $color-smmg-tag-text-active-hover;
+    border: 1px solid $color-smmg-tag-border-active-hover;
 }
 div.vat-toggle-tag-single > .ajax-progress-throbber,
 div.vat-toggle-tag-multi > .ajax-progress-throbber {
-  display: none;
+    display: none;
 }
 a.vat-toggle-tag-single {
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 0;
 }
 a.vat-toggle-tag-single.first {
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
 
-}
 a.vat-toggle-tag-single.last {
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
+
