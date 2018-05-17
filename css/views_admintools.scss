@@ -1,0 +1,107 @@
+.views-field-row-admintools {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.vat-link,
+.vat-button {
+    padding: 4px 10px;
+    display: inline-block;
+    margin: 2px;
+    font-size: 1em;
+    text-decoration: none;
+}
+
+.vat-button {
+    border-radius: 3px;
+    border-color: rgb(187, 187, 187);
+    background: rgb(236, 236, 236);
+}
+
+.vat-button:hover {
+    background: #b9b9b9;
+}
+
+.vat-button:active {
+    background: #878787;
+}
+
+.vat-link {
+}
+
+.vat-seperator {
+    margin-left: 9px;
+    margin-right: 15px;
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
+.vat-button-sm {
+    font-size: 0.9em;
+    padding: 1px 10px;
+}
+
+.vat-button-md {
+    font-size: 1em;
+}
+
+.vat-button-lg {
+    font-size: 1.3em;
+    padding: 4px 10px;
+}
+
+td.views-field.views-field-row-admintools a {
+    visibility: hidden;
+}
+
+tr:hover td.views-field.views-field-row-admintools a {
+    visibility: visible;
+}
+
+.views-view-table a.link.vat-button,
+.views-view-table a.vat-button {
+    text-decoration: none;
+}
+
+.vat-button span.glyphicon,
+.vat-button i.fa {
+    opacity: 0.5;
+    margin-right: 2px;
+    color: gray;
+}
+
+.vat-button:hover span.glyphicon,
+.vat-button i.fa:hover {
+    opacity: 1;
+}
+
+.vat-button:hover span.glyphicon-pencil,
+.vat-button:hover i.fa-pencil {
+    color: green;
+}
+
+.vat-button:hover span.glyphicon-trash,
+.vat-button:hover i.fa-trash {
+    color: red;
+}
+
+.vat-views-option-group {
+    border-bottom: solid 1px gainsboro;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.vat-views-option-inline {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.views-admintools-header-toolbox {
+}
+
+.vat-no-break {
+    white-space: nowrap;
+}
+
+.vat-row-label {
+    margin-left: 2px;
+}

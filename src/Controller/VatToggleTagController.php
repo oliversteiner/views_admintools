@@ -29,6 +29,7 @@
      *
      * @return \Drupal\Core\Ajax\AjaxResponse
      *
+     * @throws \Drupal\Core\Entity\EntityStorageException
      */
     public static function toggleTag($target_nid, $term_tid, $field_name, $values) {
 
@@ -42,7 +43,6 @@
 
         // remove all
         $selector_all = '.' . $field_name.'-'.$target_nid . '.vat-toggle-tag-single';
-
 
         $response->addCommand(new InvokeCommand($selector_all, 'removeClass', ['active']));
 
@@ -63,7 +63,7 @@
 
 
         else {
-          $message = 'Es ist ein Fehler aufgetreten beim ändern der Empfängergruppe';
+          $message = 'Error: Unknown result mode';
           $response->addCommand(new ReplaceCommand('.ajax-container',
             '<div class="ajax-container">' . $message . '</div>'));
         }
