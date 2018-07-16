@@ -1,21 +1,8 @@
-(function ($) {
-
-  /**
-   *
-   */
-  Drupal.behaviors.vatBlank = {
-    attach: function (context, settings) {
-
-
-
-      
-
-
-
-    }
-  };
-
-
+(function($) {
+    /**
+     *
+     */
+    Drupal.behaviors.vatBlank = {
+        attach: function(context, settings) {}
+    };
 })(jQuery);
-
-

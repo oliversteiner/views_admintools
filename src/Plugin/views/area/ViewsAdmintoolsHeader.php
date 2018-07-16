@@ -127,6 +127,7 @@
         '#type' => 'checkbox',
         '#default_value' => $this->options['header_button_new'],
       ];
+
       // sort
       $form['header_button_sort'] = [
         '#title' => $this->t('Sorting'),
@@ -375,7 +376,9 @@
               elseif (\Drupal::moduleHandler()
                 ->moduleExists('bootstrap_library')) {
                 $prefix = 'glyphicon glyphicon-';
-              } // Drupal Default / jQuery UI Icons
+              }
+
+              // Drupal Default / jQuery UI Icons
               else {
                 $prefix = 'ui-icon ui-icon-';
               }
