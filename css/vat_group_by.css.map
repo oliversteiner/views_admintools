@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,UAAW;EACP,WAAW,EAAE,GAAG;EAChB,SAAS,EAAE,KAAK;;AAGpB,cAAe;EACX,OAAO,EAAE,KAAK;EACd,WAAW,EAAE,IAAI;EACjB,MAAM,EAAE,IAAI;;AAShB,oCAAqC;EACjC,cAAc,EAAE,MAAM",
+"sources": ["vat_group_by.scss"],
+"names": [],
+"file": "vat_group_by.css"
+}
