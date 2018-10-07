@@ -21,7 +21,9 @@
         {# New #}
         {% if vat.button_new %}
 
-            <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} use-ajax" data-dialog-type="modal"
+            <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} use-ajax"
+               data-dialog-type="modal"
+               data-dialog-options="{&quot;width&quot;:&quot;800&quot;}"
                href="node/add/{{ vat.node_type }}?destination={{ vat.destination }}">
 
                 {# Icon #}
