@@ -24,7 +24,7 @@
             <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} use-ajax"
                data-dialog-type="modal"
                data-dialog-options="{&quot;width&quot;:&quot;800&quot;}"
-               href="node/add/{{ vat.node_type }}?destination={{ vat.destination }}">
+               href="/node/add/{{ vat.node_type }}?destination={{ vat.destination }}">
 
                 {# Icon #}
                 {% if vat.button_icon %}
@@ -45,7 +45,7 @@
         {% if vat.button_sort %}
 
             <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
-               href="admin/{{ vat.node_type }}-sort?destination={{ vat.destination }}">
+               href="/admin/{{ vat.node_type }}-sort?destination={{ vat.destination }}">
 
                 {# Icon #}
                 {% if vat.button_icon %}
@@ -80,7 +80,7 @@
                 {% if  taxonomy.machine_name %}
 
                     <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
-                       href="admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.destination }}"
+                       href="/admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.destination }}"
                        aria-label="{{ taxonomy.title }}">
 
                         {# Icon #}
