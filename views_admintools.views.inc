@@ -28,6 +28,16 @@ function views_admintools_views_data_alter(array &$data) {
     ],
   ];
 
+    $data['node']['vat_field_anchor'] = [
+        'title' => t('Field Anchor Link'),
+        'group' => t('Admin'),
+        'field' => [
+            'title' => t('Anchor link'),
+            'help' => t('Add anchor link tag'),
+            'id' => 'vat_field_anchor'
+        ],
+    ];
+
   $data['node']['vat_group_by_field'] = [
     'title' => t('Group title in one table'),
     'group' => t('Admin'),
