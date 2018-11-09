@@ -5,16 +5,9 @@
    *
    */
 
-  use Drupal\Core\Url;
-  use Drupal\views\ViewExecutable;
-  use Drupal\Core\Routing\RouteMatchInterface;
-  use Drupal\calendar\CalendarHelper;
-
-  define('VIEWS_ADMINTOOLS', 0);
-
-  function views_admintools_theme($path) {
 
 
+  function views_admintools_theme() {
 
 
     return [
@@ -27,10 +20,7 @@
   }
 
 
-  $views_admintools_kint_count = 0;
 function views_admintools_preprocess_page(&$variables) {
-  global $views_admintools_kint_count;
-  if ( $views_admintools_kint_count++ < 1 ) {
- //   var_dump($row);
-  }
+
+
 }

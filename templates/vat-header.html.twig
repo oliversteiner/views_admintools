@@ -25,10 +25,15 @@
             {# New #}
             {% if vat.button_new %}
 
-            <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} use-ajax"
-               data-dialog-type="modal"
-               data-dialog-options="{&quot;width&quot;:&quot;800&quot;}"
-               href="/node/add/{{ vat.node_type }}?destination={{ vat.destination }}">
+                <a type="button" class="{{ vat.button_class }} {{ vat.size_class }}"
+
+                        {# Modal #}
+                        {% if vat.modal %}
+                            data-dialog-type="modal"
+                            data-dialog-options="{&quot;width&quot;:&quot;{{ vat.modal_width }}&quot;}"
+                        {% endif %}
+
+                   href="/node/add/{{ vat.node_type }}?destination={{ vat.target_path_after_save }}">
 
                     {# Icon #}
                     {% if vat.button_icon %}
@@ -48,8 +53,8 @@
             {# Sort #}
             {% if vat.button_sort %}
 
-            <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
-               href="/admin/{{ vat.node_type }}-sort?destination={{ vat.destination }}">
+                <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
+                   href="{{ vat.target_path_sort }}?destination={{ vat.target_path_after_save }}">
 
                     {# Icon #}
                     {% if vat.button_icon %}
@@ -68,10 +73,10 @@
 
 
 
-            {# seperator #}
-            {% if vat.seperator %}
+            {# separator #}
+            {% if vat.separator %}
 
-                <span class="vat-seperator"></span>
+                <span class="vat-separator"></span>
 
             {% endif %}
 
@@ -84,9 +89,9 @@
                     {% if  taxonomy.machine_name %}
 
 
-                    <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
-                       href="/admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.destination }}"
-                       aria-label="{{ taxonomy.title }}">
+                        <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
+                           href="/admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.target_path_after_save }}"
+                           aria-label="{{ taxonomy.title }}">
 
                             {# Icon #}
                             {% if vat.button_icon %}

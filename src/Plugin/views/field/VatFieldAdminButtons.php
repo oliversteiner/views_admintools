@@ -194,7 +194,6 @@ class VatFieldAdminButtons extends FieldPluginBase
         // Icon Size
         // ------------------------------
 
-
         $options_icon_size = [
             'Small',
             'Normal',
@@ -272,6 +271,11 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
+
+
+        // Parent Options
+        // ------------------------------
+
         parent::buildOptionsForm($form, $form_state);
     }
 
