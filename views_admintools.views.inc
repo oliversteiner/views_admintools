@@ -7,12 +7,12 @@ function views_admintools_views_data_alter(array &$data) {
 
   // Views
 
-  $data['views']['vat_header'] = array(
-    'title' => t('Admin Tools Header'),
+  $data['views']['vat_views_area_admin_tools'] = array(
+    'title' => t('Admin Tools'),
     'group' => t('Admin'),
-    'help' => t('Admin Tools heading or pager.'),
+    'help' => t('Add Admin Buttons in an area'),
     'area' => array(
-      'id' => 'vat_header',
+      'id' => 'vat_views_area_admin_tools',
     ),
   );
 

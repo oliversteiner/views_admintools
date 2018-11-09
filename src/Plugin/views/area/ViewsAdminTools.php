@@ -13,9 +13,9 @@ use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
  *
  * @ingroup views_area_handlers
  *
- * @ViewsArea("vat_header")
+ * @ViewsArea("vat_views_area_admin_tools")
  */
-class ViewsAdmintoolsHeader extends TokenizeAreaPluginBase
+class ViewsAdminTools extends TokenizeAreaPluginBase
 {
 
 
@@ -35,7 +35,7 @@ class ViewsAdmintoolsHeader extends TokenizeAreaPluginBase
         $options['empty']['default'] = TRUE;
 
         // Provide our own defaults.
-        $options['content']['default'] = '';
+        $options['title']['default'] = '';
 
         // Bundle
         $options['header_node_type']['default'] = 'article';
@@ -110,10 +110,10 @@ class ViewsAdmintoolsHeader extends TokenizeAreaPluginBase
         $form['#attached']['library'][] = 'views_admintools/views_admintools.enable';
 
         // Title Text / Heading
-        $form['content'] = [
-            '#title' => $this->t('Header Text'),
+        $form['title'] = [
+            '#title' => $this->t('Title'),
             '#type' => 'textfield',
-            '#default_value' => $this->options['content'],
+            '#default_value' => $this->options['title'],
         ];
 
         // Which Node Type ?
@@ -457,7 +457,7 @@ class ViewsAdmintoolsHeader extends TokenizeAreaPluginBase
 
 
             $vat = [
-                'test_var' => 'test',
+                'title' =>  $this->options['title'],
                 'button_new' => $this->options['header_button_new'],
                 'button_sort' => $this->options['header_button_sort'],
                 'button_text' => $this->options['header_button_text'],
