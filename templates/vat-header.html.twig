@@ -25,7 +25,7 @@
             {# New #}
             {% if vat.button_new %}
 
-                <a type="button" class="{{ vat.button_class }} {{ vat.size_class }}"
+                <a type="button" class="{{ vat.button_class }} {{ vat.modal_button }} {{ vat.size_class }}"
 
                         {# Modal #}
                         {% if vat.modal %}
@@ -53,7 +53,7 @@
             {# Sort #}
             {% if vat.button_sort %}
 
-                <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
+                <a type="button" class="{{ vat.button_class }}  {{ vat.size_class }} "
                    href="{{ vat.target_path_sort }}?destination={{ vat.target_path_after_save }}">
 
                     {# Icon #}

@@ -450,10 +450,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             // Modal Dialog?
 
-            if ($this->options['modal']) {
-
-                $button_class = $button_class . ' use-ajax';
-            }
+            $button_class_dialog = $this->options['modal'] ? 'use-ajax' : '';
 
 
             $vat = [
@@ -483,6 +480,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 // Modal
                 'modal' => $this->options['modal'],
                 'modal_width' => $this->options['modal_width'],
+                'modal_button' => $button_class_dialog,
 
 
             ];
