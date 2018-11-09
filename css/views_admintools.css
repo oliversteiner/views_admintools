@@ -74,6 +74,9 @@ tr:hover td.views-field.views-field-row-admintools a {
   display: inline-block;
   padding-right: 20px; }
 
+.vat-area {
+  padding: 5px 0; }
+
 .vat-no-break {
   white-space: nowrap; }
 

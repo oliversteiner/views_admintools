@@ -11,9 +11,10 @@
 */
 #}
 
-{% set user_role = user.account.roles %}
 
-{% if(is_admin or user_role[0] == "administrator" or user_role[0] == "editor") %}
+{% if(vat.has_access) %}
+
+
 
 
     <div class="vat-area">

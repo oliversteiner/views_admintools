@@ -5,6 +5,8 @@ namespace Drupal\views_admintools\Plugin\views\area;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\user\Entity\Role;
+use Drupal\user\Entity\User;
 use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
 
 
@@ -77,6 +79,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['modal']['default'] = TRUE;
         $options['modal_width']['default'] = 800; //
 
+        // Role
+        $role_objects = Role::loadMultiple();
+
+        foreach ($role_objects as $role) {
+            $option_name = 'roles-' . $role->id();
+            $options[$option_name]['default'] = false;  // normal
+        }
 
         return $options;
     }
@@ -96,6 +105,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         foreach ($types as $key => $type) {
             $bundle_options[$key] = $type->label();
         }
+
+        // Roles
+        $roles = [];
+        $i = 0;
+        $role_objects = Role::loadMultiple();
+
+        foreach ($role_objects as $role) {
+            $roles[$i]['id'] = $role->id();
+            $roles[$i]['label'] = $role->label();
+            $i++;
+        }
+
 
         // Taxonomy
         $types = Vocabulary::loadMultiple();
@@ -345,6 +366,25 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
+
+        // User Roles
+        // ------------------------------
+
+        // Title
+        $form['group_roles'] = [
+            '#markup' => '<div class="vat-views-option-group">' . $this->t('Which roles are allowed to see the Buttons? ') . '</div>',
+        ];
+
+        foreach ($roles as $role) {
+
+            $role_form_name = 'roles-' . $role['id'];
+            $form[$role_form_name] = [
+                '#title' => $this->t($role['label']),
+                '#type' => 'checkbox',
+                '#default_value' => $this->options[$role_form_name],
+            ];
+        }
+
     }
 
     /**
@@ -368,6 +408,52 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 }
 
             }
+
+            // Roles with access
+            $system_roles = [];
+            $i = 0;
+            $role_objects = Role::loadMultiple();
+            foreach ($role_objects as $role) {
+                $system_roles[$i]['id'] = $role->id();
+                $system_roles[$i]['label'] = $role->label();
+                $i++;
+            }
+
+            $access_roles = [];
+
+            foreach ($role_objects as $role) {
+                $role_id = $role->id();
+                $option_name = 'roles-' . $role_id;
+                if ($this->options[$option_name]) {
+                    $access_roles[] = $role_id;
+                }
+
+            }
+
+
+            // Get User Roles
+            $current_user = \Drupal::currentUser();
+            $user_roles = $current_user->getRoles();
+
+
+            // is user roles in access roles ?
+            $has_access = false;
+
+            // If User is Admin
+            if ($user_id = 1) {
+                $has_access = true;
+
+            } else {
+                // Check user roles
+
+                foreach ($user_roles as $user_role) {
+                    if (in_array($user_role, $access_roles)) {
+                        $has_access = true;
+                        break;
+                    }
+                }
+            }
+
 
             // Design
 
@@ -454,15 +540,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
 
             $vat = [
-                'title' =>  $this->options['title'],
+                'title' => $this->options['title'],
                 'button_new' => $this->options['header_button_new'],
                 'button_sort' => $this->options['header_button_sort'],
                 'button_text' => $this->options['header_button_text'],
                 'separator' => $this->options['separator'],
                 'list_taxonomy' => $taxonomy,
                 'node_type' => $this->options['header_node_type'],
-                'target_path_after_save' => '/'.$this->options['target_path_after_save'],
-                'target_path_sort' => '/'.$this->options['target_path_sort'],
+                'target_path_after_save' => '/' . $this->options['target_path_after_save'],
+                'target_path_sort' => '/' . $this->options['target_path_sort'],
                 'button_label' => $this->options['button_label'],
                 'button_icon' => $this->options['button_icon'],
                 'show_as' => $this->options['show_as'],
@@ -482,12 +568,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 'modal_width' => $this->options['modal_width'],
                 'modal_button' => $button_class_dialog,
 
+                // Roles
+                'access_roles' => $access_roles,
+                'has_access' => $has_access,
+
 
             ];
 
 
             return [
-                '#theme' => 'vat_header',
+                '#theme' => 'vat_area',
                 '#vat' => $vat,
             ];
 
@@ -500,7 +590,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     /**
      * Render a text area with \Drupal\Component\Utility\Xss::filterAdmin().
      */
-    public function renderTextField($value)
+    public
+    function renderTextField($value)
     {
         if ($value) {
             return $this->sanitizeValue($this->tokenizeValue($value), 'xss_admin');
@@ -509,7 +600,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     }
 
 
-    private function _properTitle($string)
+    private
+    function _properTitle($string)
     {
 
         $string = str_replace('_', ' ', $string);

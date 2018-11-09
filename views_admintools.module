@@ -6,14 +6,12 @@
    */
 
 
-
   function views_admintools_theme() {
 
-
     return [
-      'vat_header' => [
+      'vat_area' => [
         'render element' => 'view',
-        'template' => 'vat-header',
+        'template' => 'vat-area',
         'variables' => array('vat' => [] ),
       ],
     ];
