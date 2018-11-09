@@ -11,93 +11,100 @@
 */
 #}
 
+{% set user_role = user.account.roles %}
 
-<div class="views-admintools-header-toolbox">
-
-    <!-- Button Group -->
-    <div class="{{ vat.size_class }}" role="group">
+{% if(is_admin or user_role[0] == "administrator" or user_role[0] == "editor") %}
 
 
-        {# New #}
-        {% if vat.button_new %}
+    <div class="views-admintools-header-toolbox">
+
+        <!-- Button Group -->
+        <div class="{{ vat.size_class }}" role="group">
+
+
+            {# New #}
+            {% if vat.button_new %}
 
             <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} use-ajax"
                data-dialog-type="modal"
                data-dialog-options="{&quot;width&quot;:&quot;800&quot;}"
                href="/node/add/{{ vat.node_type }}?destination={{ vat.destination }}">
 
-                {# Icon #}
-                {% if vat.button_icon %}
-                    <span class="{{ vat.icon_prefix }}{{vat.icon_new}}" aria-hidden="true"> </span>
-                {% endif %}
+                    {# Icon #}
+                    {% if vat.button_icon %}
+                        <span class="{{ vat.icon_prefix }}{{ vat.icon_new }}" aria-hidden="true"> </span>
+                    {% endif %}
 
-                {# Label #}
-                {% if vat.button_label %}
-                    {% trans %} New {% endtrans %}
-                {% endif %}
+                    {# Label #}
+                    {% if vat.button_label %}
+                        {% trans %} New {% endtrans %}
+                    {% endif %}
 
-            </a>
+                </a>
 
-        {% endif %}
+            {% endif %}
 
 
-        {# Sort #}
-        {% if vat.button_sort %}
+            {# Sort #}
+            {% if vat.button_sort %}
 
             <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
                href="/admin/{{ vat.node_type }}-sort?destination={{ vat.destination }}">
 
-                {# Icon #}
-                {% if vat.button_icon %}
-                    <span class="{{ vat.icon_prefix }}{{vat.icon_sort}}" aria-hidden="true"> </span>
-                {% endif %}
+                    {# Icon #}
+                    {% if vat.button_icon %}
+                        <span class="{{ vat.icon_prefix }}{{ vat.icon_sort }}" aria-hidden="true"> </span>
+                    {% endif %}
 
-                {# Label #}
-                {% if vat.button_label %}
-                    {% trans %} Sort {% endtrans %}
-                {% endif %}
+                    {# Label #}
+                    {% if vat.button_label %}
+                        {% trans %} Sort {% endtrans %}
+                    {% endif %}
 
-            </a>
+                </a>
 
-        {% endif %}
-
-
+            {% endif %}
 
 
-        {# seperator #}
-        {% if vat.seperator %}
-
-            <span class="vat-seperator"></span>
-
-        {% endif %}
 
 
-        {# Taxonomy #}
-        {% if vat.list_taxonomy %}
+            {# seperator #}
+            {% if vat.seperator %}
 
-            {% for taxonomy in vat.list_taxonomy %}
+                <span class="vat-seperator"></span>
 
-                {% if  taxonomy.machine_name %}
+            {% endif %}
+
+
+            {# Taxonomy #}
+            {% if vat.list_taxonomy %}
+
+                {% for taxonomy in vat.list_taxonomy %}
+
+                    {% if  taxonomy.machine_name %}
+
 
                     <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
                        href="/admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.destination }}"
                        aria-label="{{ taxonomy.title }}">
 
-                        {# Icon #}
-                        {% if vat.button_icon %}
-                            <span class="{{ vat.icon_prefix }}{{vat.icon_edit}}" aria-hidden="true"> </span>
-                        {% endif %}
+                            {# Icon #}
+                            {% if vat.button_icon %}
+                                <span class="{{ vat.icon_prefix }}{{ vat.icon_edit }}" aria-hidden="true"> </span>
+                            {% endif %}
 
-                        {# Label #}
-                        {% if vat.button_label %}
-                            {{ taxonomy.title }}
-                        {% endif %}
-                    </a>
-                {% endif %}
+                            {# Label #}
+                            {% if vat.button_label %}
+                                {{ taxonomy.title }}
+                            {% endif %}
+                        </a>
+                    {% endif %}
 
-            {% endfor %}
-        {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        </div>
 
     </div>
 
-</div>
+{% endif %}
