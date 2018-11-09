@@ -434,13 +434,14 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // Get User Roles
             $current_user = \Drupal::currentUser();
             $user_roles = $current_user->getRoles();
+            $user_id = $current_user->id();
 
 
             // is user roles in access roles ?
             $has_access = false;
 
             // If User is Admin
-            if ($user_id = 1) {
+            if ($user_id == 1) {
                 $has_access = true;
 
             } else {
@@ -569,8 +570,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 'modal_button' => $button_class_dialog,
 
                 // Roles
+                'system_roles' => $system_roles,
                 'access_roles' => $access_roles,
+                'user_roles' => $user_roles,
                 'has_access' => $has_access,
+                'user_id' => $user_id,
 
 
             ];

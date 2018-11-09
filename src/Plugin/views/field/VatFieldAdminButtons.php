@@ -8,6 +8,7 @@
 namespace Drupal\views_admintools\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\Entity\Role;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Url;
 use Drupal\views\ResultRow;
@@ -49,6 +50,7 @@ class VatFieldAdminButtons extends FieldPluginBase
 
         $options['destination_options'] = ['default' => 1]; // active View
         $options['destination_other'] = ['default' => ''];
+        $options['destination_path'] = ['default' => ''];
 
         //  Modal
         $options['modal'] = ['default' => TRUE];
@@ -62,6 +64,13 @@ class VatFieldAdminButtons extends FieldPluginBase
         $options['icon_edit'] = ['default' => 'edit'];  // normal
         $options['icon_delete'] = ['default' => 'trash'];  // normal
 
+        // Role
+        $role_objects = Role::loadMultiple();
+
+        foreach ($role_objects as $role) {
+            $option_name = 'roles-' . $role->id();
+            $options[$option_name]['default'] = false;  // normal
+        }
 
         return $options;
     }
@@ -72,7 +81,8 @@ class VatFieldAdminButtons extends FieldPluginBase
     public function buildOptionsForm(&$form, FormStateInterface $form_state)
     {
 
-        //
+
+        // Show Buttons
         // ------------------------------
         $form['group_buttons'] = [
             '#markup' => '<div class="vat-views-option-group">' . $this->t('Show Buttons') . '</div>',
@@ -106,8 +116,8 @@ class VatFieldAdminButtons extends FieldPluginBase
         $options_destination = [
             'Show Content',
             'this view',
-            '<content_type>_admin',
-            'other view',
+            '<content_type>-admin',
+            'other path',
         ];
 
         $form['destination_options'] = [
@@ -120,10 +130,10 @@ class VatFieldAdminButtons extends FieldPluginBase
 
         ];
 
-        $form['destination_other'] = [
-            '#title' => $this->t('Destination View id'),
+        $form['destination_path'] = [
+            '#title' => $this->t('Other destination path'),
             '#type' => 'textfield',
-            '#default_value' => '',
+            '#default_value' => $this->options['destination_path'],
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
@@ -273,6 +283,35 @@ class VatFieldAdminButtons extends FieldPluginBase
         ];
 
 
+        // User Roles
+        // ------------------------------
+
+        $roles = [];
+        $i = 0;
+        $role_objects = Role::loadMultiple();
+
+        foreach ($role_objects as $role) {
+            $roles[$i]['id'] = $role->id();
+            $roles[$i]['label'] = $role->label();
+            $i++;
+        }
+
+        // Title
+        $form['group_roles'] = [
+            '#markup' => '<div class="vat-views-option-group">' . $this->t('Which roles are allowed to see the Buttons? ') . '</div>',
+        ];
+
+        foreach ($roles as $role) {
+
+            $role_form_name = 'roles-' . $role['id'];
+            $form[$role_form_name] = [
+                '#title' => $this->t($role['label']),
+                '#type' => 'checkbox',
+                '#default_value' => $this->options[$role_form_name],
+            ];
+        }
+
+
         // Parent Options
         // ------------------------------
 
@@ -296,179 +335,232 @@ class VatFieldAdminButtons extends FieldPluginBase
         $label = '';
 
 
-        switch ($this->options['destination_options']) {
-            case 1:
-                // this view
-                $destination = '?destination=' . $display_path;
-                break;
-            case 2:
-                // <content_type>_admin
-                $destination = '?destination=' . $bundle . '_admin';
-                break;
-            case 3:
-                // other view
-                $path_other = $this->options['destination_other'];
-                $destination = '?destination=' . $path_other;
-                break;
-            default:
-                //Show Content
-                $destination = '';
-                break;
+        // Roles with access
+        $system_roles = [];
+        $i = 0;
+        $role_objects = Role::loadMultiple();
+        foreach ($role_objects as $role) {
+            $system_roles[$i]['id'] = $role->id();
+            $system_roles[$i]['label'] = $role->label();
+            $i++;
         }
 
+        $access_roles = [];
 
-        // Size Class
-        switch ($this->options['icon_size']) {
-            case 0: // small
-                $class_size = 'btn-sm vat-button-sm';
-                break;
+        foreach ($role_objects as $role) {
+            $role_id = $role->id();
+            $option_name = 'roles-' . $role_id;
+            if ($this->options[$option_name]) {
+                $access_roles[] = $role_id;
+            }
 
-            case 1:  // normal
-                $class_size = 'btn-md vat-button-md';
-                break;
-
-            case 2: // large
-                $class_size = 'btn-lg vat-button-lg';
-                break;
-
-            default:
-                $class_size = '';
-                break;
         }
 
+        // Get User Roles
+        $current_user = \Drupal::currentUser();
+        $user_roles = $current_user->getRoles();
+        $user_id = $current_user->id();
 
-        //  Icon Theme prefix
-        if ($this->options['button_icon']) {
 
-            switch ($this->options['icon_set']) {
+        // is user roles in access roles ?
+        $has_access = false;
 
-                case 1: // 'Font Awesome 5'
-                    $icon_prefix = 'fas fa-';
+        // If User is Admin
+        if ($user_id == 1) {
+            $has_access = true;
+
+        } else {
+            // Check user roles
+
+            foreach ($user_roles as $user_role) {
+                if (in_array($user_role, $access_roles)) {
+                    $has_access = true;
+                    break;
+                }
+            }
+        }
+
+        $elements = [];
+
+        if ($has_access) {
+
+            switch ($this->options['destination_options']) {
+                case 1:
+                    // this view
+                    $destination = '?destination=' . $display_path;
+                    break;
+                case 2:
+                    // <content_type>-admin
+                    $destination = '?destination=' . $bundle . '-admin';
+                    break;
+                case 3:
+                    // other path
+                    $path_other = $this->options['destination_path'];
+                    $destination = '?destination=' . $path_other;
+                    break;
+                default:
+                    //Show Content
+                    $destination = '';
+                    break;
+            }
+
+
+            // Size Class
+            switch ($this->options['icon_size']) {
+                case 0: // small
+                    $class_size = 'btn-sm vat-button-sm';
                     break;
 
-                case 2: // 'Bootstrap'
-                    $icon_prefix = 'glyphicon glyphicon-';
+                case 1:  // normal
+                    $class_size = 'btn-md vat-button-md';
                     break;
 
-                case 3:  // 'Drupal / jQuery Ui'
-                    $icon_prefix = 'ui-icon ui-icon-';
+                case 2: // large
+                    $class_size = 'btn-lg vat-button-lg';
                     break;
 
-                default: //'automatic'
+                default:
+                    $class_size = '';
+                    break;
+            }
 
-                    // Font Awesome
-                    //
-                    if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
+
+            //  Icon Theme prefix
+            if ($this->options['button_icon']) {
+
+                switch ($this->options['icon_set']) {
+
+                    case 1: // 'Font Awesome 5'
                         $icon_prefix = 'fas fa-';
-                    } // Twitter Bootstap 3
-                    elseif (\Drupal::moduleHandler()
-                        ->moduleExists('bootstrap_library')) {
+                        break;
+
+                    case 2: // 'Bootstrap'
                         $icon_prefix = 'glyphicon glyphicon-';
-                    } // Drupal Default / jQuery UI Icons
-                    else {
+                        break;
+
+                    case 3:  // 'Drupal / jQuery Ui'
                         $icon_prefix = 'ui-icon ui-icon-';
+                        break;
+
+                    default: //'automatic'
+
+                        // Font Awesome
+                        //
+                        if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
+                            $icon_prefix = 'fas fa-';
+                        } // Twitter Bootstap 3
+                        elseif (\Drupal::moduleHandler()
+                            ->moduleExists('bootstrap_library')) {
+                            $icon_prefix = 'glyphicon glyphicon-';
+                        } // Drupal Default / jQuery UI Icons
+                        else {
+                            $icon_prefix = 'ui-icon ui-icon-';
+                        }
+                        break;
+
+                }
+            }
+
+            // show as
+            switch ($this->options['show_as']) {
+
+                case  0: // Button:
+                    if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
+                        $class_show_as = ' btn btn-default vat-button';
+                    } else {
+                        $class_show_as = 'vat-button';
                     }
                     break;
 
+                case 1: // Link:
+                    $class_show_as = 'vat-link';
+                    break;
+
+                default:
+                    $class_show_as = 'vat-default';
+                    break;
+
             }
-        }
-
-        // show as
-        switch ($this->options['show_as']) {
-
-            case  0: // Button:
-                if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-                    $class_show_as = ' btn btn-default vat-button';
-                } else {
-                    $class_show_as = 'vat-button';
-                }
-                break;
-
-            case 1: // Link:
-                $class_show_as = 'vat-link';
-                break;
-
-            default:
-                $class_show_as = 'vat-default';
-                break;
-
-        }
 
 
-        foreach ($buttons as $button_name) {
+            foreach ($buttons as $button_name) {
 
-            // if Button selected
-            $options_button_active = 'button_' . $button_name;
+                // if Button selected
+                $options_button_active = 'button_' . $button_name;
 
-            if ($this->options[$options_button_active]) {
-
-
-                // Link
-                switch ($button_name) {
-
-                    case 'edit':
-                        $link = 'node/' . $nid . '/edit' . $destination;
-                        $icon_name = $this->options['icon_edit'];
+                if ($this->options[$options_button_active]) {
 
 
-                        break;
+                    // Link
+                    switch ($button_name) {
 
-                    case 'delete':
-                        $link = 'node/' . $nid . '/delete' . $destination;
-                        $icon_name = $this->options['icon_delete'];
-
-
-                        break;
-
-                    default:
-                        $link = 'node/' . $nid;
-                        $icon_name = FALSE;
-                        break;
-
-                }
+                        case 'edit':
+                            $link = 'node/' . $nid . '/edit' . $destination;
+                            $icon_name = $this->options['icon_edit'];
 
 
-                // Options Icon
-                if ($this->options['button_icon']) {
-                    $icon = '<span class="' . $icon_prefix . $icon_name . '" aria-hidden="true"></span>';
-                }
+                            break;
 
-                // Options Label
-                if ($this->options['button_label']) {
-                    $label = '<span class="vat-row-label">' . $this->t($button_name) . '</span>';
-                }
+                        case 'delete':
+                            $link = 'node/' . $nid . '/delete' . $destination;
+                            $icon_name = $this->options['icon_delete'];
 
 
-                $title = ['#markup' => $icon . $label];
+                            break;
+
+                        default:
+                            $link = 'node/' . $nid;
+                            $icon_name = FALSE;
+                            break;
+
+                    }
 
 
-                $elements[$button_name] = [
-                    '#title' => $title,
-                    '#type' => 'link',
-                    '#url' => Url::fromUri('internal:/' . $link),
-                    '#attributes' => [
-                        'class' => $class_show_as . ' ' . $class_size,
-                    ],
-                    '#prefix' => '<span><div class="vat-no-break">',
-                    '#suffix' => '</div></span>',
-                ];
+                    // Options Icon
+                    if ($this->options['button_icon']) {
+                        $icon = '<span class="' . $icon_prefix . $icon_name . '" aria-hidden="true"></span>';
+                    }
+
+                    // Options Label
+                    if ($this->options['button_label']) {
+                        $label = '<span class="vat-row-label">' . $this->t($button_name) . '</span>';
+                    }
 
 
-                // Modal Dialog
-
-                if ($this->options['modal']) {
-                    $elements[$button_name]['#attributes'] = [
-                        'class' => 'use-ajax ' . $class_show_as . ' ' . $class_size,
-                        'data-dialog-type' => 'modal',
-                        'data-dialog-options' => json_encode(['width' => $this->options['modal_width']]),
+                    $title = ['#markup' => $icon . $label];
 
 
+                    $elements[$button_name] = [
+                        '#title' => $title,
+                        '#type' => 'link',
+                        '#url' => Url::fromUri('internal:/' . $link),
+                        '#attributes' => [
+                            'class' => $class_show_as . ' ' . $class_size,
+                        ],
+                        '#prefix' => '<span><div class="vat-no-break">',
+                        '#suffix' => '</div></span>',
                     ];
+
+
+                    // Modal Dialog
+
+                    if ($this->options['modal']) {
+                        $elements[$button_name]['#attributes'] = [
+                            'class' => 'use-ajax ' . $class_show_as . ' ' . $class_size,
+                            'data-dialog-type' => 'modal',
+                            'data-dialog-options' => json_encode(['width' => $this->options['modal_width']]),
+
+
+                        ];
+                    }
+
+
                 }
             }
-        }
 
-        $elements['#attached']['library'][] = 'views_admintools/views_admintools.enable';
+            $elements['#attached']['library'][] = 'views_admintools/views_admintools.enable';
+
+        }
 
         return $elements;
 
