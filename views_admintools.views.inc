@@ -19,11 +19,11 @@ function views_admintools_views_data_alter(array &$data) {
   // Node
 
   $data['node']['vat_field_admin_buttons'] = [
-    'title' => t('Field Admin Buttons'),
+    'title' => t('Admin Buttons'),
     'group' => t('Admin'),
     'field' => [
-      'title' => t('Field Admin Buttons'),
-      'help' => t('Add Buttons for Edit and Delete'),
+      'title' => t('Admin Buttons'),
+      'help' => t('Add Buttons for Edit and Delete via Modal Dialog'),
       'id' => 'vat_field_admin_buttons'
     ],
   ];
