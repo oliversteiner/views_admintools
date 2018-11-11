@@ -76,6 +76,25 @@
 
             {% endif %}
 
+            {# back #}
+            {% if vat.button_back %}
+
+                <a type="button" class="{{ vat.button_class }}  {{ vat.size_class }} "
+                   href="{{ vat.target_path_back }}?destination={{ vat.target_path_back }}">
+
+                    {# Icon #}
+                    {% if vat.button_icon %}
+                        <span class="{{ vat.icon_prefix }}{{ vat.icon_back }}" aria-hidden="true"> </span>
+                    {% endif %}
+
+                    {# Label #}
+                    {% if vat.button_label %}
+                        {% trans %} {{ vat.button_back_name }} {% endtrans %}
+                    {% endif %}
+
+                </a>
+
+            {% endif %}
 
 
 

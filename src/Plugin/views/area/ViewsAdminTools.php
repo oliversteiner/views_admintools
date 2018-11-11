@@ -40,20 +40,33 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['title']['default'] = '';
 
         // Bundle
-        $options['header_node_type']['default'] = 'article';
+        $options['node_type']['default'] = 'article';
 
         // Buttons
-        $options['header_button_new']['default'] = TRUE;
-        $options['header_button_sort']['default'] = FALSE;
+        $options['buttons_blank'][0]['default'] = FALSE;
 
-
-        // targets
+        // Button new
+        $options['button_new']['default'] = TRUE;
         $options['target_path_after_save']['default'] = $view_path;
+        $options['icon_new']['default'] = 'plus';
+
+        // Button sort
+        $options['button_sort']['default'] = FALSE;
         $options['target_path_sort']['default'] = $view_path . '-sort';
+        $options['icon_sort']['default'] = 'sort';
 
 
-        $options['header_button_text']['default'] = '';
-        $options['header_destination']['default'] = '';
+        // Button back
+        $options['button_back']['default'] = FALSE;
+        $options['button_back_name']['default'] = $this->t('Back');
+        $options['target_path_back']['default'] = $view_path;
+        $options['icon_back']['default'] = 'chevron-left';
+
+        // Buttons
+
+
+        $options['button_text']['default'] = '';
+        $options['destination']['default'] = '';
         $options['separator']['default'] = FALSE;
 
 
@@ -62,17 +75,14 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['button_icon']['default'] = TRUE;
         $options['show_as']['default'] = 'Button';
         $options['button_class']['default'] = FALSE;
-        $options['icon_set']['default'] = 0;    // Automatic
         $options['icon_size']['default'] = 1;  // normal
 
-        // Icon Names for Iconfonts
-        $options['icon_new']['default'] = 'plus';  // normal
-        $options['icon_sort']['default'] = 'sort';  // normal
-        $options['icon_edit']['default'] = 'edit';  // normal
+        // Icon Set
+        $options['icon_set']['default'] = 0;    // Automatic
 
         // Vocabulary
         for ($i = 1; $i <= 5; $i++) {
-            $options['header_vocabulary_' . $i]['default'] = '';
+            $options['vocabulary_' . $i]['default'] = '';
         }
 
         //  Modal
@@ -138,10 +148,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         ];
 
         // Which Node Type ?
-        $form['header_node_type'] = [
+        $form['node_type'] = [
             '#title' => $this->t('Content Type'),
             '#type' => 'select',
-            '#default_value' => $this->options['header_node_type'],
+            '#default_value' => $this->options['node_type'],
             '#options' => $bundle_options,
         ];
 
@@ -154,16 +164,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         ];
 
         // Use Button New ?
-        $form['header_button_new'] = [
+        $form['button_new'] = [
             '#title' => $this->t('Button New'),
             '#type' => 'checkbox',
-            '#default_value' => $this->options['header_button_new'],
+            '#default_value' => $this->options['button_new'],
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
 
         // Destination after save
-        $form['header_destination'] = [
+        $form['destination'] = [
             '#title' => $this->t('Destination after Save'),
             '#type' => 'textfield',
             '#default_value' => $this->options['target_path_after_save'],
@@ -189,10 +199,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#markup' => '<div class="vat-views-option-group">' . $this->t('Add "Sorting" Button') . '</div>',
         ];
 
-        $form['header_button_sort'] = [
+        $form['button_sort'] = [
             '#title' => $this->t('Button Sorting'),
             '#type' => 'checkbox',
-            '#default_value' => $this->options['header_button_sort'],
+            '#default_value' => $this->options['button_sort'],
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
@@ -217,6 +227,48 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#suffix' => '</div>',
         ];
 
+        // Button Back
+        // ------------------------------
+
+        $form['group_button_back'] = [
+            '#markup' => '<div class="vat-views-option-group">' . $this->t('Add "Back" Button') . '</div>',
+        ];
+
+        // activation
+        $form['button_back'] = [
+            '#title' => $this->t('Back'),
+            '#type' => 'checkbox',
+            '#default_value' => $this->options['button_back'],
+            '#prefix' => '<div class="vat-views-option-inline">',
+            '#suffix' => '</div>',
+        ];
+        // Name
+        $form['button_back_name'] = [
+            '#title' => $this->t('Name'),
+            '#type' => 'textfield',
+            '#default_value' => $this->options['button_back_name'],
+            '#prefix' => '<div class="vat-views-option-inline">',
+            '#suffix' => '</div>',
+        ];
+
+        // Destination
+        $form['view_name_back'] = [
+            '#title' => $this->t('View name'),
+            '#type' => 'textfield',
+            '#default_value' => $this->options['target_path_back'],
+            '#prefix' => '<div class="vat-views-option-inline">',
+            '#suffix' => '</div>',
+        ];
+
+        // Icon
+        $form['icon_back'] = [
+            '#title' => $this->t('Icon Name (without prefix)'),
+            '#type' => 'textfield',
+            '#attributes' => array('maxlength' => 10, 'size' => 10),
+            '#default_value' => $this->options['icon_back'],
+            '#prefix' => '<div class="vat-views-option-inline">',
+            '#suffix' => '</div>',
+        ];
 
         // Button Look
         // ------------------------------
@@ -326,10 +378,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         for ($i = 1; $i <= 5; $i++) {
 
             // add 4 taxonomy vocabulary dropdowns
-            $form['header_vocabulary_' . $i] = [
+            $form['vocabulary_' . $i] = [
                 '#title' => $this->t('Taxonomy ' . $i),
                 '#type' => 'select',
-                '#default_value' => $this->options['header_vocabulary_' . $i],
+                '#default_value' => $this->options['vocabulary_' . $i],
                 '#options' => $vocabulary_options,
                 '#prefix' => '<div class="vat-views-option-inline">',
                 '#suffix' => '</div>',
@@ -399,8 +451,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             $taxonomy = [];
             for ($i = 1; $i <= 5; $i++) {
 
-                if ($this->options['header_vocabulary_' . $i] != FALSE) {
-                    $taxonomy_term_name = $this->options['header_vocabulary_' . $i];
+                if ($this->options['vocabulary_' . $i] != FALSE) {
+                    $taxonomy_term_name = $this->options['vocabulary_' . $i];
                     $taxonomy[$i]['machine_name'] = $taxonomy_term_name;
                     $taxonomy[$i]['title'] = self::_properTitle($taxonomy_term_name);
                 } else {
@@ -542,14 +594,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             $vat = [
                 'title' => $this->options['title'],
-                'button_new' => $this->options['header_button_new'],
-                'button_sort' => $this->options['header_button_sort'],
-                'button_text' => $this->options['header_button_text'],
+                'button_new' => $this->options['button_new'],
+                'button_sort' => $this->options['button_sort'],
+                'button_back' => $this->options['button_back'],
                 'separator' => $this->options['separator'],
                 'list_taxonomy' => $taxonomy,
-                'node_type' => $this->options['header_node_type'],
+                'node_type' => $this->options['node_type'],
                 'target_path_after_save' => '/' . $this->options['target_path_after_save'],
                 'target_path_sort' => '/' . $this->options['target_path_sort'],
+                'target_path_back' => '/' . $this->options['target_path_back'],
                 'button_label' => $this->options['button_label'],
                 'button_icon' => $this->options['button_icon'],
                 'show_as' => $this->options['show_as'],
@@ -562,7 +615,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 // Icon names
                 'icon_new' => $this->options['icon_new'],
                 'icon_sort' => $this->options['icon_sort'],
-                'icon_edit' => $this->options['icon_edit'],
+                'icon_back' => $this->options['icon_back'],
 
                 // Modal
                 'modal' => $this->options['modal'],
