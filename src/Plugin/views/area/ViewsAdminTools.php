@@ -43,7 +43,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['node_type']['default'] = 'article';
 
         // Buttons
-        $options['buttons_blank'][0]['default'] = FALSE;
+        $options['buttons_blank']['default'] = FALSE;
 
         // Button new
         $options['button_new']['default'] = TRUE;
