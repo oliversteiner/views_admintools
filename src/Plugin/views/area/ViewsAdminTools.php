@@ -58,7 +58,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         // Button back
         $options['button_back']['default'] = FALSE;
-        $options['button_back_name']['default'] = $this->t('Back');
+        $options['button_back_label']['default'] = $this->t('Back');
         $options['target_path_back']['default'] = $view_path;
         $options['icon_back']['default'] = 'chevron-left';
 
@@ -242,11 +242,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
-        // Name
-        $form['button_back_name'] = [
-            '#title' => $this->t('Name'),
+        // Label
+        $form['button_back_label'] = [
+            '#title' => $this->t('Label'),
             '#type' => 'textfield',
-            '#default_value' => $this->options['button_back_name'],
+            '#default_value' => $this->options['button_back_label'],
             '#prefix' => '<div class="vat-views-option-inline">',
             '#suffix' => '</div>',
         ];
@@ -597,6 +597,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 'button_new' => $this->options['button_new'],
                 'button_sort' => $this->options['button_sort'],
                 'button_back' => $this->options['button_back'],
+                'button_back_label' => $this->options['button_back_label'],
                 'separator' => $this->options['separator'],
                 'list_taxonomy' => $taxonomy,
                 'node_type' => $this->options['node_type'],
