@@ -28,9 +28,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     {
         $options = parent::defineOptions();
 
-        $view_id = $this->view->storage->id() . ':' . $this->view->current_display;
         $view_path = $this->view->getPath();
-
+        $view_path = 'view path';
 
         // Override defaults to from parent.
         $options['tokenize']['default'] = FALSE;
@@ -40,7 +39,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['title']['default'] = '';
 
         // Bundle
-        $options['node_type']['default'] = 'article';
+        $options['node_type']['default'] = '';
 
         // Buttons
         $options['buttons_blank']['default'] = FALSE;
