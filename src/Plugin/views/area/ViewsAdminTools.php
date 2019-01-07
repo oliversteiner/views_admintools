@@ -29,7 +29,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options = parent::defineOptions();
 
         $view_path = $this->view->getPath();
-        $view_path = 'view path';
 
         // Override defaults to from parent.
         $options['tokenize']['default'] = FALSE;
