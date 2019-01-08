@@ -40,9 +40,10 @@
       return 'views_admintools.twig_extension.readable_url';
     }
 
-    /**
-     * Replaces all numbers from the string.
-     */
+      /**
+       * @param $string
+       * @return mixed
+       */
     public static function readableUrl($string) {
       $string = str_replace('https://www.', '', $string);
       $string = str_replace('http://www.', '', $string);
