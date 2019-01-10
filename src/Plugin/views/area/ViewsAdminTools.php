@@ -316,10 +316,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         // ------------------------------
 
         $options_icon_set = [
-            'automatic',
-            'Font Awesome',
-            'Twitter Bootstrap',
+            'Automatic',
             'Drupal / jQuery Ui',
+            'Font Awesome 5',
+            'Twitter Bootstrap 3',
         ];
 
         $form['icon_set'] = [
@@ -528,40 +528,44 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     break;
             }
 
-            //  Icon Theme prefix
-            if ($this->options['button_icon']) {
 
-                switch ($this->options['icon_set']) {
+            //  Icon Set
+            // ----------------------------------------------------
 
-                    case 1: // 'Font Awesome 5'
-                        $prefix = 'fas fa-';
-                        break;
+            $icon_set = $this->options['icon_set'];
 
-                    case 2: // 'Bootstrap'
-                        $prefix = 'glyphicon glyphicon-';
-                        break;
+            //  Icon Theme
+            if ($icon_set == 0) {
 
-                    case 3:  // 'Drupal / jQuery Ui'
-                        $prefix = 'ui-icon ui-icon-';
-                        break;
-
-                    default: //'automatic'
-
-                        // Font Awesome
-                        //
-                        if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
-                            $prefix = 'fas fa-';
-                        } // Twitter Bootstap 3
-                        elseif (\Drupal::moduleHandler()
-                            ->moduleExists('bootstrap_library')) {
-                            $prefix = 'glyphicon glyphicon-';
-                        } // Drupal Default / jQuery UI Icons
-                        else {
-                            $prefix = 'ui-icon ui-icon-';
-                        }
-                        break;
-
+                // Search for Module Fontawesome
+                if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
+                    $icon_set = 2; // Font Awesome 5
+                } else {
+                    $icon_set = 1; // Drupal / jQuery Ui
                 }
+            }
+
+            switch ($icon_set) {
+
+                case 1:  // Drupal / jQuery Ui
+                    $prefix = 'ui-icon ui-icon-';
+                    $icon_taxonomy = "pencil";
+                    break;
+
+                case 2: // 'Font Awesome 5'
+                    $prefix = 'fas fa-';
+                    $icon_taxonomy = "list-ul";
+                    break;
+
+                case 3: // 'Bootstrap 3'
+                    $prefix = 'glyphicon glyphicon-';
+                    $icon_taxonomy = "list";
+                    break;
+
+                default:
+                    $prefix = 'ui-icon ui-icon-';
+                    $icon_taxonomy = "pencil";
+                    break;
             }
 
 
@@ -605,16 +609,20 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 'button_label' => $this->options['button_label'],
                 'button_icon' => $this->options['button_icon'],
                 'show_as' => $this->options['show_as'],
-                'icon_set' => $this->options['icon_set'],
-                'icon_prefix' => $prefix,
                 'icon_size' => $this->options['icon_size'],
                 'button_class' => $button_class,
                 'size_class' => $size_class,
+
+                // Icon
+                'icon_set' => $icon_set,
+                'icon_prefix' => $prefix,
+
 
                 // Icon names
                 'icon_new' => $this->options['icon_new'],
                 'icon_sort' => $this->options['icon_sort'],
                 'icon_back' => $this->options['icon_back'],
+                'icon_taxonomy' => $icon_taxonomy,
 
                 // Modal
                 'modal' => $this->options['modal'],
