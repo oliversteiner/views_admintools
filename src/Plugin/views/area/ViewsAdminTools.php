@@ -159,7 +159,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         ];
 
 
-        $form['#attached']['library'][] = 'views_admintools/views_admintools.enable';
+        $form['#attached']['library'][] = 'views_admintools/views_admintools.admin';
 
 
         // Title Text / Heading
@@ -309,13 +309,12 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         }
 
-        // Add more Rows
-        // Add a submit button that handles the submission of the form.
+        // Button: add more Rows
         $form['actions_add_more_rows'] = [
             '#type' => 'html_tag',
-            '#tag' => 'div',
+            '#tag' => 'a',
             '#value' => $this->t('Add more buttons'),
-            '#attributes' => ['class' => ['vat-button', 'add-more-buttons']],
+            '#attributes' => ['class' => ['button', 'add-more-buttons']],
         ];
 
 

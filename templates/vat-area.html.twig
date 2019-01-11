@@ -4,31 +4,35 @@
 * Be default called by AdmintoolsHeader area.
 *
 * Available variables:
-* - title: Header Title.
-* - empty: Whether there are any results.
+*
+* - buttons
+* - vocabularies
+* - look
+        look.separator
+        look.icon
+        look.label
+* - modal
+*       modal.size
+*
+* - content
+*       content.type
+*
+* - access
 *
 * @ingroup themeable
 */
 #}
-{#
 
-    {{ dd(vat.system_roles) }}
-    {{ dd(vat.access_roles) }}
-    {{ dd(vat.user_roles) }}
-    {{ dd(vat.has_access) }}
-    {{ dd(vat.user_id) }}
-#}
-
-    {{ dd(vocabularies) }}
 
 
 {% if(access) %}
 
+    {{ attach_library('views_admintools/views_admintools.main') }}
 
     <div class="vat-area">
 
     <!-- Button Group -->
-    <div class="{{ group.class }}" role="group">
+    <div class="btn-group" role="group">
 
         {% for button in buttons %}
             {# New #}
@@ -70,7 +74,7 @@
 
 
         <!-- Button Group -->
-        <div class="{{ group.class }}" role="group">
+        <div class="btn-group" role="group">
 
             {% for vocabulary in vocabularies %}
 
