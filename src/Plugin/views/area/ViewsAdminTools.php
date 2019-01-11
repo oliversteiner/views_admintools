@@ -20,7 +20,6 @@ use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
 class ViewsAdminTools extends TokenizeAreaPluginBase
 {
 
-
     /**
      * {@inheritdoc}
      */
@@ -518,9 +517,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         if (!$empty || !empty($this->options['empty'])) {
 
-
             $view_path = $this->view->getPath();
-
 
             // Content
             // -------------------------------
@@ -528,7 +525,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             if ($this->options['content_type']) {
                 $content['type'] = $this->options['content_type'];
-
             }
 
 
@@ -576,12 +572,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             }
 
-
             // Get User Roles
             $current_user = \Drupal::currentUser();
             $user_roles = $current_user->getRoles();
             $user_id = $current_user->id();
-
 
             // is user roles in access roles ?
             $access = false;
@@ -603,7 +597,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
 
             // Design
-
 
             //  Icon Set
             // ----------------------------------------------------
@@ -647,28 +640,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // Look
             // -------------------------------
 
-            // Show
-            switch ($this->options['look_show_as']) {
-
-                case  0: // Button:
-                    if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-                        $button_classes = 'btn btn-default vat-button';
-                    } else {
-                        $button_classes = 'vat-button';
-                    }
-
-                    break;
-
-                case 1: // Link:
-                    $button_classes = 'vat-link';
-                    break;
-
-                default:
-                    $button_classes = 'vat-default';
-                    break;
-
-            }
-
             // Size
             switch ($this->options['look_icon_size']) {
                 case 0: // small
@@ -688,9 +659,19 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     break;
             }
 
-            // Group
-            // -------------------------------
-            $group['class'] = $size_class;
+            // Show
+            if ($this->options['look_show_as'] == 0) { // Button:
+                if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
+                    $button_classes = 'btn btn-default vat-button';
+                } else {
+                    $button_classes = 'vat-button';
+                }
+            } else {
+                $button_classes = 'vat-link';
+            }
+
+            // Add Size to Button
+            $button_classes = $button_classes . ' ' . $size_class;
 
 
             // Modal
@@ -740,12 +721,9 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     }
 
                     $attr[$button_attribute] = $attribute;
-
-
                 }
 
                 $buttons[$i] = $attr;
-
             }
 
 
@@ -753,7 +731,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // -------------------------------
             $vocabularies = [];
 
-           for ($i = 1; $i <= 6; $i++) {
+            for ($i = 1; $i <= 6; $i++) {
 
                 $attr = [];
                 $vocabulary_name = 'vocabulary_' . $i;
@@ -765,11 +743,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     $label = $voc->label();
 
                     $attr['active'] = true;
-
                     $attr['icon'] = $prefix . $icon_taxonomy;
-
                     $attr['label'] = $label;
-
                     $attr['$machine_name'] = $machine_name;
 
                     // href
@@ -782,13 +757,9 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     // modal
                     $attr['modal'] = false;
 
-
                 }
                 $vocabularies[$i] = $attr;
-
             }
-
-
 
             return [
                 '#theme' => 'vat_area',
@@ -798,10 +769,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#modal' => $modal,
                 '#content' => $content,
                 '#look' => $look,
-                '#group' => $group,
-
             ];
-
         }
         return [];
 
