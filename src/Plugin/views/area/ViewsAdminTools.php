@@ -753,7 +753,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // -------------------------------
             $vocabularies = [];
 
-            for ($i = 1; $i <= 6; $i++) {
+           for ($i = 1; $i <= 6; $i++) {
 
                 $attr = [];
                 $vocabulary_name = 'vocabulary_' . $i;
@@ -788,25 +788,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             }
 
-            //   dpm($vocabularies);
 
-            $test = [
-                'ein' => 'Test 1',
-                'ein2' => 'Test 2',
-                'ein3' => 'Test 3',
-                'ein4' => 'Test 5',
-            ];
 
             return [
                 '#theme' => 'vat_area',
-                '#test' => $test,
                 '#access' => $access,
                 '#buttons' => $buttons,
+                '#vocabularies' => $vocabularies,
                 '#modal' => $modal,
                 '#content' => $content,
                 '#look' => $look,
                 '#group' => $group,
-                '#voc' => $vocabularies,
 
             ];
 

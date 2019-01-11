@@ -14,14 +14,13 @@ function views_admintools_theme()
             'render element' => 'view',
             'template' => 'vat-area',
             'variables' => [
-                'test' => [],
                 'access' => [],
                 'buttons' => [],
+                'vocabularies' => [],
                 'modal' => [],
                 'content' => [],
-                'group' => [],
                 'look' => [],
-                'voc' => [],
+                'group' => [],
             ],
         ],
     ];
