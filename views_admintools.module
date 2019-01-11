@@ -8,7 +8,6 @@
 
 function views_admintools_theme()
 {
-
     return [
         'vat_area' => [
             'render element' => 'view',
@@ -20,15 +19,7 @@ function views_admintools_theme()
                 'modal' => [],
                 'content' => [],
                 'look' => [],
-                'group' => [],
             ],
         ],
     ];
-}
-
-
-function views_admintools_preprocess_page(&$variables)
-{
-
-
 }
