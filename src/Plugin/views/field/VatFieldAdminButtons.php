@@ -80,12 +80,15 @@ class VatFieldAdminButtons extends FieldPluginBase
      */
     public function buildOptionsForm(&$form, FormStateInterface $form_state)
     {
-
-
         // Show Buttons
         // ------------------------------
-        $form['group_buttons'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Show Buttons') . '</div>',
+
+        // Fieldset Start
+        $form['group_buttons_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Show Buttons'),
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
 
 
@@ -93,25 +96,38 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#title' => $this->t('Edit'),
             '#type' => 'checkbox',
             '#default_value' => $this->options['button_edit'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
         $form['button_delete'] = [
-            '#title' => $this->t('delete'),
+            '#title' => $this->t('Delete'),
             '#type' => 'checkbox',
             '#default_value' => $this->options['button_delete'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
 
         ];
 
+        // Fieldset End
+        $form['group_buttons_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
+        ];
 
         // Destination
         // ------------------------------
-        $form['group_destination'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Chose Destination') . '</div>',
+
+        // Fieldset Start
+        $form['group_destination_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Chose Destination'),
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
+
+
 
         $options_destination = [
             'Show Content',
@@ -125,8 +141,8 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'select',
             '#default_value' => $this->options['destination_options'],
             '#options' => $options_destination,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
 
         ];
 
@@ -134,40 +150,46 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#title' => $this->t('Other destination path'),
             '#type' => 'textfield',
             '#default_value' => $this->options['destination_path'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
-        // Button Look
+        // Fieldset End
+        $form['group_destination_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
+        ];
+
+        // Design
         // ------------------------------
 
-        $form['group_elements'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Show') . '</div>',
+
+        // Fieldset Start
+        $form['group_design_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Design:'),
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
+
 
         $form['button_label'] = [
             '#title' => $this->t('label'),
             '#type' => 'checkbox',
             '#default_value' => $this->options['button_label'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
         $form['button_icon'] = [
             '#title' => $this->t('icon'),
             '#type' => 'checkbox',
             '#default_value' => $this->options['button_icon'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
-
-        // Design
-        // ------------------------------
-
-        $form['group_design'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Design:') . '</div>',
-        ];
 
 
         // Link or Button
@@ -178,8 +200,8 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'select',
             '#default_value' => $this->options['show_as'],
             '#options' => $options,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
         // Icon Set
@@ -196,8 +218,8 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'select',
             '#default_value' => $this->options['icon_set'],
             '#options' => $options_icon_set,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
 
@@ -215,8 +237,14 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'select',
             '#default_value' => $this->options['icon_size'],
             '#options' => $options_icon_size,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        $form['group_design_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
         ];
 
 
@@ -224,8 +252,11 @@ class VatFieldAdminButtons extends FieldPluginBase
         // ------------------------------
 
         // Title
-        $form['group_design'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Icon Name (without prefix)') . '</div>',
+        $form['group_iconfonts_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Icon Name (without prefix)'),
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
 
 
@@ -235,8 +266,8 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'textfield',
             '#attributes' => array('maxlength' => 10, 'size' => 10),
             '#default_value' => $this->options['icon_edit'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
         // delete
@@ -245,31 +276,37 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'textfield',
             '#attributes' => array('maxlength' => 10, 'size' => 10),
             '#default_value' => $this->options['icon_delete'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
-        $form['group_end'] = [
-            '#markup' => '<div class="vat-views-option-group"></div>',
+        $form['group_iconfonts_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
         ];
 
 
         // Modal
         // ------------------------------
 
-        // Title
-        $form['group_modal'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Modal Dialog') . '</div>',
+
+        // Fieldset Start
+        $form['group_modal_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
+
 
         // Modal
         $form['modal'] = [
             '#title' => $this->t('Use Modal Dialog?'),
             '#type' => 'checkbox',
             '#default_value' => $this->options['modal'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
         // Modal Width
@@ -278,13 +315,29 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#type' => 'textfield',
             '#attributes' => array('maxlength' => 10, 'size' => 10),
             '#default_value' => $this->options['modal_width'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
         ];
 
 
+        // Fieldset End
+        $form['group_modal_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
+        ];
+
         // User Roles
         // ------------------------------
+
+
+        // Fieldset Start
+        $form['group_roles_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Roles:'),
+            '#prefix' => '<fieldset class="vat-options-group">',
+        ];
 
         $roles = [];
         $i = 0;
@@ -296,11 +349,6 @@ class VatFieldAdminButtons extends FieldPluginBase
             $i++;
         }
 
-        // Title
-        $form['group_roles'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Which roles are allowed to see the Buttons? ') . '</div>',
-        ];
-
         foreach ($roles as $role) {
 
             $role_form_name = 'roles-' . $role['id'];
@@ -311,6 +359,12 @@ class VatFieldAdminButtons extends FieldPluginBase
             ];
         }
 
+        // Fieldset End
+        $form['group_roles_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#suffix' => '</fieldset>',
+        ];
 
         // Parent Options
         // ------------------------------
@@ -535,10 +589,11 @@ class VatFieldAdminButtons extends FieldPluginBase
                         '#type' => 'link',
                         '#url' => Url::fromUri('internal:/' . $link),
                         '#attributes' => [
-                            'class' => $class_show_as . ' ' . $class_size,
+                            'class' => 'vat-button-inline ' . $class_show_as . ' ' . $class_size,
+                            'role' => 'button',
                         ],
-                        '#prefix' => '<span><div class="vat-no-break">',
-                        '#suffix' => '</div></span>',
+                        '#prefix' => '<span><span class="vat-no-break">',
+                        '#suffix' => '</span></span>',
                     ];
 
 

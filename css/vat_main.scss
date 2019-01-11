@@ -4,26 +4,50 @@
 }
 
 .vat-link,
-.vat-btn {
-margin-right: 10px;
+.vat-button {
+  margin: 2px 5px;
+  padding: 2px 10px;
+  display: inline-block;
 }
 
 
-.vat-btn.btn-sm{
+.vat-button.btn-sm {
+  font-size: 0.8rem;
 }
 
-.vat-btn.btn-lg{
+.vat-button.btn-lg {
+  font-size: 1.2rem;
 }
 
 
-.vat-btn {
+.vat-button {
   border-radius: 3px;
   border-color: rgb(187, 187, 187);
   background: rgb(236, 236, 236);
   cursor: pointer;
+  color: #373737;
+  text-decoration: none;
+
+  &:hover {
+    background: rgb(201, 201, 201);
+    color: black;
+    text-decoration: none;
+
+  }
+
+  &:active {
+    background: rgb(123, 123, 123);
+    color: #ededed;
+  }
+
 }
 
-.vat-btn-primary{
+.vat-button-group{
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.vat-button-primary {
 
 }
 
@@ -34,7 +58,6 @@ margin-right: 10px;
 }
 
 
-
 td.views-field.views-field-row-admintools a {
   visibility: hidden;
 }
@@ -43,31 +66,23 @@ tr:hover td.views-field.views-field-row-admintools a {
   visibility: visible;
 }
 
-.views-view-table a.link.vat-btn,
-.views-view-table a.vat-btn {
+.views-view-table a.link.vat-button,
+.views-view-table a.vat-button {
   text-decoration: none;
 }
 
-.vat-btn span.glyphicon,
-.vat-btn i.fa {
+.vat-button span.glyphicon,
+.vat-button i.fa,
+.vat-button svg {
   opacity: 0.5;
-  margin-right: 2px;
-  color: gray;
+  margin-right: 3px;
+  color: #000;
 }
 
-.vat-btn:hover span.glyphicon,
-.vat-btn i.fa:hover {
+.vat-button:hover span.glyphicon,
+.vat-button:hover i.fa,
+.vat-button:hover svg {
   opacity: 1;
-}
-
-.vat-btn:hover span.glyphicon-pencil,
-.vat-btn:hover i.fa-pencil {
-  color: green;
-}
-
-.vat-btn:hover span.glyphicon-trash,
-.vat-btn:hover i.fa-trash {
-  color: red;
 }
 
 
@@ -91,8 +106,7 @@ tr:hover td.views-field.views-field-row-admintools a {
 }
 
 
-
-.vat-options-button-row.hide{
+.vat-options-button-row.hide {
   display: none;
 }
 
@@ -104,6 +118,7 @@ tr:hover td.views-field.views-field-row-admintools a {
 .vat-options-group {
   align-items: center;
   vertical-align: central;
+//  border: red 1px solid;
 }
 
 .vat-options-inline {
@@ -112,3 +127,6 @@ tr:hover td.views-field.views-field-row-admintools a {
 }
 
 
+.vat-options-button-inline{
+  color: red;
+}

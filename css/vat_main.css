@@ -3,14 +3,35 @@
   flex-wrap: nowrap; }
 
 .vat-link,
-.vat-btn {
-  margin-right: 10px; }
+.vat-button {
+  margin: 2px 5px;
+  padding: 2px 10px;
+  display: inline-block; }
 
-.vat-btn {
+.vat-button.btn-sm {
+  font-size: 0.8rem; }
+
+.vat-button.btn-lg {
+  font-size: 1.2rem; }
+
+.vat-button {
   border-radius: 3px;
   border-color: #bbbbbb;
   background: #ececec;
-  cursor: pointer; }
+  cursor: pointer;
+  color: #373737;
+  text-decoration: none; }
+  .vat-button:hover {
+    background: #c9c9c9;
+    color: black;
+    text-decoration: none; }
+  .vat-button:active {
+    background: #7b7b7b;
+    color: #ededed; }
+
+.vat-button-group {
+  display: inline-block;
+  margin-right: 20px; }
 
 .vat-separator {
   margin-left: 9px;
@@ -23,27 +44,21 @@ td.views-field.views-field-row-admintools a {
 tr:hover td.views-field.views-field-row-admintools a {
   visibility: visible; }
 
-.views-view-table a.link.vat-btn,
-.views-view-table a.vat-btn {
+.views-view-table a.link.vat-button,
+.views-view-table a.vat-button {
   text-decoration: none; }
 
-.vat-btn span.glyphicon,
-.vat-btn i.fa {
+.vat-button span.glyphicon,
+.vat-button i.fa,
+.vat-button svg {
   opacity: 0.5;
-  margin-right: 2px;
-  color: gray; }
+  margin-right: 3px;
+  color: #000; }
 
-.vat-btn:hover span.glyphicon,
-.vat-btn i.fa:hover {
+.vat-button:hover span.glyphicon,
+.vat-button:hover i.fa,
+.vat-button:hover svg {
   opacity: 1; }
-
-.vat-btn:hover span.glyphicon-pencil,
-.vat-btn:hover i.fa-pencil {
-  color: green; }
-
-.vat-btn:hover span.glyphicon-trash,
-.vat-btn:hover i.fa-trash {
-  color: red; }
 
 .vat-area {
   padding: 5px 0; }
@@ -73,5 +88,8 @@ tr:hover td.views-field.views-field-row-admintools a {
 .vat-options-inline {
   display: inline-table;
   margin-right: 20px; }
+
+.vat-options-button-inline {
+  color: red; }
 
 /*# sourceMappingURL=vat_main.css.map */

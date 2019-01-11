@@ -69,7 +69,7 @@ class VatFieldAnchor extends FieldPluginBase
         // ------ Group: anchor link ------
 
         $form['group_link'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Anchor Link') . '</div>',
+            '#markup' => '<div class="vat-options-group">' . $this->t('Anchor Link') . '</div>',
         ];
 
         // Textfield  Prefix
@@ -131,7 +131,7 @@ class VatFieldAnchor extends FieldPluginBase
         // ------ Group: anchor Tag ------
 
         $form['group_tag'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Anchor Tag') . '</div>',
+            '#markup' => '<div class="vat-options-group">' . $this->t('Anchor Tag') . '</div>',
         ];
 
         // Textfield CSS Class

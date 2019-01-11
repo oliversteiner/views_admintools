@@ -32,16 +32,16 @@
     <div class="vat-area">
 
     <!-- Button Group -->
-    <div class="btn-group" role="group">
+    <div class="btn-group vat-button-group" role="group">
 
         {% for button in buttons %}
             {# New #}
             {% if button.active %}
 
-                <a type="button" class="{{ buttons.class }}"
+                <a role="button" class="{{ button.class }}"
 
                         {# Modal #}
-                        {% if buttons.modal %}
+                        {% if button.modal %}
                             data-dialog-type="modal"
                             data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
                         {% endif %}
@@ -74,14 +74,14 @@
 
 
         <!-- Button Group -->
-        <div class="btn-group" role="group">
+        <div class="btn-group vat-button-group" role="group">
 
             {% for vocabulary in vocabularies %}
 
 
                 {% if vocabulary.active %}
 
-                    <a type="button" class="{{ vocabulary.class }}"
+                    <a role="button" class="{{ vocabulary.class }}"
 
                             {# Modal #}
                             {% if vocabulary.modal %}
