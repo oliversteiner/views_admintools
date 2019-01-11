@@ -13,7 +13,8 @@
 .vat-button {
   border-radius: 3px;
   border-color: #bbbbbb;
-  background: #ececec; }
+  background: #ececec;
+  cursor: pointer; }
 
 .vat-button:hover {
   background: #b9b9b9; }
@@ -65,15 +66,6 @@ tr:hover td.views-field.views-field-row-admintools a {
 .vat-button:hover i.fa-trash {
   color: red; }
 
-.vat-views-option-group {
-  border-bottom: solid 1px gainsboro;
-  font-weight: bold;
-  margin-top: 10px; }
-
-.vat-views-option-inline {
-  display: inline-block;
-  padding-right: 20px; }
-
 .vat-area {
   padding: 5px 0; }
 
@@ -82,5 +74,35 @@ tr:hover td.views-field.views-field-row-admintools a {
 
 .vat-row-label {
   margin-left: 2px; }
+
+.vat-options-button-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ebebeb; }
+  .vat-options-button-row label {
+    display: none; }
+
+.vat-options-button-row.hide {
+  display: none; }
+
+#vat-options-button-row-1 label {
+  display: inherit;
+  margin: 0;
+  padding: 0 0 5px 5px; }
+#vat-options-button-row-1 .vat-options-button-active,
+#vat-options-button-row-1 .vat-options-button-fa {
+  padding-top: 8px; }
+
+.vat-options-button-inline {
+  padding-right: 18px;
+  min-width: 20px; }
+
+.vat-options-group {
+  align-items: center;
+  vertical-align: central; }
+
+.vat-options-inline {
+  display: inline-table;
+  margin-right: 20px; }
 
 /*# sourceMappingURL=views_admintools.css.map */

@@ -1,24 +1,35 @@
 <?php
 
-  /**
-   * @file
-   *
-   */
+/**
+ * @file
+ *
+ */
 
 
-  function views_admintools_theme() {
+function views_admintools_theme()
+{
 
     return [
-      'vat_area' => [
-        'render element' => 'view',
-        'template' => 'vat-area',
-        'variables' => array('vat' => [] ),
-      ],
+        'vat_area' => [
+            'render element' => 'view',
+            'template' => 'vat-area',
+            'variables' => [
+                'test' => [],
+                'access' => [],
+                'buttons' => [],
+                'modal' => [],
+                'content' => [],
+                'group' => [],
+                'look' => [],
+                'voc' => [],
+            ],
+        ],
     ];
-  }
+}
 
 
-function views_admintools_preprocess_page(&$variables) {
+function views_admintools_preprocess_page(&$variables)
+{
 
 
 }

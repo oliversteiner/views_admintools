@@ -10,128 +10,106 @@
 * @ingroup themeable
 */
 #}
+{#
 
-{#    {{ dd(vat.system_roles) }}
+    {{ dd(vat.system_roles) }}
     {{ dd(vat.access_roles) }}
     {{ dd(vat.user_roles) }}
     {{ dd(vat.has_access) }}
-    {{ dd(vat.user_id) }}#}
+    {{ dd(vat.user_id) }}
+#}
 
-{% if(vat.has_access) %}
+    {{ dd(buttons) }}
+    {{ dd(modal) }}
+    {{ dd(content) }}
+    {{ dd(group) }}
+    {{ dd(access ) }}
+    {{ dd(look) }}
+    {{ dd(test) }}
+    {{ dd(voc) }}
 
 
+{% if(access) %}
 
 
     <div class="vat-area">
 
-        <!-- Button Group -->
-        <div class="{{ vat.size_class }}" role="group">
+    <!-- Button Group -->
+    <div class="{{ group.class }}" role="group">
 
-
+        {% for button in buttons %}
             {# New #}
-            {% if vat.button_new %}
+            {% if button.active %}
 
-                <a type="button" class="{{ vat.button_class }} {{ vat.modal_button }} {{ vat.size_class }}"
+                <a type="button" class="{{ buttons.class }}"
 
                         {# Modal #}
-                        {% if vat.modal %}
+                        {% if buttons.modal %}
                             data-dialog-type="modal"
-                            data-dialog-options="{&quot;width&quot;:&quot;{{ vat.modal_width }}&quot;}"
+                            data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
                         {% endif %}
 
-                   href="/node/add/{{ vat.node_type }}?destination={{ vat.target_path_after_save }}">
+                   href="{{ button.href }}">
 
                     {# Icon #}
-                    {% if vat.button_icon %}
-                        <span class="{{ vat.icon_prefix }}{{ vat.icon_new }}" aria-hidden="true"> </span>
+                    {% if look.icon and button.icon %}
+                        <span class="{{ button.icon }}" aria-hidden="true"> </span>
                     {% endif %}
 
                     {# Label #}
-                    {% if vat.button_label %}
-                        {% trans %} New {% endtrans %}
+                    {% if look.label %}
+                        {% trans %} {{ button.label }} {% endtrans %}
                     {% endif %}
 
                 </a>
 
             {% endif %}
 
-
-            {# Sort #}
-            {% if vat.button_sort %}
-
-                <a type="button" class="{{ vat.button_class }}  {{ vat.size_class }} "
-                   href="{{ vat.target_path_sort }}?destination={{ vat.target_path_after_save }}">
-
-                    {# Icon #}
-                    {% if vat.button_icon %}
-                        <span class="{{ vat.icon_prefix }}{{ vat.icon_sort }}" aria-hidden="true"> </span>
-                    {% endif %}
-
-                    {# Label #}
-                    {% if vat.button_label %}
-                        {% trans %} Sort {% endtrans %}
-                    {% endif %}
-
-                </a>
-
-            {% endif %}
-
-            {# back #}
-            {% if vat.button_back %}
-
-                <a type="button" class="{{ vat.button_class }}  {{ vat.size_class }} "
-                   href="{{ vat.target_path_back }}?destination={{ vat.target_path_back }}">
-
-                    {# Icon #}
-                    {% if vat.button_icon %}
-                        <span class="{{ vat.icon_prefix }}{{ vat.icon_back }}" aria-hidden="true"> </span>
-                    {% endif %}
-
-                    {# Label #}
-                    {% if vat.button_label %}
-                        {% trans %} {{ vat.button_back_label }} {% endtrans %}
-                    {% endif %}
-
-                </a>
-
-            {% endif %}
+        {% endfor %}
 
 
 
-            {# separator #}
-            {% if vat.separator %}
 
-                <span class="vat-separator"></span>
-
-            {% endif %}
-
-
-            {# Taxonomy #}
-            {% if vat.list_taxonomy %}
-
-                {% for taxonomy in vat.list_taxonomy %}
-
-                    {% if  taxonomy.machine_name %}
+        {# separator #}
+        {% if look.separator %}
+            <span class="vat-separator"></span>
+        {% endif %}
 
 
-                        <a type="button" class="{{ vat.button_class }} {{ vat.size_class }} "
-                           href="/admin/structure/taxonomy/manage/{{ taxonomy.machine_name }}/overview?destination={{ vat.target_path_after_save }}"
-                           aria-label="{{ taxonomy.title }}">
+        <!-- Button Group -->
+        <div class="{{ group.class }}" role="group">
 
-                            {# Icon #}
-                            {% if vat.button_icon %}
-                                <span class="{{ vat.icon_prefix }}{{ vat.icon_taxonomy }}" aria-hidden="true"> </span>
+            {% for vocabulary in vocabularies %}
+
+
+                {% if vocabulary.active %}
+
+                    <a type="button" class="{{ vocabulary.class }}"
+
+                            {# Modal #}
+                            {% if vocabulary.modal %}
+                                data-dialog-type="modal"
+                                data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
                             {% endif %}
 
-                            {# Label #}
-                            {% if vat.button_label %}
-                                {{ taxonomy.title }}
-                            {% endif %}
-                        </a>
-                    {% endif %}
+                       href="{{ vocabulary.href }}">
 
-                {% endfor %}
-            {% endif %}
+                        {# Icon #}
+                        {% if look.icon and vocabulary.icon %}
+                            <span class="{{ vocabulary.icon }}" aria-hidden="true"> </span>
+                        {% endif %}
+
+                        {# Label #}
+                        {% if look.label %}
+                            {% trans %} {{ vocabulary.label }} {% endtrans %}
+                        {% endif %}
+
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
 
         </div>
 

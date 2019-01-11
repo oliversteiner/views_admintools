@@ -1,12 +1,25 @@
 (function($) {
-    /**
-     *
-     */
-    Drupal.behaviors.rowAdmintools = {
-        attach: function(context, settings) {
-            $('#drupal-modal').on('show.bs.modal', function(e) {
-              //  if (!data) return e.preventDefault(); // stops modal from being shown
-            });
-        }
-    };
-})(jQuery);
+  Drupal.behaviors.viewAdminTools = {
+
+
+    attach(context, settings) {
+
+      const scope = this;
+
+      // Click Handler for adding Rows
+      $('.add-more-buttons')
+        .once('.add-more-buttons')
+        .click(() => {
+          const elems = $('#vat-buttons-list').find('.vat-options-button-row.hide');
+          const first = elems[0];
+          $(first)
+            .removeClass('hide')
+            .addClass('show');
+
+          if (elems.length === 1) {
+            $('.add-more-buttons').hide();
+          }
+        });
+    },
+  };
+})(jQuery, Drupal, drupalSettings);

@@ -30,61 +30,71 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         $view_path = $this->view->getPath();
 
+        // Bundle
+        $option_filters = $this->view->display_handler->getOption('filters');
+        $option_filters_types = $option_filters['type']['value'];
+        $bundle = array_keys($option_filters_types)[0];
+
+        $options['content_type']['default'] = $bundle;
+
+
         // Override defaults to from parent.
-        $options['tokenize']['default'] = FALSE;
+        $options['tokenize']['default'] = false;
         $options['empty']['default'] = TRUE;
 
         // Provide our own defaults.
-        $options['title']['default'] = '';
+        $options['title_text']['default'] = '';
 
-        // Bundle
-        $options['node_type']['default'] = '';
 
-        // Buttons
-        $options['buttons_blank']['default'] = FALSE;
+        for ($i = 1; $i <= 10; $i++) {
+            $options['button_b' . $i . '_active']['default'] = false;
+            $options['button_b' . $i . '_label']['default'] = '';
+            $options['button_b' . $i . '_icon']['default'] = '';
+            $options['button_b' . $i . '_link']['default'] = '';
+            $options['button_b' . $i . '_destination']['default'] = '';
+            $options['button_b' . $i . '_modal']['default'] = '';
+        }
+
 
         // Button new
-        $options['button_new']['default'] = TRUE;
-        $options['target_path_after_save']['default'] = $view_path;
-        $options['icon_new']['default'] = 'plus';
+        $options['button_b1_active']['default'] = true;
+        $options['button_b1_label']['default'] = $this->t('New');
+        $options['button_b1_icon']['default'] = 'plus';
+        $options['button_b1_link']['default'] = '/node/add/' . $bundle;
+        $options['button_b1_destination']['default'] = '/' . $view_path;
+        $options['button_b1_modal']['default'] = true;
 
         // Button sort
-        $options['button_sort']['default'] = FALSE;
-        $options['target_path_sort']['default'] = $view_path . '-sort';
-        $options['icon_sort']['default'] = 'sort';
-
+        $options['button_b2_active']['default'] = false;
+        $options['button_b2_label']['default'] = $this->t('Sort');
+        $options['button_b2_icon']['default'] = 'sort';
+        $options['button_b2_link']['default'] = '/' . $view_path . '/sort';
+        $options['button_b2_destination']['default'] = '/' . $view_path;
 
         // Button back
-        $options['button_back']['default'] = FALSE;
-        $options['button_back_label']['default'] = $this->t('Back');
-        $options['target_path_back']['default'] = $view_path;
-        $options['icon_back']['default'] = 'chevron-left';
-
-        // Buttons
-
-
-        $options['button_text']['default'] = '';
-        $options['destination']['default'] = '';
-        $options['separator']['default'] = FALSE;
+        $options['button_b3_active']['default'] = false;
+        $options['button_b3_label']['default'] = $this->t('Back');
+        $options['button_b3_icon']['default'] = 'chevron-left';
+        $options['button_b3_link']['default'] = '/' . $view_path;
+        $options['button_b3_destination']['default'] = '';
 
 
-        // Design
-        $options['button_label']['default'] = TRUE;
-        $options['button_icon']['default'] = TRUE;
-        $options['show_as']['default'] = 'Button';
-        $options['button_class']['default'] = FALSE;
-        $options['icon_size']['default'] = 1;  // normal
-
-        // Icon Set
-        $options['icon_set']['default'] = 0;    // Automatic
+        // Button Look
+        $options['look_show_label']['default'] = TRUE;
+        $options['look_show_icon']['default'] = TRUE;
+        $options['look_show_as']['default'] = 'Button';
+        $options['look_icon_size']['default'] = 1;  // normal
+        $options['look_icon_set']['default'] = 0;    // Automatic
 
         // Vocabulary
-        for ($i = 1; $i <= 5; $i++) {
+        $options['look_separator']['default'] = false;
+        // 5 Vocabularies
+        for ($i = 1; $i <= 6; $i++) {
             $options['vocabulary_' . $i]['default'] = '';
         }
 
         //  Modal
-        $options['modal']['default'] = TRUE;
+        $options['use_modal']['default'] = TRUE;
         $options['modal_width']['default'] = 800; //
 
         // Role
@@ -105,6 +115,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     {
         parent::buildOptionsForm($form, $form_state);
 
+        // dpm($this->options);
 
         // Nodes Types
         $types = NodeType::loadMultiple();
@@ -135,185 +146,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             $vocabulary_options[$key] = $type->label();
         }
 
-
-        $form['#attached']['library'][] = 'views_admintools/views_admintools.enable';
-
-        // Title Text / Heading
-        $form['title'] = [
-            '#title' => $this->t('Title'),
-            '#type' => 'textfield',
-            '#default_value' => $this->options['title'],
+        $options_icon_size = [
+            'Small',
+            'Normal',
+            'Large',
         ];
-
-        // Which Node Type ?
-        $form['node_type'] = [
-            '#title' => $this->t('Content Type'),
-            '#type' => 'select',
-            '#default_value' => $this->options['node_type'],
-            '#options' => $bundle_options,
-        ];
-
-
-        // Button New
-        // ------------------------------
-
-        $form['group_button_new'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Add "New" Button') . '</div>',
-        ];
-
-        // Use Button New ?
-        $form['button_new'] = [
-            '#title' => $this->t('Button New'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['button_new'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Destination after save
-        $form['destination'] = [
-            '#title' => $this->t('Destination after Save'),
-            '#type' => 'textfield',
-            '#default_value' => $this->options['target_path_after_save'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // new icon
-        $form['icon_new'] = [
-            '#title' => $this->t('Icon Name (without prefix)'),
-            '#type' => 'textfield',
-            '#attributes' => array('maxlength' => 10, 'size' => 10),
-            '#default_value' => $this->options['icon_new'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-
-        // Button Sort
-        // ------------------------------
-
-        $form['group_button_sort'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Add "Sorting" Button') . '</div>',
-        ];
-
-        $form['button_sort'] = [
-            '#title' => $this->t('Button Sorting'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['button_sort'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Target View Sort
-        $form['view_name_sorting'] = [
-            '#title' => $this->t('View name'),
-            '#type' => 'textfield',
-            '#default_value' => $this->options['target_path_sort'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-
-        // sort icon
-        $form['icon_sort'] = [
-            '#title' => $this->t('Icon Name (without prefix)'),
-            '#type' => 'textfield',
-            '#attributes' => array('maxlength' => 10, 'size' => 10),
-            '#default_value' => $this->options['icon_sort'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Button Back
-        // ------------------------------
-
-        $form['group_button_back'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Add "Back" Button') . '</div>',
-        ];
-
-        // activation
-        $form['button_back'] = [
-            '#title' => $this->t('Back'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['button_back'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-        // Label
-        $form['button_back_label'] = [
-            '#title' => $this->t('Label'),
-            '#type' => 'textfield',
-            '#default_value' => $this->options['button_back_label'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Destination
-        $form['view_name_back'] = [
-            '#title' => $this->t('View name'),
-            '#type' => 'textfield',
-            '#default_value' => $this->options['target_path_back'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Icon
-        $form['icon_back'] = [
-            '#title' => $this->t('Icon Name (without prefix)'),
-            '#type' => 'textfield',
-            '#attributes' => array('maxlength' => 10, 'size' => 10),
-            '#default_value' => $this->options['icon_back'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Button Look
-        // ------------------------------
-
-        $form['group_elements'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Show') . '</div>',
-        ];
-
-        $form['button_label'] = [
-            '#title' => $this->t('label'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['button_label'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        $form['button_icon'] = [
-            '#title' => $this->t('icon'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['button_icon'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-
-        // Design
-        // ------------------------------
-
-        $form['group_design'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Design:') . '</div>',
-        ];
-
-
-        // Link or Button
-
-        $options = ['Button', 'Link'];
-        $form['show_as'] = [
-            '#title' => $this->t('Display as'),
-            '#type' => 'select',
-            '#default_value' => $this->options['show_as'],
-            '#options' => $options,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
-
-        // Icon Set
-        // ------------------------------
 
         $options_icon_set = [
             'Automatic',
@@ -322,88 +159,306 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             'Twitter Bootstrap 3',
         ];
 
-        $form['icon_set'] = [
-            '#title' => $this->t('Icon Set'),
+
+        $form['#attached']['library'][] = 'views_admintools/views_admintools.enable';
+
+
+        // Title Text / Heading
+        $form['title_text'] = [
+            '#title' => $this->t('Title'),
+            '#type' => 'textfield',
+            '#size' => 60,
+            '#default_value' => $this->options['title_text'],
+        ];
+
+        // Which Node Type ?
+        $form['content_type'] = [
+            '#title' => $this->t('Content Type'),
             '#type' => 'select',
-            '#default_value' => $this->options['icon_set'],
-            '#options' => $options_icon_set,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#default_value' => $this->options['content_type'],
+            '#options' => $bundle_options,
         ];
 
-
-        // Icon Size
-        // ------------------------------
-
-        $options_icon_size = [
-            'Small',
-            'Normal',
-            'Large',
+        $form['info'] = [
+            '#markup' => '<div class="vat-options-info">' . $this->t('Add icon names without prefix (fa-).') . '</div>',
         ];
 
-        $form['icon_size'] = [
-            '#title' => $this->t('Icon Size'),
-            '#type' => 'select',
-            '#default_value' => $this->options['icon_size'],
-            '#options' => $options_icon_size,
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+        // Warning: Default Drupal Fieldset don't work with $options['fieldset']['field']['default']
+        // Also create Filesets manuel
+
+        $form['button_fieldset_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => 'Buttons',
+            '#prefix' => '<fieldset id="vat-buttons-list">'
         ];
 
-        // Separator between Buttons and Taxonomy
-        // ------------------------------
-        $form['separator'] = [
-            '#title' => $this->t('Separator between Buttons and Taxonomy'),
-            '#type' => 'checkbox',
-            '#default_value' => $this->options['separator'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
-        ];
+        for ($i = 1; $i <= 10; $i++) {
+
+            // Button Default
+            // ------------------------------
+            if ($this->options['button_b' . $i . '_label'] == '') {
+                $visibility = 'hide';
+
+            } else {
+                $visibility = 'show';
+            }
 
 
-        $form['group_end'] = [
-            '#markup' => '<div class="vat-views-option-group"></div>',
-        ];
+            $form['button_b' . $i . '_fieldset_start'] = [
+                '#type' => 'html_tag',
+                '#tag' => 'span',
+                '#value' => '',
+                '#prefix' => '<div class="vat-options-button-row ' . $visibility . '" id="vat-options-button-row-' . $i . '">'
+            ];
 
 
-        // Taxonomy
-        // ------------------------------
-        $form['group_taxonomy_title'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Add Taxonomy Links') . '</div>',
-        ];
+            // Active  ?
+            $form['button_b' . $i . '_active'] = [
+                '#title' => '',
+                '#type' => 'checkbox',
+                '#default_value' => $this->options['button_b' . $i . '_active'],
+                '#prefix' => '<span class="vat-options-button-inline vat-options-button-active">',
+                '#suffix' => '</span>',
+            ];
+
+            // Font Awesome
+
+            if ($this->options['button_b' . $i . '_icon']) {
+                $form['button_b' . $i . 'fa'] = array(
+                    '#theme' => 'fontawesomeicon',
+                    '#tag' => 'span',
+                    '#name' => 'fas fa-' . $this->options['button_b' . $i . '_icon'],
+                    '#settings' => NULL,
+                    '#transforms' => '2x',
+                    '#mask' => NULL,
+                    '#prefix' => '<span class="vat-options-button-inline vat-options-button-fa">',
+                    '#suffix' => '</span>',
+                );
+            } else {
+                $form['button_b' . $i . 'no_fa'] = [
+                    '#type' => 'html_tag',
+                    '#tag' => 'span',
+                    '#value' => '',
+                    '#prefix' => '<span class="vat-options-button-inline vat-options-button-fa">',
+                    '#suffix' => '</span>',];
+            }
 
 
-        for ($i = 1; $i <= 5; $i++) {
+            //  icon
+            $form['button_b' . $i . 'icon'] = [
+                '#title' => $this->t('Icon'),
+                '#type' => 'textfield',
+                '#size' => 10,
+                '#default_value' => $this->options['button_b' . $i . '_icon'],
+                '#prefix' => '<span class="vat-options-button-inline">',
+                '#suffix' => '</span>',
+            ];
 
-            // add 4 taxonomy vocabulary dropdowns
-            $form['vocabulary_' . $i] = [
-                '#title' => $this->t('Taxonomy ' . $i),
-                '#type' => 'select',
-                '#default_value' => $this->options['vocabulary_' . $i],
-                '#options' => $vocabulary_options,
-                '#prefix' => '<div class="vat-views-option-inline">',
-                '#suffix' => '</div>',
+            // Label
+            $form['button_b' . $i . '_label'] = [
+                '#title' => $this->t('Label'),
+                '#type' => 'textfield',
+                '#size' => 20,
+                '#default_value' => $this->options['button_b' . $i . '_label'],
+                '#prefix' => '<span class="vat-options-button-inline">',
+                '#suffix' => '</span>',
+            ];
+
+            // Link
+            $form['button_b' . $i . '_link'] = [
+                '#title' => $this->t('Link'),
+                '#type' => 'textfield',
+                '#size' => 20,
+                '#default_value' => $this->options['button_b' . $i . '_link'],
+                '#prefix' => '<span class="vat-options-button-inline">',
+                '#suffix' => '</span>',
+            ];
+
+            // Destination after save
+            $form['button_b' . $i . '_destination'] = [
+                '#title' => $this->t('Destination after Save'),
+                '#type' => 'textfield',
+                '#size' => 20,
+                '#default_value' => $this->options['button_b' . $i . '_destination'],
+                '#prefix' => '<span class="vat-options-button-inline">',
+                '#suffix' => '</span>',
+            ];
+
+            // Modal?
+            $form['button_b' . $i . '_modal'] = [
+                '#title' => '',
+                '#type' => 'checkbox',
+                '#default_value' => $this->options['button_b' . $i . '_modal'],
+                '#prefix' => '<span class="vat-options-button-inline vat-options-button-modal">',
+                '#suffix' => '</span>',
+            ];
+
+            // Modal?
+            if ($i == 1) {
+
+                $form['button_b' . $i . '_modal']['#prefix'] = '<span class="vat-options-button-inline vat-options-button-modal"><label class="modal-label">Modal</label>';
+                $form['button_b' . $i . '_modal']['#suffix'] = '</span>';
+            }
+            $form['button_b' . $i . '_fieldset_end'] = [
+                '#type' => 'html_tag',
+                '#tag' => 'span',
+                '#value' => '',
+                '#suffix' => '</div>'
             ];
 
 
         }
 
+        // Add more Rows
+        // Add a submit button that handles the submission of the form.
+        $form['actions_add_more_rows'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'div',
+            '#value' => $this->t('Add more buttons'),
+            '#attributes' => ['class' => ['vat-button', 'add-more-buttons']],
+        ];
+
+
+        $form['button_fieldset_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#suffix' => '</fieldset>'
+        ];
+
+
+        // Look
+        // ------------------------------
+
+        // Fieldset
+        $form['look_fieldset_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Button Look'),
+            '#prefix' => '<fieldset class="vat-options-group">'
+        ];
+
+
+        // Label
+        $form['look_show_label'] = [
+            '#title' => $this->t('label'),
+            '#type' => 'checkbox',
+            '#default_value' => $this->options['look_show_label'],
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+
+        // Icon
+        $form['look_show_icon'] = [
+            '#title' => $this->t('icon'),
+            '#type' => 'checkbox',
+            '#default_value' => $this->options['look_show_icon'],
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+
+        // Link or Button
+        $options = ['Button', 'Link'];
+        $form['look_show_as'] = [
+            '#title' => $this->t('Show as'),
+            '#type' => 'select',
+            '#default_value' => $this->options['look_show_as'],
+            '#options' => $options,
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        // Icon Set
+        $form['look_icon_set'] = [
+            '#title' => $this->t('Icon Set'),
+            '#type' => 'select',
+            '#default_value' => $this->options['look_icon_set'],
+            '#options' => $options_icon_set,
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        // Icon Size
+        $form['look_icon_size'] = [
+            '#title' => $this->t('Icon Size'),
+            '#type' => 'select',
+            '#default_value' => $this->options['look_icon_size'],
+            '#options' => $options_icon_size,
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        // Fieldset End
+        $form['look_fieldset_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#suffix' => '</fieldset>'
+        ];
+
+        // Vocabulary
+        // ------------------------------
+
+        // Fieldset
+        $form['vocabularies_fieldset_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Vocabularies'),
+            '#prefix' => '<fieldset class="vat-options-group">'
+        ];
+
+        for ($i = 1; $i <= 6; $i++) {
+
+            // add 4 taxonomy vocabulary dropdowns
+            $form['vocabulary_' . $i] = [
+                //    '#title' => $this->t('Taxonomy ' . $i),
+                '#type' => 'select',
+                '#default_value' => $this->options['vocabulary_' . $i],
+                '#options' => $vocabulary_options,
+                '#prefix' => '<span class="vat-options-inline">',
+                '#suffix' => '</span>',
+            ];
+
+
+        }
+        // Separator between Buttons and Taxonomy
+        $form['look_separator'] = [
+            '#title' => $this->t('Separator between Buttons and Taxonomy'),
+            '#type' => 'checkbox',
+            '#default_value' => $this->options['look_separator'],
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        // Fieldset End
+        $form['vocabularies_fieldset_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#suffix' => '</fieldset>'
+        ];
 
         // Modal
         // ------------------------------
 
-        // Title
-        $form['group_modal'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Modal Dialog') . '</div>',
+        // Fieldset
+        $form['modal_fieldset_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Modal Dialog'),
+            '#prefix' => '<fieldset class="vat-options-group">'
         ];
 
         // Modal
-        $form['modal'] = [
+        $form['use_modal'] = [
             '#title' => $this->t('Use Modal Dialog?'),
             '#type' => 'checkbox',
-            '#default_value' => $this->options['modal'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#default_value' => $this->options['use_modal'],
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
 
         ];
 
@@ -411,18 +466,29 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $form['modal_width'] = [
             '#title' => $this->t('Modal Width'),
             '#type' => 'textfield',
-            '#attributes' => array('maxlength' => 10, 'size' => 10),
+            '#size' => 10,
             '#default_value' => $this->options['modal_width'],
-            '#prefix' => '<div class="vat-views-option-inline">',
-            '#suffix' => '</div>',
+            '#prefix' => '<span class="vat-options-inline">',
+            '#suffix' => '</span>',
+        ];
+
+        // Fieldset End
+        $form['modal_fieldset_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#suffix' => '</fieldset>'
         ];
 
         // User Roles
         // ------------------------------
 
-        // Title
-        $form['group_roles'] = [
-            '#markup' => '<div class="vat-views-option-group">' . $this->t('Which roles are allowed to see the Buttons? ') . '</div>',
+        // Fieldset
+        $form['roles_fieldset_start'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'label',
+            '#value' => $this->t('Which roles are allowed to see the Buttons?'),
+            '#prefix' => '<fieldset class="vat-options-group">'
         ];
 
         foreach ($roles as $role) {
@@ -435,29 +501,59 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             ];
         }
 
+        // Fieldset End
+        $form['roles_fieldset_end'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#value' => '',
+            '#suffix' => '</fieldset>'
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function render($empty = FALSE)
+    public function render($empty = false)
     {
 
         if (!$empty || !empty($this->options['empty'])) {
 
-            // Taxonomy
-            $taxonomy = [];
-            for ($i = 1; $i <= 5; $i++) {
 
-                if ($this->options['vocabulary_' . $i] != FALSE) {
-                    $taxonomy_term_name = $this->options['vocabulary_' . $i];
-                    $taxonomy[$i]['machine_name'] = $taxonomy_term_name;
-                    $taxonomy[$i]['title'] = self::_properTitle($taxonomy_term_name);
-                } else {
-                    $taxonomy[$i] = FALSE;
-                }
+            $view_path = $this->view->getPath();
+
+
+            // Content
+            // -------------------------------
+            $content = false;
+
+            if ($this->options['content_type']) {
+                $content['type'] = $this->options['content_type'];
 
             }
+
+
+            // Look
+            // -------------------------------
+            $look['separator'] = false;
+            $look['icon'] = false;
+            $look['label'] = false;
+
+
+            // Separator
+            if ($this->options['look_separator']) {
+                $look['separator'] = true;
+            }
+
+            // Icon
+            if ($this->options['look_show_icon']) {
+                $look['icon'] = true;
+            }
+
+            // Label
+            if ($this->options['look_show_label']) {
+                $look['label'] = true;
+            }
+
 
             // Roles with access
             $system_roles = [];
@@ -488,18 +584,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
 
             // is user roles in access roles ?
-            $has_access = false;
+            $access = false;
 
             // If User is Admin
             if ($user_id == 1) {
-                $has_access = true;
+                $access = true;
 
             } else {
                 // Check user roles
 
                 foreach ($user_roles as $user_role) {
                     if (in_array($user_role, $access_roles)) {
-                        $has_access = true;
+                        $access = true;
                         break;
                     }
                 }
@@ -509,30 +605,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // Design
 
 
-            // Size Class
-            switch ($this->options['icon_size']) {
-                case 0: // small
-                    $size_class = 'btn-sm vat-button-sm';
-                    break;
-
-                case 1:  // normal
-                    $size_class = 'btn-md vat-button-md';
-                    break;
-
-                case 2: // large
-                    $size_class = 'btn-lg vat-button-lg';
-                    break;
-
-                default:
-                    $size_class = '';
-                    break;
-            }
-
-
             //  Icon Set
             // ----------------------------------------------------
 
-            $icon_set = $this->options['icon_set'];
+            $icon_set = $this->options['look_icon_set'];
 
             //  Icon Theme
             if ($icon_set == 0) {
@@ -568,86 +644,175 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     break;
             }
 
+            // Look
+            // -------------------------------
 
-            switch ($this->options['show_as']) {
+            // Show
+            switch ($this->options['look_show_as']) {
 
                 case  0: // Button:
                     if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-                        $button_class = 'btn btn-default vat-button';
+                        $button_classes = 'btn btn-default vat-button';
                     } else {
-                        $button_class = 'vat-button';
+                        $button_classes = 'vat-button';
                     }
+
                     break;
 
                 case 1: // Link:
-                    $button_class = 'vat-link';
+                    $button_classes = 'vat-link';
                     break;
 
                 default:
-                    $button_class = 'vat-default';
+                    $button_classes = 'vat-default';
                     break;
 
             }
 
-            // Modal Dialog?
+            // Size
+            switch ($this->options['look_icon_size']) {
+                case 0: // small
+                    $size_class = 'btn-sm vat-button-sm';
+                    break;
 
-            $button_class_dialog = $this->options['modal'] ? 'use-ajax' : '';
+                case 1:  // normal
+                    $size_class = 'btn-md vat-button-md';
+                    break;
 
+                case 2: // large
+                    $size_class = 'btn-lg vat-button-lg';
+                    break;
 
-            $vat = [
-                'title' => $this->options['title'],
-                'button_new' => $this->options['button_new'],
-                'button_sort' => $this->options['button_sort'],
-                'button_back' => $this->options['button_back'],
-                'button_back_label' => $this->options['button_back_label'],
-                'separator' => $this->options['separator'],
-                'list_taxonomy' => $taxonomy,
-                'node_type' => $this->options['node_type'],
-                'target_path_after_save' => '/' . $this->options['target_path_after_save'],
-                'target_path_sort' => '/' . $this->options['target_path_sort'],
-                'target_path_back' => '/' . $this->options['target_path_back'],
-                'button_label' => $this->options['button_label'],
-                'button_icon' => $this->options['button_icon'],
-                'show_as' => $this->options['show_as'],
-                'icon_size' => $this->options['icon_size'],
-                'button_class' => $button_class,
-                'size_class' => $size_class,
+                default:
+                    $size_class = '';
+                    break;
+            }
 
-                // Icon
-                'icon_set' => $icon_set,
-                'icon_prefix' => $prefix,
+            // Group
+            // -------------------------------
+            $group['class'] = $size_class;
 
 
-                // Icon names
-                'icon_new' => $this->options['icon_new'],
-                'icon_sort' => $this->options['icon_sort'],
-                'icon_back' => $this->options['icon_back'],
-                'icon_taxonomy' => $icon_taxonomy,
+            // Modal
+            // -------------------------------
+            $modal = false;
 
-                // Modal
-                'modal' => $this->options['modal'],
-                'modal_width' => $this->options['modal_width'],
-                'modal_button' => $button_class_dialog,
-
-                // Roles
-                'system_roles' => $system_roles,
-                'access_roles' => $access_roles,
-                'user_roles' => $user_roles,
-                'has_access' => $has_access,
-                'user_id' => $user_id,
+            if ($this->options['use_modal']) {
+                $modal = [
+                    'width' => $this->options['modal_width'],
+                ];
+            }
 
 
+            // Buttons
+            // -------------------------------
+            $buttons = [];
+            $button_attributes = ['active', 'label', 'icon', 'link', 'destination', 'class', 'modal'];
+
+            for ($i = 1; $i <= 10; $i++) {
+
+                $attr = [];
+                $button_name = 'button_b' . $i;
+
+                foreach ($button_attributes as $button_attribute) {
+                    $option_name = $button_name . '_' . $button_attribute;
+                    $attribute = '';
+                    switch ($button_attribute) {
+
+                        case 'icon':
+                            if ($this->options[$option_name]) {
+                                $attribute = $prefix . $this->options[$option_name];
+                            }
+                            break;
+
+                        case 'class':
+                            $attribute = $button_classes;
+                            break;
+
+                        case 'link':
+                            $attribute = self::buildHref($button_name);
+                            $attr['href'] = $attribute;
+                            break;
+
+                        default:
+                            $attribute = $this->options[$option_name];
+                            break;
+                    }
+
+                    $attr[$button_attribute] = $attribute;
+
+
+                }
+
+                $buttons[$i] = $attr;
+
+            }
+
+
+            // Vocabularies
+            // -------------------------------
+            $vocabularies = [];
+
+            for ($i = 1; $i <= 6; $i++) {
+
+                $attr = [];
+                $vocabulary_name = 'vocabulary_' . $i;
+
+                if ($this->options[$vocabulary_name] != false) {
+
+                    $machine_name = $this->options[$vocabulary_name];
+                    $voc = Vocabulary::load($machine_name);
+                    $label = $voc->label();
+
+                    $attr['active'] = true;
+
+                    $attr['icon'] = $prefix . $icon_taxonomy;
+
+                    $attr['label'] = $label;
+
+                    $attr['$machine_name'] = $machine_name;
+
+                    // href
+                    $href = "/admin/structure/taxonomy/manage/$machine_name/overview?destination=$view_path";
+                    $attr['href'] = $href;
+
+                    // class
+                    $attr['class'] = $button_classes;
+
+                    // modal
+                    $attr['modal'] = false;
+
+
+                }
+                $vocabularies[$i] = $attr;
+
+            }
+
+            //   dpm($vocabularies);
+
+            $test = [
+                'ein' => 'Test 1',
+                'ein2' => 'Test 2',
+                'ein3' => 'Test 3',
+                'ein4' => 'Test 5',
             ];
-
 
             return [
                 '#theme' => 'vat_area',
-                '#vat' => $vat,
+                '#test' => $test,
+                '#access' => $access,
+                '#buttons' => $buttons,
+                '#modal' => $modal,
+                '#content' => $content,
+                '#look' => $look,
+                '#group' => $group,
+                '#voc' => $vocabularies,
+
             ];
 
         }
-
         return [];
+
     }
 
 
@@ -663,15 +828,21 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         return '';
     }
 
-
-    private
-    function _properTitle($string)
+    public
+    function buildHref($button_name)
     {
 
-        $string = str_replace('_', ' ', $string);
-        $string = ucwords($string);
+        $target = $this->options[$button_name . '_link'];
+        $destination = $this->options[$button_name . '_destination'];
 
-        return $string;
+        if ($destination) {
+            $link = $target . '?destination=' . $destination;
+        } else {
+            $link = $target;
+        }
+
+        return $link;
     }
+
 
 }

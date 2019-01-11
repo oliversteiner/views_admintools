@@ -5,7 +5,6 @@ views_admintools.forms:
        css/views_admintools.css: {}
 
 views_admintools.enable:
-  version: 1
   css:
     theme:
       css/views_admintools.css: {}
@@ -17,7 +16,6 @@ views_admintools.enable:
 #
 # VAT GroupBy
 views_admintools.group_by:
-  version: 1
   css:
     theme:
       css/vat_group_by.css: {}
@@ -29,7 +27,6 @@ views_admintools.group_by:
 
 
 views_admintools.vat_toggle_tag:
-  version: 1
   css:
     theme:
       css/vat_toggle_tag.css: {}
