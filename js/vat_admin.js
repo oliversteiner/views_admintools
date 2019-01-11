@@ -1,10 +1,9 @@
 (function($) {
-  Drupal.behaviors.viewAdminTools = {
+  Drupal.behaviors.vatAdmin = {
 
 
     attach(context, settings) {
 
-      const scope = this;
 
       // Click Handler for adding Rows
       $('.add-more-buttons')

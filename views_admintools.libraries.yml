@@ -1,18 +1,24 @@
-views_admintools.forms:
-   version: 1
-   css:
-     theme:
-       css/views_admintools.css: {}
-
-views_admintools.enable:
+views_admintools.main:
   css:
     theme:
-      css/views_admintools.css: {}
+      css/vat_main.css: {}
   js:
-    js/vat_admintools.js: {}
+    js/vat_mains.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
+
+
+views_admintools.admin:
+  css:
+    theme:
+      css/vat_admin.css: {}
+  js:
+    js/vat_admin.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - views_admintools.admin
 #
 # VAT GroupBy
 views_admintools.group_by:
@@ -24,6 +30,7 @@ views_admintools.group_by:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - views_admintools.admin
 
 
 views_admintools.vat_toggle_tag:
@@ -35,3 +42,4 @@ views_admintools.vat_toggle_tag:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - views_admintools.admin
