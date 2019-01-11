@@ -23,7 +23,6 @@ $color-smmg-tag-text-active-hover: rgb(244, 255, 246);
 $color-smmg-tag-border-active-hover: rgb(46, 62, 56);
 
 
-
 // Black
 $color-90: rgb(17, 17, 17);
 $color-80: rgb(41, 41, 41);
@@ -66,6 +65,7 @@ $color-error-text: #7f2013;
   background-color: $color-ok-background;
   color: $color-ok-text;
 }
+
 // BOX warning
 @mixin box-warning {
   @include box-message;
@@ -74,6 +74,7 @@ $color-error-text: #7f2013;
   background-color: $color-warning-background;
   color: $color-warning-text;
 }
+
 // BOX error
 @mixin box-error {
   @include box-message;
@@ -87,14 +88,17 @@ $color-error-text: #7f2013;
 // Ajax
 .ajax-message {
 }
+
 // Ajax
 .ajax-message-ok {
   @include box-ok;
 }
+
 // Ajax
 .ajax-message-warning {
   @include box-warning;
 }
+
 // Ajax
 .ajax-message-error {
   @include box-error;

@@ -4,27 +4,27 @@
 }
 
 .vat-link,
-.vat-button {
-  padding: 4px 10px;
-  display: inline-block;
-  margin: 2px;
-  font-size: 1em;
-  text-decoration: none;
+.vat-btn {
+margin-right: 10px;
 }
 
-.vat-button {
+
+.vat-btn.btn-sm{
+}
+
+.vat-btn.btn-lg{
+}
+
+
+.vat-btn {
   border-radius: 3px;
   border-color: rgb(187, 187, 187);
   background: rgb(236, 236, 236);
   cursor: pointer;
 }
 
-.vat-button:hover {
-  background: #b9b9b9;
-}
+.vat-btn-primary{
 
-.vat-button:active {
-  background: #878787;
 }
 
 .vat-separator {
@@ -33,19 +33,7 @@
   border-left: 1px solid rgb(221, 221, 221);
 }
 
-.vat-button-sm {
-  font-size: 0.9em;
-  padding: 1px 10px;
-}
 
-.vat-button-md {
-  font-size: 1em;
-}
-
-.vat-button-lg {
-  font-size: 1.3em;
-  padding: 4px 10px;
-}
 
 td.views-field.views-field-row-admintools a {
   visibility: hidden;
@@ -55,30 +43,30 @@ tr:hover td.views-field.views-field-row-admintools a {
   visibility: visible;
 }
 
-.views-view-table a.link.vat-button,
-.views-view-table a.vat-button {
+.views-view-table a.link.vat-btn,
+.views-view-table a.vat-btn {
   text-decoration: none;
 }
 
-.vat-button span.glyphicon,
-.vat-button i.fa {
+.vat-btn span.glyphicon,
+.vat-btn i.fa {
   opacity: 0.5;
   margin-right: 2px;
   color: gray;
 }
 
-.vat-button:hover span.glyphicon,
-.vat-button i.fa:hover {
+.vat-btn:hover span.glyphicon,
+.vat-btn i.fa:hover {
   opacity: 1;
 }
 
-.vat-button:hover span.glyphicon-pencil,
-.vat-button:hover i.fa-pencil {
+.vat-btn:hover span.glyphicon-pencil,
+.vat-btn:hover i.fa-pencil {
   color: green;
 }
 
-.vat-button:hover span.glyphicon-trash,
-.vat-button:hover i.fa-trash {
+.vat-btn:hover span.glyphicon-trash,
+.vat-btn:hover i.fa-trash {
   color: red;
 }
 
@@ -100,29 +88,12 @@ tr:hover td.views-field.views-field-row-admintools a {
   align-items: center;
   border-bottom: 1px solid #ebebeb;
 
-
-  label {
-    display: none;
-  }
 }
 
 
 
 .vat-options-button-row.hide{
   display: none;
-}
-
-#vat-options-button-row-1 {
-  label {
-    display: inherit;
-    margin: 0;
-    padding: 0 0 5px 5px;
-  }
-
-  .vat-options-button-active,
-  .vat-options-button-fa {
-    padding-top: 8px;
-  }
 }
 
 .vat-options-button-inline {
@@ -141,6 +112,3 @@ tr:hover td.views-field.views-field-row-admintools a {
 }
 
 
-.vat-add-more-buttons{
-
-}

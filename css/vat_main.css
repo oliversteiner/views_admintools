@@ -3,40 +3,19 @@
   flex-wrap: nowrap; }
 
 .vat-link,
-.vat-button {
-  padding: 4px 10px;
-  display: inline-block;
-  margin: 2px;
-  font-size: 1em;
-  text-decoration: none; }
+.vat-btn {
+  margin-right: 10px; }
 
-.vat-button {
+.vat-btn {
   border-radius: 3px;
   border-color: #bbbbbb;
   background: #ececec;
   cursor: pointer; }
 
-.vat-button:hover {
-  background: #b9b9b9; }
-
-.vat-button:active {
-  background: #878787; }
-
 .vat-separator {
   margin-left: 9px;
   margin-right: 15px;
   border-left: 1px solid #dddddd; }
-
-.vat-button-sm {
-  font-size: 0.9em;
-  padding: 1px 10px; }
-
-.vat-button-md {
-  font-size: 1em; }
-
-.vat-button-lg {
-  font-size: 1.3em;
-  padding: 4px 10px; }
 
 td.views-field.views-field-row-admintools a {
   visibility: hidden; }
@@ -44,26 +23,26 @@ td.views-field.views-field-row-admintools a {
 tr:hover td.views-field.views-field-row-admintools a {
   visibility: visible; }
 
-.views-view-table a.link.vat-button,
-.views-view-table a.vat-button {
+.views-view-table a.link.vat-btn,
+.views-view-table a.vat-btn {
   text-decoration: none; }
 
-.vat-button span.glyphicon,
-.vat-button i.fa {
+.vat-btn span.glyphicon,
+.vat-btn i.fa {
   opacity: 0.5;
   margin-right: 2px;
   color: gray; }
 
-.vat-button:hover span.glyphicon,
-.vat-button i.fa:hover {
+.vat-btn:hover span.glyphicon,
+.vat-btn i.fa:hover {
   opacity: 1; }
 
-.vat-button:hover span.glyphicon-pencil,
-.vat-button:hover i.fa-pencil {
+.vat-btn:hover span.glyphicon-pencil,
+.vat-btn:hover i.fa-pencil {
   color: green; }
 
-.vat-button:hover span.glyphicon-trash,
-.vat-button:hover i.fa-trash {
+.vat-btn:hover span.glyphicon-trash,
+.vat-btn:hover i.fa-trash {
   color: red; }
 
 .vat-area {
@@ -79,19 +58,9 @@ tr:hover td.views-field.views-field-row-admintools a {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #ebebeb; }
-  .vat-options-button-row label {
-    display: none; }
 
 .vat-options-button-row.hide {
   display: none; }
-
-#vat-options-button-row-1 label {
-  display: inherit;
-  margin: 0;
-  padding: 0 0 5px 5px; }
-#vat-options-button-row-1 .vat-options-button-active,
-#vat-options-button-row-1 .vat-options-button-fa {
-  padding-top: 8px; }
 
 .vat-options-button-inline {
   padding-right: 18px;
@@ -105,4 +74,4 @@ tr:hover td.views-field.views-field-row-admintools a {
   display: inline-table;
   margin-right: 20px; }
 
-/*# sourceMappingURL=views_admintools.css.map */
+/*# sourceMappingURL=vat_main.css.map */
