@@ -738,6 +738,12 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 $attr = [];
                 $button_name = 'button_b' . $i;
 
+                // Use Modal ?
+                $use_modal = $this->options[$button_name . '_modal'];
+                if ($use_modal) {
+                    $css_class_button = $css_class_button . ' use-ajax';
+                };
+
                 foreach ($button_attributes as $button_attribute) {
                     $option_name = $button_name . '_' . $button_attribute;
                     $attribute = '';
@@ -750,6 +756,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                             break;
 
                         case 'class':
+
                             $attribute = $css_class_button;
                             break;
 
