@@ -46,12 +46,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         }
 
         // Read first View Row get Content Type
+        $content_type = false;
         if ($this->view && $this->view->display_handler->getOption('filters')) {
             $option_filters = $this->view->display_handler->getOption('filters');
-            $option_filters_types = $option_filters['type']['value'];
-            $content_type = array_keys($option_filters_types)[0];
-        } else {
-            $content_type = false;
+            if(isset($option_filters['type']) && $option_filters['type']['value']){
+                $option_filters_types = $option_filters['type']['value'];
+                $content_type = array_keys($option_filters_types)[0];
+            }
         }
 
         $options['content_type']['default'] = $content_type;
