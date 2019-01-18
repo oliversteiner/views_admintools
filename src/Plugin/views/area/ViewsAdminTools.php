@@ -686,7 +686,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
 
                         // Add Bootstrap 4 Classes
-                        $css_class_button = 'btn btn-primary btn-vat';
+                        $css_class_button = 'btn btn-primary vat-button vat-button-primary';
                     } else {
                         $css_class_button = 'vat-button vat-button-primary';
                     }
