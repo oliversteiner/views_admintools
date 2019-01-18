@@ -2,17 +2,12 @@ views_admintools.main:
   css:
     theme:
       css/vat_main.css: {}
-  js:
-    js/vat_main.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
 
 
 views_admintools.admin:
-  css:
-    theme:
-      css/vat_admin.css: {}
   js:
     js/vat_admin.js: {}
   dependencies:
@@ -25,8 +20,6 @@ views_admintools.group_by:
   css:
     theme:
       css/vat_group_by.css: {}
-  js:
-    js/vat_group_by.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
