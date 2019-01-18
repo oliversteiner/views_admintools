@@ -3,7 +3,7 @@ views_admintools.main:
     theme:
       css/vat_main.css: {}
   js:
-    js/vat_mains.js: {}
+    js/vat_main.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
