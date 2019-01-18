@@ -22,7 +22,7 @@
   namespace Drupal\views_admintools\TwigExtension;
 
 
-  class readableLink extends \Twig_Extension {
+  class ReadableLink extends \Twig_Extension {
 
     /**
      * Generates a list of all Twig filters that this extension defines.

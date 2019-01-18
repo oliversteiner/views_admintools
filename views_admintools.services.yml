@@ -1,11 +1,11 @@
 services:
   views_admintools.twig_extension.readable_url:
     arguments: ['@renderer']
-    class: Drupal\views_admintools\TwigExtension\readableUrl
+    class: Drupal\views_admintools\TwigExtension\ReadableUrl
     tags:
       - { name: twig.extension }
   views_admintools.twig_extension.readable_link:
     arguments: ['@renderer']
-    class: Drupal\views_admintools\TwigExtension\readableLink
+    class: Drupal\views_admintools\TwigExtension\ReadableLink
     tags:
       - { name: twig.extension }

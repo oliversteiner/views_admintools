@@ -22,7 +22,7 @@
   namespace Drupal\views_admintools\TwigExtension;
 
 
-  class readableUrl extends \Twig_Extension {
+  class ReadableUrl extends \Twig_Extension {
 
     /**
      * Generates a list of all Twig filters that this extension defines.
