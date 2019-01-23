@@ -80,6 +80,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['button_b1_destination']['default'] = '/' . $view_path;
         $options['button_b1_modal']['default'] = true;
 
+
         // Button sort
         $options['button_b2_active']['default'] = false;
         $options['button_b2_label']['default'] = $this->t('Sort');
@@ -290,7 +291,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             }
 
             // Icon
-            $form['button_b' . $i . 'icon'] = [
+            $form['button_b' . $i . '_icon'] = [
                 '#title' => $this->labelFirstRow($i, $this->t('Icon')),
                 '#type' => 'textfield',
                 '#size' => 10,
@@ -298,6 +299,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#prefix' => '<span class="vat-options-button-inline">',
                 '#suffix' => '</span>',
             ];
+
 
             // Label
             $form['button_b' . $i . '_label'] = [
