@@ -109,7 +109,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         if ($options['fontawesome']['default']) {
             $options['look_icon_set']['default'] = 2;
 
-        } elseif ($options['fontawesome']['default']) {
+        } elseif ($options['bootstrap']['default']) {
             $options['look_icon_set']['default'] = 3;
 
         } else {
