@@ -34,22 +34,24 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         // View Info
         $view_path = $this->view->getPath();
+        $icon_prefix = '';
 
         // Icon Modules
         // fontawesome
         if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
             $options['fontawesome']['default'] = true;
-        }
-        // bootstrap
-        if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
+            $icon_prefix = 1;
+        } // bootstrap
+        elseif (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
             $options['bootstrap']['default'] = true;
+            $icon_prefix = 4;
         }
 
         // Read first View Row get Content Type
         $content_type = false;
         if ($this->view && $this->view->display_handler->getOption('filters')) {
             $option_filters = $this->view->display_handler->getOption('filters');
-            if(isset($option_filters['type']) && $option_filters['type']['value']){
+            if (isset($option_filters['type']) && $option_filters['type']['value']) {
                 $option_filters_types = $option_filters['type']['value'];
                 $content_type = array_keys($option_filters_types)[0];
             }
@@ -64,10 +66,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         for ($i = 1; $i <= 10; $i++) {
             $options['button_b' . $i . '_active']['default'] = false;
             $options['button_b' . $i . '_label']['default'] = '';
+            $options['button_b' . $i . '_icon_prefix']['default'] = '';
             $options['button_b' . $i . '_icon']['default'] = '';
             $options['button_b' . $i . '_link']['default'] = '';
             $options['button_b' . $i . '_destination']['default'] = '';
-            $options['button_b' . $i . '_modal']['default'] = '';
+            $options['button_b' . $i . '_modal']['default'] = 0;
         }
 
         // Set defaults for first 3 Buttons as "New", "Sort", "Back"
@@ -76,24 +79,29 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['button_b1_active']['default'] = true;
         $options['button_b1_label']['default'] = $this->t('New');
         $options['button_b1_icon']['default'] = 'plus';
+        $options['button_b1_icon_prefix']['default'] = $icon_prefix;
         $options['button_b1_link']['default'] = '/node/add/' . $content_type;
         $options['button_b1_destination']['default'] = '/' . $view_path;
-        $options['button_b1_modal']['default'] = true;
+        $options['button_b1_modal']['default'] = 1;
 
 
         // Button sort
         $options['button_b2_active']['default'] = false;
         $options['button_b2_label']['default'] = $this->t('Sort');
         $options['button_b2_icon']['default'] = 'sort';
+        $options['button_b2_icon_prefix']['default'] = $icon_prefix;
         $options['button_b2_link']['default'] = '/' . $view_path . '/sort';
         $options['button_b2_destination']['default'] = '/' . $view_path;
+        $options['button_b2_modal']['default'] = 0;
 
         // Button back
         $options['button_b3_active']['default'] = false;
         $options['button_b3_label']['default'] = $this->t('Back');
         $options['button_b3_icon']['default'] = 'chevron-left';
+        $options['button_b3_icon_prefix']['default'] = $icon_prefix;
         $options['button_b3_link']['default'] = '/' . $view_path;
         $options['button_b3_destination']['default'] = '';
+        $options['button_b2_modal']['default'] = 0;
 
         // Look
         $options['look_show_label']['default'] = TRUE;
@@ -204,6 +212,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             'Twitter Bootstrap 3',
         ];
 
+
+        // Options Icon Prefix
+        // -------------------------------
+        $options_icon_prefix = [
+            '',
+            'fas',
+            'far',
+            'fal',
+            'fa',
+            'fab',
+        ];
+
         // Build Form
         // -------------------------------
 
@@ -271,10 +291,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             // Render Icon if Font Awesome Module is installed
             if ($this->options['fontawesome'] && $this->options['button_b' . $i . '_icon']) {
+
+                $icon_prefix = $this->options['button_b' . $i . '_icon_prefix'];
+                $fontawesome_prefix = $options_icon_prefix[$icon_prefix];
+                $fontawesome_icon = $this->options['button_b' . $i . '_icon'];
+
                 $form['button_b' . $i . 'fa'] = array(
                     '#theme' => 'fontawesomeicon',
                     '#tag' => 'span',
-                    '#name' => 'fas fa-' . $this->options['button_b' . $i . '_icon'],
+                    '#name' => $fontawesome_prefix . ' fa-' . $fontawesome_icon,
                     '#settings' => NULL,
                     '#transforms' => '2x',
                     '#mask' => NULL,
@@ -289,6 +314,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     '#prefix' => '<span class="vat-options-button-inline vat-options-button-fa">',
                     '#suffix' => '</span>',];
             }
+
+            // Icon Prefix
+            $form['button_b' . $i . '_icon_prefix'] = [
+                '#title' => $this->labelFirstRow($i, $this->t('Prefix')),
+                '#type' => 'select',
+                '#default_value' => $this->options['button_b' . $i . '_icon_prefix'],
+                '#options' => $options_icon_prefix,
+                '#prefix' => '<span class="vat-options-button-inline">',
+                '#suffix' => '</span>',
+            ];
 
             // Icon
             $form['button_b' . $i . '_icon'] = [
@@ -665,7 +700,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     break;
 
                 case 2: // 'Font Awesome 5'
-                    $icon_prefix = 'fas fa-';
+                    $icon_prefix = 'fa-';
                     $icon_taxonomy = "list-ul";
                     break;
 
@@ -689,19 +724,19 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
 
                         // Add Bootstrap 4 Classes
-                        $css_class_button = 'btn btn-primary vat-button vat-button-primary';
+                        $button_classes = 'btn btn-primary vat-button vat-button-primary';
                     } else {
-                        $css_class_button = 'vat-button vat-button-primary';
+                        $button_classes = 'vat-button vat-button-primary';
                     }
 
                     break;
 
                 case 1: // Link:
-                    $css_class_button = 'vat-link';
+                    $button_classes = 'vat-link';
                     break;
 
                 default:
-                    $css_class_button = 'vat-button vat-button-primary';
+                    $button_classes = 'vat-button vat-button-primary';
                     break;
 
             }
@@ -723,7 +758,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             }
 
             // Combine Classes
-            $css_class_button = $css_class_button . ' ' . $css_class_size;
+            $button_classes = $button_classes . ' ' . $css_class_size;
 
             // Modal
             // -------------------------------
@@ -735,6 +770,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 ];
             }
 
+
+            // Options Icon Prefix
+            // -------------------------------
+            $options_icon_prefix = [
+                '',
+                'fas',
+                'far',
+                'fal',
+                'fa',
+                'fab',
+            ];
 
             // Buttons
             // -------------------------------
@@ -748,9 +794,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
                 // Use Modal ?
                 $use_modal = $this->options[$button_name . '_modal'];
-                if ($use_modal) {
-                    $css_class_button = $css_class_button . ' use-ajax';
-                };
+                if ($use_modal != 0) {
+                    $classes = $button_classes . ' use-ajax';
+                }
+                else{
+                    $classes = $button_classes;
+                }
+
+                $fp = $this->options[$button_name . '_icon_prefix'];
+                $fontawesome_prefix = $options_icon_prefix[$fp];
 
                 foreach ($button_attributes as $button_attribute) {
                     $option_name = $button_name . '_' . $button_attribute;
@@ -759,13 +811,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
                         case 'icon':
                             if ($this->options[$option_name]) {
-                                $attribute = $icon_prefix . $this->options[$option_name];
+                                $attribute = $fontawesome_prefix . ' ' . $icon_prefix . $this->options[$option_name];
                             }
                             break;
 
                         case 'class':
 
-                            $attribute = $css_class_button;
+                            $attribute = $classes;
                             break;
 
                         case 'link':
@@ -811,7 +863,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     $attr['href'] = $href;
 
                     // class
-                    $attr['class'] = $css_class_button;
+                    $attr['class'] = $button_classes;
 
                     // modal
                     $attr['modal'] = false;
