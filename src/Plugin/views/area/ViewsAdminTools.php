@@ -9,7 +9,6 @@ use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
 
-
 /**
  * Views area Admin Tools.
  *
@@ -19,18 +18,16 @@ use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
  */
 class ViewsAdminTools extends TokenizeAreaPluginBase
 {
-
     /**
      * {@inheritdoc}
      */
-    protected
-    function defineOptions()
+    protected function defineOptions(): array
     {
         $options = parent::defineOptions();
 
         // Override defaults to from parent.
         $options['tokenize']['default'] = false;
-        $options['empty']['default'] = TRUE;
+        $options['empty']['default'] = true;
 
         // View Info
         $view_path = $this->view->getPath();
@@ -41,7 +38,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
             $options['fontawesome']['default'] = true;
             $icon_prefix = 1;
-        } // bootstrap
+        }
+        // bootstrap
         elseif (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
             $options['bootstrap']['default'] = true;
             $icon_prefix = 4;
@@ -50,8 +48,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         // Read first View Row get Content Type
         $content_type = false;
         if ($this->view && $this->view->display_handler->getOption('filters')) {
-            $option_filters = $this->view->display_handler->getOption('filters');
-            if (isset($option_filters['type']) && $option_filters['type']['value']) {
+            $option_filters = $this->view->display_handler->getOption(
+                'filters'
+            );
+            if (
+                isset($option_filters['type']) &&
+                $option_filters['type']['value']
+            ) {
                 $option_filters_types = $option_filters['type']['value'];
                 $content_type = array_keys($option_filters_types)[0];
             }
@@ -84,7 +87,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['button_b1_destination']['default'] = '/' . $view_path;
         $options['button_b1_modal']['default'] = 1;
 
-
         // Button sort
         $options['button_b2_active']['default'] = false;
         $options['button_b2_label']['default'] = $this->t('Sort');
@@ -104,11 +106,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $options['button_b2_modal']['default'] = 0;
 
         // Look
-        $options['look_show_label']['default'] = TRUE;
-        $options['look_show_icon']['default'] = TRUE;
+        $options['look_show_label']['default'] = true;
+        $options['look_show_icon']['default'] = true;
         $options['look_show_as']['default'] = 'Button';
-        $options['look_icon_size']['default'] = 0;  // normal
-
+        $options['look_icon_size']['default'] = 0; // normal
 
         // 0  Automatic
         // 1  Drupal / jQuery Ui
@@ -117,10 +118,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         if ($options['fontawesome']['default']) {
             $options['look_icon_set']['default'] = 2;
-
         } elseif ($options['bootstrap']['default']) {
             $options['look_icon_set']['default'] = 3;
-
         } else {
             $options['look_icon_set']['default'] = 1;
         }
@@ -134,7 +133,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         }
 
         // Modal
-        $options['use_modal']['default'] = TRUE;
+        $options['use_modal']['default'] = true;
         $options['modal_width']['default'] = 800; //
 
         // Role
@@ -142,7 +141,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         foreach ($role_objects as $role) {
             $option_name = 'roles-' . $role->id();
-            $options[$option_name]['default'] = false;  // normal
+            $options[$option_name]['default'] = false; // normal
         }
 
         return $options;
@@ -151,14 +150,12 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     /**
      * {@inheritdoc}
      */
-    public
-    function buildOptionsForm(&$form, FormStateInterface $form_state)
+    public function buildOptionsForm(&$form, FormStateInterface $form_state)
     {
         parent::buildOptionsForm($form, $form_state);
 
         // Prepare Options for Select Form
         // -------------------------------
-
 
         //  Options Nodes Types
         // -------------------------------
@@ -212,23 +209,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             'Twitter Bootstrap 3',
         ];
 
-
         // Options Icon Prefix
         // -------------------------------
-        $options_icon_prefix = [
-            '',
-            'fas',
-            'far',
-            'fal',
-            'fa',
-            'fab',
-        ];
+        $options_icon_prefix = ['', 'fas', 'far', 'fal', 'fa', 'fab'];
 
         // Build Form
         // -------------------------------
 
         // Add CSS and JS
-        $form['#attached']['library'][] = 'views_admintools/views_admintools.admin';
+        $form['#attached']['library'][] =
+            'views_admintools/views_admintools.admin';
 
         // Title Text / Heading
         $form['title_text'] = [
@@ -248,7 +238,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         // Info , Help
         $form['info'] = [
-            '#markup' => '<div class="vat-options-info">' . $this->t('Add icon names without prefix (fa-).') . '</div>',
+            '#markup' =>
+                '<div class="vat-options-info">' .
+                    $this->t('Add icon names without prefix (fa-).') .
+                    '</div>',
         ];
 
         // Warning: Default Drupal Fieldset don't work with $options['fieldset']['field']['default']
@@ -258,16 +251,14 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'label',
             '#value' => 'Buttons',
-            '#prefix' => '<fieldset id="vat-buttons-list">'
+            '#prefix' => '<fieldset id="vat-buttons-list">',
         ];
 
         for ($i = 1; $i <= 10; $i++) {
-
             // Button Default
             // ------------------------------
             if ($this->options['button_b' . $i . '_label'] == '') {
                 $visibility = 'hide';
-
             } else {
                 $visibility = 'show';
             }
@@ -277,7 +268,12 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#type' => 'html_tag',
                 '#tag' => 'span',
                 '#value' => '',
-                '#prefix' => '<div class="vat-options-button-row ' . $visibility . '" id="vat-options-button-row-' . $i . '">'
+                '#prefix' =>
+                    '<div class="vat-options-button-row ' .
+                        $visibility .
+                        '" id="vat-options-button-row-' .
+                        $i .
+                        '">',
             ];
 
             // Activate Button
@@ -285,13 +281,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#title' => '',
                 '#type' => 'checkbox',
                 '#default_value' => $this->options['button_b' . $i . '_active'],
-                '#prefix' => '<span class="vat-options-button-inline vat-options-button-active">',
+                '#prefix' =>
+                    '<span class="vat-options-button-inline vat-options-button-active">',
                 '#suffix' => '</span>',
             ];
 
             // Render Icon if Font Awesome Module is installed
-            if ($this->options['fontawesome'] && $this->options['button_b' . $i . '_icon']) {
-
+            if (
+                $this->options['fontawesome'] &&
+                $this->options['button_b' . $i . '_icon']
+            ) {
                 $icon_prefix = $this->options['button_b' . $i . '_icon_prefix'];
                 $fontawesome_prefix = $options_icon_prefix[$icon_prefix];
                 $fontawesome_icon = $this->options['button_b' . $i . '_icon'];
@@ -300,10 +299,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     '#theme' => 'fontawesomeicon',
                     '#tag' => 'span',
                     '#name' => $fontawesome_prefix . ' fa-' . $fontawesome_icon,
-                    '#settings' => NULL,
+                    '#settings' => null,
                     '#transforms' => '2x',
-                    '#mask' => NULL,
-                    '#prefix' => '<span class="vat-options-button-inline vat-options-button-fa">',
+                    '#mask' => null,
+                    '#prefix' =>
+                        '<span class="vat-options-button-inline vat-options-button-fa">',
                     '#suffix' => '</span>',
                 );
             } else {
@@ -311,15 +311,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     '#type' => 'html_tag',
                     '#tag' => 'span',
                     '#value' => '',
-                    '#prefix' => '<span class="vat-options-button-inline vat-options-button-fa">',
-                    '#suffix' => '</span>',];
+                    '#prefix' =>
+                        '<span class="vat-options-button-inline vat-options-button-fa">',
+                    '#suffix' => '</span>',
+                ];
             }
 
             // Icon Prefix
             $form['button_b' . $i . '_icon_prefix'] = [
                 '#title' => $this->labelFirstRow($i, $this->t('Prefix')),
                 '#type' => 'select',
-                '#default_value' => $this->options['button_b' . $i . '_icon_prefix'],
+                '#default_value' =>
+                    $this->options['button_b' . $i . '_icon_prefix'],
                 '#options' => $options_icon_prefix,
                 '#prefix' => '<span class="vat-options-button-inline">',
                 '#suffix' => '</span>',
@@ -334,7 +337,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#prefix' => '<span class="vat-options-button-inline">',
                 '#suffix' => '</span>',
             ];
-
 
             // Label
             $form['button_b' . $i . '_label'] = [
@@ -358,10 +360,14 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             // Destination after submit
             $form['button_b' . $i . '_destination'] = [
-                '#title' => $this->labelFirstRow($i, $this->t('Destination after submit')),
+                '#title' => $this->labelFirstRow(
+                    $i,
+                    $this->t('Destination after submit')
+                ),
                 '#type' => 'textfield',
                 '#size' => 20,
-                '#default_value' => $this->options['button_b' . $i . '_destination'],
+                '#default_value' =>
+                    $this->options['button_b' . $i . '_destination'],
                 '#prefix' => '<span class="vat-options-button-inline">',
                 '#suffix' => '</span>',
             ];
@@ -371,14 +377,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#title' => '',
                 '#type' => 'checkbox',
                 '#default_value' => $this->options['button_b' . $i . '_modal'],
-                '#prefix' => '<span class="vat-options-button-inline vat-options-button-modal">',
+                '#prefix' =>
+                    '<span class="vat-options-button-inline vat-options-button-modal">',
                 '#suffix' => '</span>',
             ];
 
             // Manual Modal Label on first Row
             if ($i == 1) {
-
-                $form['button_b' . $i . '_modal']['#prefix'] = '<span class="vat-options-button-inline vat-options-button-modal"><label class="modal-label">Modal</label>';
+                $form['button_b' . $i . '_modal']['#prefix'] =
+                    '<span class="vat-options-button-inline vat-options-button-modal"><label class="modal-label">Modal</label>';
                 $form['button_b' . $i . '_modal']['#suffix'] = '</span>';
             }
 
@@ -387,10 +394,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#type' => 'html_tag',
                 '#tag' => 'span',
                 '#value' => '',
-                '#suffix' => '</div>'
+                '#suffix' => '</div>',
             ];
-
-
         }
 
         // Add more Rows
@@ -399,17 +404,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'a',
             '#value' => $this->t('Add more buttons'),
-            '#attributes' => ['class' => ['button', 'add-more-buttons'], 'role' => 'button'],
+            '#attributes' => [
+                'class' => ['button', 'add-more-buttons'],
+                'role' => 'button',
+            ],
         ];
-
 
         $form['button_fieldset_end'] = [
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => '',
-            '#suffix' => '</fieldset>'
+            '#suffix' => '</fieldset>',
         ];
-
 
         // Look
         // ------------------------------
@@ -419,9 +425,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'label',
             '#value' => $this->t('Button Look'),
-            '#prefix' => '<fieldset class="vat-options-group">'
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
-
 
         // Label
         $form['look_show_label'] = [
@@ -432,7 +437,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#suffix' => '</span>',
         ];
 
-
         // Icon
         $form['look_show_icon'] = [
             '#title' => $this->t('Icon'),
@@ -441,7 +445,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#prefix' => '<span class="vat-options-inline">',
             '#suffix' => '</span>',
         ];
-
 
         // Link or Button
         $options = ['Button', 'Link'];
@@ -479,7 +482,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => '',
-            '#suffix' => '</fieldset>'
+            '#suffix' => '</fieldset>',
         ];
 
         // Vocabulary
@@ -490,11 +493,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'label',
             '#value' => $this->t('Vocabularies'),
-            '#prefix' => '<fieldset class="vat-options-group">'
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
 
         for ($i = 1; $i <= 6; $i++) {
-
             // add 4 taxonomy vocabulary dropdowns
             $form['vocabulary_' . $i] = [
                 //    '#title' => $this->t('Taxonomy ' . $i),
@@ -504,8 +506,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#prefix' => '<span class="vat-options-inline">',
                 '#suffix' => '</span>',
             ];
-
-
         }
         // Separator between Buttons and Taxonomy
         $form['look_separator'] = [
@@ -521,7 +521,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => '',
-            '#suffix' => '</fieldset>'
+            '#suffix' => '</fieldset>',
         ];
 
         // Modal
@@ -532,7 +532,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'label',
             '#value' => $this->t('Modal Dialog'),
-            '#prefix' => '<fieldset class="vat-options-group">'
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
 
         // Modal
@@ -542,7 +542,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#default_value' => $this->options['use_modal'],
             '#prefix' => '<span class="vat-options-inline">',
             '#suffix' => '</span>',
-
         ];
 
         // Modal Width
@@ -560,7 +559,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => '',
-            '#suffix' => '</fieldset>'
+            '#suffix' => '</fieldset>',
         ];
 
         // User Roles
@@ -571,11 +570,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'label',
             '#value' => $this->t('Which roles are allowed to see the Buttons?'),
-            '#prefix' => '<fieldset class="vat-options-group">'
+            '#prefix' => '<fieldset class="vat-options-group">',
         ];
 
         foreach ($options_roles as $role) {
-
             $role_form_name = 'roles-' . $role['id'];
             $form[$role_form_name] = [
                 '#title' => $this->t($role['label']),
@@ -589,24 +587,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => '',
-            '#suffix' => '</fieldset>'
+            '#suffix' => '</fieldset>',
         ];
-
-
     }
 
     /**
      * {@inheritdoc}
      */
-    public
-    function render($empty = false)
+    public function render($empty = false)
     {
-
         if (!$empty || !empty($this->options['empty'])) {
-
-
             $view_path = $this->view->getPath();
-
 
             // Content
             // -------------------------------
@@ -614,16 +605,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             if ($this->options['content_type']) {
                 $content['type'] = $this->options['content_type'];
-
             }
-
 
             // Look
             // -------------------------------
             $look['separator'] = false;
             $look['icon'] = false;
             $look['label'] = false;
-
 
             // Separator
             if ($this->options['look_separator']) {
@@ -639,7 +627,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             if ($this->options['look_show_label']) {
                 $look['label'] = true;
             }
-
 
             //  Access
             // ----------------------------------------------------
@@ -660,7 +647,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             $user_roles = $current_user->getRoles();
             $user_id = $current_user->id();
 
-
             // is user roles in access roles ?
             // If User is Admin
             if ($user_id == 1) {
@@ -675,7 +661,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 }
             }
 
-
             //  Icon Set
             // ----------------------------------------------------
 
@@ -683,7 +668,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
             //  Icon Theme
             if ($icon_set == 0) {
-
                 // Search for Module Fontawesome
                 if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
                     $icon_set = 2; // Font Awesome 5
@@ -693,8 +677,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             }
 
             switch ($icon_set) {
-
-                case 1:  // Drupal / jQuery Ui
+                case 1: // Drupal / jQuery Ui
                     $icon_prefix = 'ui-icon ui-icon-';
                     $icon_taxonomy = "pencil";
                     break;
@@ -719,12 +702,15 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             // ----------------------------------------------------
 
             switch ($this->options['look_show_as']) {
-
-                case  0: // Button:
-                    if (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-
+                case 0: // Button:
+                    if (
+                        \Drupal::moduleHandler()->moduleExists(
+                            'bootstrap_library'
+                        )
+                    ) {
                         // Add Bootstrap 4 Classes
-                        $button_classes = 'btn btn-primary vat-button vat-button-primary';
+                        $button_classes =
+                            'btn btn-primary vat-button vat-button-primary';
                     } else {
                         $button_classes = 'vat-button vat-button-primary';
                     }
@@ -738,13 +724,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 default:
                     $button_classes = 'vat-button vat-button-primary';
                     break;
-
             }
 
             // Size
             switch ($this->options['look_icon_size']) {
-
-                case 1:  // small
+                case 1: // small
                     $css_class_size = 'btn-sm';
                     break;
 
@@ -770,25 +754,24 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 ];
             }
 
-
             // Options Icon Prefix
             // -------------------------------
-            $options_icon_prefix = [
-                '',
-                'fas',
-                'far',
-                'fal',
-                'fa',
-                'fab',
-            ];
+            $options_icon_prefix = ['', 'fas', 'far', 'fal', 'fa', 'fab'];
 
             // Buttons
             // -------------------------------
             $buttons = [];
-            $button_attributes = ['active', 'label', 'icon', 'link', 'destination', 'class', 'modal'];
+            $button_attributes = [
+                'active',
+                'label',
+                'icon',
+                'link',
+                'destination',
+                'class',
+                'modal',
+            ];
 
             for ($i = 1; $i <= 10; $i++) {
-
                 $attr = [];
                 $button_name = 'button_b' . $i;
 
@@ -796,8 +779,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 $use_modal = $this->options[$button_name . '_modal'];
                 if ($use_modal != 0) {
                     $classes = $button_classes . ' use-ajax';
-                }
-                else{
+                } else {
                     $classes = $button_classes;
                 }
 
@@ -808,15 +790,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     $option_name = $button_name . '_' . $button_attribute;
                     $attribute = '';
                     switch ($button_attribute) {
-
                         case 'icon':
                             if ($this->options[$option_name]) {
-                                $attribute = $fontawesome_prefix . ' ' . $icon_prefix . $this->options[$option_name];
+                                $attribute =
+                                    $fontawesome_prefix .
+                                    ' ' .
+                                    $icon_prefix .
+                                    $this->options[$option_name];
                             }
                             break;
 
                         case 'class':
-
                             $attribute = $classes;
                             break;
 
@@ -831,24 +815,20 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                     }
 
                     $attr[$button_attribute] = $attribute;
-
                 }
 
                 $buttons[$i] = $attr;
             }
-
 
             // Vocabularies
             // -------------------------------
             $vocabularies = [];
 
             for ($i = 1; $i <= 6; $i++) {
-
                 $attr = [];
                 $vocabulary_name = 'vocabulary_' . $i;
 
                 if ($this->options[$vocabulary_name] != false) {
-
                     $machine_name = $this->options[$vocabulary_name];
                     $voc = Vocabulary::load($machine_name);
                     $label = $voc->label();
@@ -867,12 +847,9 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
                     // modal
                     $attr['modal'] = false;
-
                 }
                 $vocabularies[$i] = $attr;
-
             }
-
 
             return [
                 '#theme' => 'vat_area',
@@ -883,29 +860,26 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
                 '#content' => $content,
                 '#look' => $look,
             ];
-
         }
         return [];
-
     }
-
 
     /**
      * Render a text area with \Drupal\Component\Utility\Xss::filterAdmin().
      */
-    public
-    function renderTextField($value)
+    public function renderTextField($value)
     {
         if ($value) {
-            return $this->sanitizeValue($this->tokenizeValue($value), 'xss_admin');
+            return $this->sanitizeValue(
+                $this->tokenizeValue($value),
+                'xss_admin'
+            );
         }
         return '';
     }
 
-    public
-    function buildHref($button_name)
+    public function buildHref($button_name)
     {
-
         $target = $this->options[$button_name . '_link'];
         $destination = $this->options[$button_name . '_destination'];
 
@@ -927,6 +901,4 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         }
         return $output;
     }
-
-
 }
