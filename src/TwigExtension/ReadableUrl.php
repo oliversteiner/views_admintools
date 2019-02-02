@@ -45,10 +45,7 @@
        * @return mixed
        */
     public static function readableUrl($string) {
-      $string = str_replace('https://www.', '', $string);
-      $string = str_replace('http://www.', '', $string);
-      $string = str_replace('https://', '', $string);
-      $string = str_replace('http://', '', $string);
+      $string = str_replace(array('https://www.', 'http://www.', 'https://', 'http://'), '', $string);
 
       return $string;
 

@@ -1,7 +1,7 @@
 {#/**
 * @file
 * Template to display a Admintools header.
-* Be default called by AdmintoolsHeader area.
+* Be default called by AdmintoolsHeader Area.
 *
 * Available variables:
 *
@@ -29,87 +29,83 @@
 
     {{ attach_library('views_admintools/views_admintools.main') }}
 
-    <div class="vat-area">
+<div class="vat-area">
+
+  <!-- Button Group -->
+  <div class="btn-group vat-button-group" role="group">
+
+    {% for button in buttons %}
+      {# New #}
+      {% if button.active %}
+
+        <a role="button" class="{{ button.class }}"
+
+          {# Modal #}
+          {% if button.modal %}
+            data-dialog-type="modal"
+            data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
+          {% endif %}
+
+           href="{{ button.href }}">
+
+          {# Icon #}
+          {% if look.icon and button.icon %}
+            <span class="{{ button.icon }}" aria-hidden="true"> </span>
+          {% endif %}
+
+          {# Label #}
+          {% if look.label %}
+            {% trans %} {{ button.label }} {% endtrans %}
+          {% endif %}
+
+        </a>
+
+      {% endif %}
+
+    {% endfor %}
+
+    {# separator #}
+    {% if look.separator %}
+      <span class="vat-separator"></span>
+    {% endif %}
 
     <!-- Button Group -->
     <div class="btn-group vat-button-group" role="group">
 
-        {% for button in buttons %}
-            {# New #}
-            {% if button.active %}
+      {% for vocabulary in vocabularies %}
 
-                <a role="button" class="{{ button.class }}"
 
-                        {# Modal #}
-                        {% if button.modal %}
-                            data-dialog-type="modal"
-                            data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
-                        {% endif %}
+        {% if vocabulary.active %}
 
-                   href="{{ button.href }}">
+          <a role="button" class="{{ vocabulary.class }}"
 
-                    {# Icon #}
-                    {% if look.icon and button.icon %}
-                        <span class="{{ button.icon }}" aria-hidden="true"> </span>
-                    {% endif %}
-
-                    {# Label #}
-                    {% if look.label %}
-                        {% trans %} {{ button.label }} {% endtrans %}
-                    {% endif %}
-
-                </a>
-
+            {# Modal #}
+            {% if vocabulary.modal %}
+              data-dialog-type="modal"
+              data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
             {% endif %}
 
-        {% endfor %}
+             href="{{ vocabulary.href }}">
 
+            {# Icon #}
+            {% if look.icon and vocabulary.icon %}
+              <span class="{{ vocabulary.icon }}" aria-hidden="true"> </span>
+            {% endif %}
 
+            {# Label #}
+            {% if look.label %}
+              {% trans %} {{ vocabulary.label }} {% endtrans %}
+            {% endif %}
 
+          </a>
 
-        {# separator #}
-        {% if look.separator %}
-            <span class="vat-separator"></span>
         {% endif %}
 
+      {% endfor %}
 
-        <!-- Button Group -->
-        <div class="btn-group vat-button-group" role="group">
-
-            {% for vocabulary in vocabularies %}
-
-
-                {% if vocabulary.active %}
-
-                    <a role="button" class="{{ vocabulary.class }}"
-
-                            {# Modal #}
-                            {% if vocabulary.modal %}
-                                data-dialog-type="modal"
-                                data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
-                            {% endif %}
-
-                       href="{{ vocabulary.href }}">
-
-                        {# Icon #}
-                        {% if look.icon and vocabulary.icon %}
-                            <span class="{{ vocabulary.icon }}" aria-hidden="true"> </span>
-                        {% endif %}
-
-                        {# Label #}
-                        {% if look.label %}
-                            {% trans %} {{ vocabulary.label }} {% endtrans %}
-                        {% endif %}
-
-                    </a>
-
-                {% endif %}
-
-            {% endfor %}
-
-
-        </div>
 
     </div>
 
-{% endif %}
+  </div>
+
+  {% endif %}
