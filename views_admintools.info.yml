@@ -7,6 +7,6 @@ dependencies:
   - drupal:views
 
 project: views_admintools
-version: 8.4-1.0
+version: 8.x-1.1
 'interface translation project': views_admintools
 'interface translation server pattern': modules/%project/translations/%project-%version.%language.po

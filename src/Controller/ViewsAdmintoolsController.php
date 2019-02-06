@@ -11,7 +11,7 @@ class ViewsAdmintoolsController
   {
     return array(
       '#type' => 'markup',
-      '#markup' => t('Hello, World!'),
+      '#markup' => 'Hello, World!',
     );
   }
 }
