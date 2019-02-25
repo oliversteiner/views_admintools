@@ -38,8 +38,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
       $options['fontawesome']['default'] = true;
       $icon_prefix = 1;
-    }
-    // bootstrap
+    } // bootstrap
     elseif (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
       $options['bootstrap']['default'] = true;
       $icon_prefix = 4;
@@ -234,8 +233,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     $form['info'] = [
       '#markup' =>
         '<div class="vat-options-info">' .
-          $this->t('Add icon names without prefix (fa-).') .
-          '</div>',
+        $this->t('Add icon names without prefix (fa-).') .
+        '</div>',
     ];
 
     // Warning: Default Drupal Fieldset don't work with $options['fieldset']['field']['default']
@@ -264,10 +263,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         '#value' => '',
         '#prefix' =>
           '<div class="vat-options-button-row ' .
-            $visibility .
-            '" id="vat-options-button-row-' .
-            $i .
-            '">',
+          $visibility .
+          '" id="vat-options-button-row-' .
+          $i .
+          '">',
       ];
 
       // Activate Button
@@ -771,6 +770,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         }
 
         $fp = $this->options[$button_name . '_icon_prefix'];
+
+        if (empty($fp)) {
+          $fp = 0;
+        }
         $fontawesome_prefix = $options_icon_prefix[$fp];
 
         foreach ($button_attributes as $button_attribute) {
