@@ -43,7 +43,7 @@
           {# Modal #}
           {% if button.modal %}
             data-dialog-type="modal"
-            data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;}"
+            data-dialog-options="{&quot;width&quot;:&quot;{{ modal.width }}&quot;,&quot;height&quot;:&quot;{{ modal.height }}&quot;}"
           {% endif %}
 
            href="{{ button.href }}">

@@ -128,7 +128,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
     // Modal
     $options['use_modal']['default'] = true;
-    $options['modal_width']['default'] = 800; //
+    $options['modal_width']['default'] = 800;
+    $options['modal_height'] = ['default' => '90%'];
 
     // Role
     $role_objects = Role::loadMultiple();
@@ -545,6 +546,16 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       '#suffix' => '</span>',
     ];
 
+    // Modal height
+    $form['modal_height'] = [
+      '#title' => $this->t('Modal Height'),
+      '#type' => 'textfield',
+      '#attributes' => array('maxlength' => 10, 'size' => 10),
+      '#default_value' => $this->options['modal_height'],
+      '#prefix' => '<span class="vat-options-inline">',
+      '#suffix' => '</span>',
+    ];
+
     // Fieldset End
     $form['modal_fieldset_end'] = [
       '#type' => 'html_tag',
@@ -737,6 +748,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       if ($this->options['use_modal']) {
         $modal = [
           'width' => $this->options['modal_width'],
+          'height' => $this->options['modal_height']
         ];
       }
 

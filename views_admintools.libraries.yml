@@ -17,6 +17,7 @@ views_admintools.admin:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/drupal.dialog.ajax
 #
 # Group By
 #
