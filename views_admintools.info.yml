@@ -2,11 +2,11 @@ name: Views Admintools
 type: module
 description: Provides buttons to create your own admin views.
 package: Views
-core: 8.x
+core: 9.x
 dependencies:
   - drupal:views
 
 project: views_admintools
-version: 8.x-1.1
+version: 9.x-1.1
 'interface translation project': views_admintools
 'interface translation server pattern': modules/%project/translations/%project-%version.%language.po
