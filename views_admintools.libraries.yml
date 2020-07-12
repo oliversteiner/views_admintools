@@ -6,7 +6,8 @@ views_admintools.main:
     theme:
       css/vat_main.css: {}
   js:
-    /libraries/fontawesome/js/all.js: { minified: true }
+    //kit.fontawesome.com/9b2cb45f5e.js: { crossorigin:anonymous }
+
 #
 # Admin
 #
