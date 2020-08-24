@@ -71,7 +71,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     for ($i = 1; $i <= 10; $i++) {
       $options['button_b' . $i . '_active']['default'] = false;
       $options['button_b' . $i . '_label']['default'] = '';
-      $options['button_b' . $i . '_icon_prefix']['default'] = '';
+      $options['button_b' . $i . '_icon_prefix']['default'] = $icon_prefix;
       $options['button_b' . $i . '_icon']['default'] = '';
       $options['button_b' . $i . '_link']['default'] = '';
       $options['button_b' . $i . '_destination']['default'] = '';
