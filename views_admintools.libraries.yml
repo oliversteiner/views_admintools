@@ -5,8 +5,6 @@ views_admintools.main:
   css:
     theme:
       css/vat_main.css: {}
-  js:
-    /libraries/fontawesome/js/all.js: { minified: true }
 #
 # Admin
 #

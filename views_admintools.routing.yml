@@ -1,10 +1,10 @@
 views_admintools.content:
-  path: '/admin/views_admintools'
+  path: '/admin/config/views_admintools/settings'
   defaults:
-    _controller: '\Drupal\views_admintools\Controller\ViewsAdmintoolsController::content'
-    _title: 'Views Admintools Controller'
+    _form: '\Drupal\views_admintools\Form\ViewsAdminToolsSettingsForm'
+    _title: 'Views Admintools Settings'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer site configuration'
 
 
 views_admintools.vat_toggle_tag:
@@ -25,5 +25,16 @@ views_admintools.sandbox:
   defaults:
     _controller: '\Drupal\views_admintools\Controller\VatController::sandboxPage'
     _title: 'Views Admin Tools Sandbox Page'
+  requirements:
+    _permission: 'access content'
+
+#
+# Toggle Published Status
+#
+views_admintools.ajax.publish_toggle:
+  path: '/node/{nid}/publish'
+  defaults:
+    _controller: '\Drupal\views_admintools\Controller\ViewsAdmintoolsController::publishToggle'
+    _title: 'Toggle Published Status'
   requirements:
     _permission: 'access content'
