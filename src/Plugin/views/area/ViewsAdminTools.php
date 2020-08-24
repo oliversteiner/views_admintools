@@ -34,6 +34,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
   {
     return ViewsAdmintoolsController::getIconPrefixOption();
   }
+
   /**
    * {@inheritdoc}
    */
@@ -49,7 +50,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     // View Info
     $view_path = $this->view->getPath();
     $icon_prefix = $config->get('icon_prefix');
-
 
 
     // Read first View Row get Content Type
@@ -194,7 +194,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     ];
 
 
-
     // Options Icon Prefix
     // -------------------------------
     $options_icon_prefix = $this->getIconPrefixOption();
@@ -280,7 +279,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $icon_prefix = $this->options['button_b' . $i . '_icon_prefix'];
         $fontawesome_prefix = $options_icon_prefix[$icon_prefix];
         $fontawesome_icon = $this->options['button_b' . $i . '_icon'];
-        $class_icon = $fontawesome_prefix.' '.$fontawesome_icon;
+        $class_icon = $fontawesome_prefix . ' ' . $fontawesome_icon;
         $form['button_b' . $i . 'fa'] = array(
           '#theme' => 'fontawesomeicon',
           '#tag' => 'span',
@@ -297,7 +296,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
         $form['button_b' . $i . 'no_fa'] = [
           '#type' => 'html',
-          '#value' => '<i class="'.$class_icon.'"></i>',
+          '#value' => '<i class="' . $class_icon . '"></i>',
           '#prefix' =>
             '<span class="vat-options-button-inline vat-options-button-fa">',
           '#suffix' => '</span>',
@@ -441,7 +440,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       '#prefix' => '<span class="vat-options-inline">',
       '#suffix' => '</span>',
     ];
-
 
 
     // Icon Size
@@ -653,23 +651,26 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       //  Icon Set
       // ----------------------------------------------------
       $icon_set = $config->get('icon_set');
+      $icon_prefix_1 = $config->get('icon_prefix');
+
+      $icon_vocabulary = $config->get('icon_vocabulary');
 
 
       switch ($icon_set) {
 
         case 'font_awesome': // 'Font Awesome 5'
           $icon_prefix = 'fa-';
-          $icon_taxonomy = "fas fa-list-ul";
+          $icon_taxonomy = $icon_prefix_1 . ' fa-' . $icon_vocabulary;
           break;
 
         case 'bootstrap_3': // 'Bootstrap 3'
           $icon_prefix = 'glyphicon glyphicon-';
-          $icon_taxonomy = "glyphicon glyphicon-list";
+          $icon_taxonomy = "glyphicon glyphicon-" . $icon_vocabulary;
           break;
 
         default: // 'drupal' is default
           $icon_prefix = 'ui-icon ui-icon-';
-          $icon_taxonomy = "ui-icon ui-icon-pencil";
+          $icon_taxonomy = "ui-icon ui-icon-" . $icon_vocabulary;
           break;
       }
 
