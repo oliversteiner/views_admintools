@@ -1,0 +1,7 @@
+icon_set: font_awesome
+icon_prefix: fas
+icon_edit: pencil
+icon_publish: eye
+icon_unpublish: eye-slash
+icon_delete: trash
+icon_vocabulary: list
