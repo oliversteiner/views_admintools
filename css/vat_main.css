@@ -1,18 +1,22 @@
 .views-field-row-admintools {
   display: flex;
-  flex-wrap: nowrap; }
+  flex-wrap: nowrap;
+}
 
 .vat-link,
 .vat-button {
   margin: 2px 5px;
   padding: 2px 10px;
-  display: inline-block; }
+  display: inline-block;
+}
 
 .vat-button.btn-sm {
-  font-size: 0.8rem; }
+  font-size: 0.8rem;
+}
 
 .vat-button.btn-lg {
-  font-size: 1.2rem; }
+  font-size: 1.2rem;
+}
 
 .vat-button {
   border-radius: 3px;
@@ -20,73 +24,91 @@
   background: #ececec;
   cursor: pointer;
   color: #373737;
-  text-decoration: none; }
-  .vat-button:hover {
-    background: #c9c9c9;
-    color: black;
-    text-decoration: none; }
-  .vat-button:active {
-    background: #7b7b7b;
-    color: #ededed; }
+  text-decoration: none;
+}
+.vat-button:hover {
+  background: #c9c9c9;
+  color: black;
+  text-decoration: none;
+}
+.vat-button:active {
+  background: #7b7b7b;
+  color: #ededed;
+}
 
 .vat-button-group {
   display: inline-block;
-  margin-right: 20px; }
+  margin-right: 20px;
+}
 
 .vat-separator {
   margin-left: 9px;
   margin-right: 15px;
-  border-left: 1px solid #dddddd; }
+  border-left: 1px solid #dddddd;
+}
 
 td.views-field.views-field-row-admintools a {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 tr:hover td.views-field.views-field-row-admintools a {
-  visibility: visible; }
+  visibility: visible;
+}
 
 .views-view-table a.link.vat-button,
 .views-view-table a.vat-button {
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 .vat-button span.glyphicon,
 .vat-button i.fa,
 .vat-button svg {
   opacity: 0.5;
   margin-right: 3px;
-  color: #000; }
+  color: #000;
+}
 
 .vat-button:hover span.glyphicon,
 .vat-button:hover i.fa,
 .vat-button:hover svg {
-  opacity: 1; }
+  opacity: 1;
+}
 
 .vat-area {
-  padding: 5px 0; }
+  padding: 5px 0;
+}
 
 .vat-no-break {
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 .vat-row-label {
-  margin-left: 2px; }
+  margin-left: 2px;
+}
 
 .vat-options-button-row {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ebebeb; }
+  border-bottom: 1px solid #ebebeb;
+}
 
 .vat-options-button-row.hide {
-  display: none; }
+  display: none;
+}
 
 .vat-options-button-inline {
   padding-right: 18px;
-  min-width: 20px; }
+  min-width: 20px;
+}
 
 .vat-options-group {
   align-items: center;
-  vertical-align: central; }
+  vertical-align: central;
+}
 
 .vat-options-inline {
   display: inline-table;
-  margin-right: 20px; }
+  margin-right: 20px;
+}
 
 /*# sourceMappingURL=vat_main.css.map */
