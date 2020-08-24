@@ -8,6 +8,7 @@ use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
+use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
 
 /**
  * Views area Admin Tools.
@@ -19,11 +20,28 @@ use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
 class ViewsAdminTools extends TokenizeAreaPluginBase
 {
   /**
+   * @return string[]
+   */
+  function getIconSetOption()
+  {
+    return ViewsAdmintoolsController::getIconSetOption();
+  }
+
+  /**
+   * @return string[]
+   */
+  function getIconPrefixOption()
+  {
+    return ViewsAdmintoolsController::getIconPrefixOption();
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function defineOptions(): array
   {
     $options = parent::defineOptions();
+    $config = \Drupal::config('views_admintools.settings');
 
     // Override defaults to from parent.
     $options['tokenize']['default'] = false;
@@ -31,18 +49,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
     // View Info
     $view_path = $this->view->getPath();
-    $icon_prefix = '';
+    $icon_prefix = $config->get('icon_prefix');
 
-    // Icon Modules
-    // fontawesome
-    if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
-      $options['fontawesome']['default'] = true;
-      $icon_prefix = 1;
-    } // bootstrap
-    elseif (\Drupal::moduleHandler()->moduleExists('bootstrap_library')) {
-      $options['bootstrap']['default'] = true;
-      $icon_prefix = 4;
-    }
 
     // Read first View Row get Content Type
     $content_type = false;
@@ -105,18 +113,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     $options['look_show_as']['default'] = 'Button';
     $options['look_icon_size']['default'] = 0; // normal
 
-    // 0  Automatic
-    // 1  Drupal / jQuery Ui
-    // 2  Font Awesome 5
-    // 3  Twitter Bootstrap 3
-
-    if ($options['fontawesome']['default']) {
-      $options['look_icon_set']['default'] = 2;
-    } elseif ($options['bootstrap']['default']) {
-      $options['look_icon_set']['default'] = 3;
-    } else {
-      $options['look_icon_set']['default'] = 1;
-    }
 
     // Vocabulary
     $options['look_separator']['default'] = false;
@@ -148,6 +144,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
   public function buildOptionsForm(&$form, FormStateInterface $form_state)
   {
     parent::buildOptionsForm($form, $form_state);
+
+    $config = \Drupal::config('views_admintools.settings');
 
     // Prepare Options for Select Form
     // -------------------------------
@@ -195,18 +193,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       $this->t('Large'),
     ];
 
-    // Options Iconset
-    // -------------------------------
-    $options_icon_set = [
-      'Automatic',
-      'Drupal / jQuery Ui',
-      'Font Awesome 5',
-      'Twitter Bootstrap 3',
-    ];
 
     // Options Icon Prefix
     // -------------------------------
-    $options_icon_prefix = ['', 'fas', 'far', 'fal', 'fa', 'fab'];
+    $options_icon_prefix = $this->getIconPrefixOption();
 
     // Build Form
     // -------------------------------
@@ -280,6 +270,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         '#suffix' => '</span>',
       ];
 
+
       // Render Icon if Font Awesome Module is installed
       if (
         $this->options['fontawesome'] &&
@@ -288,7 +279,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $icon_prefix = $this->options['button_b' . $i . '_icon_prefix'];
         $fontawesome_prefix = $options_icon_prefix[$icon_prefix];
         $fontawesome_icon = $this->options['button_b' . $i . '_icon'];
-
+        $class_icon = $fontawesome_prefix . ' ' . $fontawesome_icon;
         $form['button_b' . $i . 'fa'] = array(
           '#theme' => 'fontawesomeicon',
           '#tag' => 'span',
@@ -301,10 +292,11 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
           '#suffix' => '</span>',
         );
       } else {
+        $class_icon = $this->options['button_b' . $i . '_icon'];
+
         $form['button_b' . $i . 'no_fa'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#value' => '',
+          '#type' => 'html',
+          '#value' => '<i class="' . $class_icon . '"></i>',
           '#prefix' =>
             '<span class="vat-options-button-inline vat-options-button-fa">',
           '#suffix' => '</span>',
@@ -449,15 +441,6 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       '#suffix' => '</span>',
     ];
 
-    // Icon Set
-    $form['look_icon_set'] = [
-      '#title' => $this->t('Icon Set'),
-      '#type' => 'select',
-      '#default_value' => $this->options['look_icon_set'],
-      '#options' => $options_icon_set,
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>',
-    ];
 
     // Icon Size
     $form['look_icon_size'] = [
@@ -598,6 +581,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
    */
   public function render($empty = false)
   {
+    $config = \Drupal::config('views_admintools.settings');
+
     if (!$empty || !empty($this->options['empty'])) {
       $view_path = $this->view->getPath();
 
@@ -665,38 +650,27 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
       //  Icon Set
       // ----------------------------------------------------
+      $icon_set = $config->get('icon_set');
+      $icon_prefix_1 = $config->get('icon_prefix');
 
-      $icon_set = $this->options['look_icon_set'];
+      $icon_vocabulary = $config->get('icon_vocabulary');
 
-      //  Icon Theme
-      if ($icon_set == 0) {
-        // Search for Module Fontawesome
-        if (\Drupal::moduleHandler()->moduleExists('fontawesome')) {
-          $icon_set = 2; // Font Awesome 5
-        } else {
-          $icon_set = 1; // Drupal / jQuery Ui
-        }
-      }
 
       switch ($icon_set) {
-        case 1: // Drupal / jQuery Ui
-          $icon_prefix = 'ui-icon ui-icon-';
-          $icon_taxonomy = "ui-icon ui-icon-pencil";
-          break;
 
-        case 2: // 'Font Awesome 5'
+        case 'font_awesome': // 'Font Awesome 5'
           $icon_prefix = 'fa-';
-          $icon_taxonomy = "fas fa-list-ul";
+          $icon_taxonomy = $icon_prefix_1 . ' fa-' . $icon_vocabulary;
           break;
 
-        case 3: // 'Bootstrap 3'
+        case 'bootstrap_3': // 'Bootstrap 3'
           $icon_prefix = 'glyphicon glyphicon-';
-          $icon_taxonomy = "glyphicon glyphicon-list";
+          $icon_taxonomy = "glyphicon glyphicon-" . $icon_vocabulary;
           break;
 
-        default:
+        default: // 'drupal' is default
           $icon_prefix = 'ui-icon ui-icon-';
-          $icon_taxonomy = "ui-icon ui-icon-pencil";
+          $icon_taxonomy = "ui-icon ui-icon-" . $icon_vocabulary;
           break;
       }
 
@@ -754,7 +728,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
       // Options Icon Prefix
       // -------------------------------
-      $options_icon_prefix = ['', 'fas', 'far', 'fal', 'fa', 'fab'];
+      $options_icon_prefix = $this->getIconPrefixOption();
 
       // Buttons
       // -------------------------------
@@ -786,7 +760,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         if (empty($fp)) {
           $fp = 0;
         }
-        $fontawesome_prefix = $options_icon_prefix[$fp];
+        $fontawesome_prefix = $fp;
 
         foreach ($button_attributes as $button_attribute) {
           $option_name = $button_name . '_' . $button_attribute;
@@ -905,4 +879,5 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     }
     return $output;
   }
+
 }

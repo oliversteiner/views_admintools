@@ -130,6 +130,9 @@
 
     /**
      * @{inheritdoc}
+     * @param ResultRow $values
+     * @return array
+     * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
      */
     public function render(ResultRow $values) {
 
@@ -143,11 +146,11 @@
 
       // Default CSS Classes
       $default_classes = ['use-ajax', 'vat-toggle-tag'];
-
+      $all_terms_from_vocabulary = null;
 
       // load all Tags
       try {
-        $default_tags = \Drupal::entityTypeManager()
+        $all_terms_from_vocabulary = \Drupal::entityTypeManager()
           ->getStorage('taxonomy_term')
           ->loadTree($vocabulary);
       } catch (InvalidPluginDefinitionException $e) {
@@ -163,9 +166,9 @@
       if ($node->hasField($field_name)) {
 
 
-        $storageconfig = FieldStorageConfig::loadByName('node', $field_name);
+        $storageConfig = FieldStorageConfig::loadByName('node', $field_name);
 
-        $number_of_values = $storageconfig->getCardinality();
+        $number_of_values = $storageConfig->getCardinality();
 
         // is field width Multible Values:
         if ($number_of_values === 1) {
@@ -178,6 +181,7 @@
 
         $active_tags = $values->_entity->get($field_name)
           ->getValue();
+        dpm($active_tags);
 
 
         // save only tid
@@ -187,13 +191,13 @@
         }
 
 
-        foreach ($default_tags as $default_tag) {
+        foreach ($all_terms_from_vocabulary as $item) {
 
-          $term_id = $default_tag->tid;
-          $term_name = $default_tag->name;
+          $term_id = $item->tid;
+          $term_name = $item->name;
 
           // url for SubscriberController::toggleSubsciberTag'
-          $url = Url::fromRoute('views_admintools.vat_toggle_tag',
+          $url = Url::fromRoute('views_admintools/views_admintools.vat_toggle_tag',
             [
               'target_nid' => $target_nid,
               'term_tid' => $term_id,
@@ -202,16 +206,16 @@
             ]);
 
 
+
           // class
-          if (in_array($term_id, $active_tids)) {
-            $class = $default_classes;
+          if (in_array($term_id, $active_tids, true)) {
+            $classes = $default_classes;
             $label = '<span>*</span>' . $term_name;
-            array_push($class, 'active');
+            $classes[] = 'active';
           }
           else {
             $label = $term_name;
-            $class = $default_classes;
-
+            $classes = $default_classes;
           }
 
           // build
@@ -220,7 +224,7 @@
             '#type' => 'link',
             '#url' => $url,
             '#attributes' => [
-              'class' => $class,
+              'class' => $classes,
               'id' => $field_name . '-' . $target_nid . '-' . $term_id,
             ],
           ];

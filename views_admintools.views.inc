@@ -60,11 +60,11 @@ function views_admintools_views_data_alter(array &$data) {
   ];
 
   $data['node']['vat_toggle_tag'] = [
-    'title' => t('List all Tags, active onces are marked'),
+    'title' => t('List all Tags, active ones are marked'),
     'group' => t('Admin'),
     'field' => [
       'title' => t('Tags to toggle'),
-      'help' => t('List all Tags, active onces are marked'),
+      'help' => t('List all Tags, active ones are marked'),
       'id' => 'vat_toggle_tag'
     ],
   ];
