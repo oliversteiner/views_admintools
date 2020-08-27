@@ -13,7 +13,6 @@ views_admintools.admin:
     theme:
       css/vat_main.css: {}
   js:
-    js/vat_admin.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
@@ -54,3 +53,6 @@ views_area:
       css/vat-views-area.css: {}
   js:
     js/vat_views_area.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
