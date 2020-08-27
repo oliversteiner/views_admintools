@@ -1,0 +1,19 @@
+.views-admintools-settings-form .vat-options-inline label {
+  display: inline-block;
+  min-width: 100px;
+}
+.views-admintools-settings-form .icon-set-title {
+  min-width: 200px;
+  display: inline-block;
+  padding-right: 20px;
+}
+.views-admintools-settings-form details summary {
+  padding: 0.95em 1.45em;
+  background-color: whitesmoke;
+  border-top: 1px solid silver;
+}
+.views-admintools-settings-form caption {
+  margin: 5px 0;
+}
+
+/*# sourceMappingURL=icon-sets.css.map */
