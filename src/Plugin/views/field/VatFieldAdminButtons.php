@@ -462,7 +462,7 @@ class VatFieldAdminButtons extends FieldPluginBase
             case 'edit':
               $link = 'node/' . $id . '/edit' . $destination;
               $classes = $icon_classes . $config->get('icon_edit');
-              $classes .= ' mollo-button-edit-'.$id.' ';
+              $wrapper_classes = ' mollo-button-edit-'.$id.' ';
 
               break;
 
@@ -471,26 +471,27 @@ class VatFieldAdminButtons extends FieldPluginBase
               $classes = $is_published
                 ? $icon_classes . $config->get('icon_publish')
                 : $icon_classes . $config->get('icon_unpublish');
-              $classes .= ' mollo-button-publish-'.$id.' ';
+              $wrapper_classes = ' mollo-button-publish-'.$id.' ';
               break;
 
             case 'delete':
               $link = 'node/' . $id . '/delete' . $destination;
               $classes = $icon_classes . $config->get('icon_delete');
-              $classes .= ' mollo-button-delete-'.$id.' ';
+              $wrapper_classes = ' mollo-button-delete-'.$id.' ';
 
               break;
 
             default:
               $link = 'node/' . $id;
               $classes = false;
+              $wrapper_classes = '';
               break;
           }
 
           // Options Icon
           if ($this->options['button_icon']) {
             $icon =
-              '<span class="' . $classes . '" aria-hidden="true"></span>';
+              '<i class="' . $classes . '" aria-hidden="true"></i>';
           }
 
           // Options Label
@@ -509,10 +510,10 @@ class VatFieldAdminButtons extends FieldPluginBase
             '#url' => Url::fromUri('internal:/' . $link),
             '#attributes' => [
               'class' =>
-                'vat-button-inline ' . $class_show_as . ' ' . $class_size,
+                'vat-button-inline ' . $class_show_as . ' ' . $class_size ,
               'role' => 'button'
             ],
-            '#prefix' => '<span><span class="vat-no-break">',
+            '#prefix' => '<span class="'.$wrapper_classes.'"><span class="vat-no-break">',
             '#suffix' => '</span></span>'
           ];
 
