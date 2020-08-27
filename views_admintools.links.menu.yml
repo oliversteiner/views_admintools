@@ -1,9 +1,9 @@
 #
 # Setting Page
 #
-views_admintools.settings_form:
+views_admintools.settings:
   title: 'Views AdminTools Settings'
   description: 'Configure default AdminTools settings'
   route_name: views_admintools.settings
-  parent: admin.config.development
+  parent: 'system.admin_config_development'
   weight: 20
