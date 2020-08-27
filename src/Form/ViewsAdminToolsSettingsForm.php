@@ -5,6 +5,7 @@ namespace Drupal\views_admintools\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
+use Symfony\Component\HttpFoundation\Response;
 
 class ViewsAdminToolsSettingsForm extends ConfigFormBase
 {
@@ -27,9 +28,9 @@ class ViewsAdminToolsSettingsForm extends ConfigFormBase
   /**
    * @return string[]
    */
-  function getIconPrefixOption()
+  function getIconVariantOption()
   {
-    return ViewsAdmintoolsController::getIconPrefixOption();
+    return ViewsAdmintoolsController::getIconVariantOption();
   }
 
   /**
@@ -47,13 +48,27 @@ class ViewsAdminToolsSettingsForm extends ConfigFormBase
   {
     // Default settings.
     $config = $this->config('views_admintools.settings');
+    $icon_sets = ViewsAdmintoolsController::getIconSets();
 
     // Turn Off Form Autocompletion
-    // -------------------------------
     $form['#attributes']['autocomplete'] = 'off';
 
+    // Add Library
+    $form['#attached'] = array(
+      'library' => array('views_admintools/icon_sets'),
+      'drupalSettings' => ['iconSets' => $icon_sets]
+    );
+
+    // Open Details and Fieldset
+    // Set Icon Names Manually
+    $form['group_iconfonts_start'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'label',
+      '#value' => $this->t(''),
+      '#prefix' => '<details><summary>Icon Set and Names</summary><fieldset>'
+    ];
+
     // Options Icon Set
-    // -------------------------------
     $options = $this->getIconSetOption();
     $options_default_icon_set = $config->get('icon_set');
     $form['icon_set'] = array(
@@ -63,87 +78,48 @@ class ViewsAdminToolsSettingsForm extends ConfigFormBase
       '#default_value' => $options_default_icon_set
     );
 
-    // Options Icon Prefix
-    // -------------------------------
-    $options = $this->getIconPrefixOption();
-    $options_default_icon_prefix = $config->get('icon_prefix');
-    $form['icon_prefix'] = array(
+    // Options Icon Variant (fas, far, ...)
+    $options = $this->getIconVariantOption();
+    $options_default_icon_variant = $config->get('icon_variant');
+    $form['icon_variant'] = array(
       '#type' => 'select',
       '#options' => $options,
-      '#title' => $this->t('Default Icon Prefix'),
-      '#default_value' => $options_default_icon_prefix
+      '#title' => $this->t('Default Icon Variant'),
+      '#default_value' => $options_default_icon_variant
     );
 
-    // Default Icon Names
-    // -------------------------------
+    // Set Icon Names without ...
+    $form['remark'] = array(
+      '#markup' => 'Set Icon Names without prefix (fa-)'
+    );
 
-    // Icon Names for Iconfonts
-    // ------------------------------
+    // Get Icons from Icon-Sets
+    // Load "Drupal"-Set and
+    // build textform-field for each icon
+    foreach ($icon_sets['drupal']['icons'] as $icon) {
+      $name = 'icon_' . $icon['name'];
+      $form[$name] = [
+        '#title' => $this->t($icon['name']),
+        '#type' => 'textfield',
+        '#attributes' => array('maxlength' => 10, 'size' => 10),
+        '#default_value' => $config->get($name),
+        '#prefix' => '<span class="vat-options-inline">',
+        '#suffix' => '</span>'
+      ];
+    }
 
-    // Title
-    $form['group_iconfonts_start'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'label',
-      '#value' => $this->t('Icon Name (without prefix)'),
-      '#prefix' => '<fieldset class="vat-options-group">'
-    ];
-
-
-
-    // edit
-    $form['icon_edit'] = [
-      '#title' => $this->t('edit'),
-      '#type' => 'textfield',
-      '#attributes' => array('maxlength' => 10, 'size' => 10),
-      '#default_value' => $config->get('icon_edit'),
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>'
-    ];
-
-    // publish
-    $form['icon_publish'] = [
-      '#title' => $this->t('publish'),
-      '#type' => 'textfield',
-      '#attributes' => array('maxlength' => 10, 'size' => 10),
-      '#default_value' => $config->get('icon_publish'),
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>'
-    ];
-
-    // unpublish
-    $form['icon_unpublish'] = [
-      '#title' => $this->t('unpublish'),
-      '#type' => 'textfield',
-      '#attributes' => array('maxlength' => 10, 'size' => 10),
-      '#default_value' => $config->get('icon_unpublish'),
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>'
-    ];
-
-    // delete
-    $form['icon_delete'] = [
-      '#title' => $this->t('delete'),
-      '#type' => 'textfield',
-      '#attributes' => array('maxlength' => 10, 'size' => 10),
-      '#default_value' => $config->get('icon_delete'),
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>'
-    ];
-
-    // edit vocabulary
-    $form['icon_vocabulary'] = [
-      '#title' => $this->t('edit vocabulary'),
-      '#type' => 'textfield',
-      '#attributes' => array('maxlength' => 10, 'size' => 10),
-      '#default_value' => $config->get('icon_vocabulary'),
-      '#prefix' => '<span class="vat-options-inline">',
-      '#suffix' => '</span>'
-    ];
-
+    // Close Fieldset and Details
     $form['group_iconfonts_end'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#suffix' => '</fieldset>'
+      '#suffix' => '</fieldset></details>'
+    ];
+
+    // Add Default Sets via icon-sets.html.twig
+    $form['default_icon_sets'] = [
+      '#theme' => 'icon_sets',
+      '#name' => 'icon_sets',
+      '#cache' => ['max-age' => 0]
     ];
 
     return parent::buildForm($form, $form_state);
@@ -154,26 +130,25 @@ class ViewsAdminToolsSettingsForm extends ConfigFormBase
    */
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
+    // Load Icon List
+    $icon_list = ViewsAdmintoolsController::getIconList();
+
     // Load config
-    $this->configFactory
-      ->getEditable('views_admintools.settings')
+    $config = \Drupal::service('config.factory')->getEditable('views_admintools.settings');
 
-      // Set Config Value
-      // Icon Set
-      ->set('icon_set', $form_state->getValue('icon_set'))
+    // Icon Set
+    $config->set('icon_set', $form_state->getValue('icon_set'));
 
-      // Icon Prefix
-      ->set('icon_prefix', $form_state->getValue('icon_prefix'))
+    // Icon Variant
+    $config->set('icon_variant', $form_state->getValue('icon_variant'));
 
-      // Icon Names
-      ->set('icon_edit', $form_state->getValue('icon_edit'))
-      ->set('icon_publish', $form_state->getValue('icon_publish'))
-      ->set('icon_unpublish', $form_state->getValue('icon_unpublish'))
-      ->set('icon_delete', $form_state->getValue('icon_delete'))
-      ->set('icon_vocabulary', $form_state->getValue('icon_vocabulary'))
+    // Icon Names
+    foreach ($icon_list as $icon) {
+      $config->set('icon_' .$icon['name'], $form_state->getValue('icon_' . $icon['name']));
+    }
 
-      // Save
-      ->save();
+    // Save Config
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }

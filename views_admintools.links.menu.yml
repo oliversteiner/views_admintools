@@ -1,10 +1,3 @@
-views_admintools.admin:
-  title: 'Admin Views Tools Settings'
-  description: 'example of how to make an admin settings page link'
-  parent: system.admin_config_development
-  route_name: views_admintools.content
-  weight: 100
-
 #
 # Setting Page
 #
@@ -12,5 +5,5 @@ views_admintools.settings_form:
   title: 'Views AdminTools Settings'
   description: 'Configure default AdminTools settings'
   route_name: views_admintools.settings
-  parent: admin
+  parent: admin.config.development
   weight: 20

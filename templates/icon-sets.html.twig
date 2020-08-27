@@ -1,0 +1,25 @@
+<div id="views-admintools-icon-sets"></div>
+{% for icon_set in icon_sets %}
+  <div>
+    <details>
+
+      <summary><span class="icon-set-title">{{ icon_set.name }} <strong>{{ icon_set.variant }}</strong></span>
+        <a role="button" href="#" class="icon-set-trigger" data-icon-set="{{ icon_set.machine_name }}">Set as Default</a>
+      </summary>
+      <table>
+        <caption>{{ icon_set.name }} <strong>{{ icon_set.variant }}</strong>
+        </caption>
+
+        {% for icon in icon_set.icons %}
+
+          <tr>
+            <th>{{ icon.name }}</th>
+            <td><i class="{{ icon_set.variant }} {{ icon_set.prefix }}{{ icon.icon }}"></i></td>
+            <td>{{ icon.icon }}</td>
+          </tr>
+        {% endfor %}
+
+      </table>
+    </details>
+  </div>
+{% endfor %}

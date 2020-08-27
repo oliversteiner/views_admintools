@@ -13,6 +13,7 @@ use Drupal\user\Entity\Role;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Url;
 use Drupal\views\ResultRow;
+use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
 
 /**
  * Field handler to add Edit and Delete Buttons.
@@ -54,7 +55,7 @@ class VatFieldAdminButtons extends FieldPluginBase
     $options['destination_path'] = ['default' => ''];
 
     //  Modal
-    $options['modal'] = ['default' => true];
+    $options['modal'] = ['default' => false];
     $options['modal_width'] = ['default' => 800]; //
     $options['modal_height'] = ['default' => '90%']; //
 
@@ -77,6 +78,8 @@ class VatFieldAdminButtons extends FieldPluginBase
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state)
   {
+
+
     // Show Buttons
     // ------------------------------
 
@@ -414,19 +417,19 @@ class VatFieldAdminButtons extends FieldPluginBase
 
       $config = \Drupal::config('views_admintools.settings');
       $icon_set = $config->get('icon_set');
-      $icon_prefix = $config->get('icon_prefix');
+      $icon_variant = $config->get('icon_variant');
 
       switch ($icon_set) {
-        case 'font_awesome': // 'Font Awesome 5'
-          $icon_pre = $icon_prefix . ' fa-';
+        case 'fontawesome': // 'Font Awesome 5'
+          $icon_classes = $icon_variant . ' fa-';
           break;
 
         case 'bootstrap_3': // 'Bootstrap 3'
-          $icon_pre = 'glyphicon glyphicon-';
+          $icon_classes = 'glyphicon glyphicon-';
           break;
 
         default: // 'drupal' is default
-          $icon_pre = 'ui-icon ui-icon-';
+          $icon_classes = 'ui-icon ui-icon-';
           break;
       }
 
@@ -458,7 +461,7 @@ class VatFieldAdminButtons extends FieldPluginBase
           switch ($button_name) {
             case 'edit':
               $link = 'node/' . $id . '/edit' . $destination;
-              $classes = $icon_pre . $config->get('icon_edit');
+              $classes = $icon_classes . $config->get('icon_edit');
               $classes .= ' mollo-button-edit-'.$id.' ';
 
               break;
@@ -466,14 +469,14 @@ class VatFieldAdminButtons extends FieldPluginBase
             case 'publish':
               $link = 'node/' . $id . '/publish';
               $classes = $is_published
-                ? $icon_pre . $config->get('icon_publish')
-                : $icon_pre . $config->get('icon_unpublish');
+                ? $icon_classes . $config->get('icon_publish')
+                : $icon_classes . $config->get('icon_unpublish');
               $classes .= ' mollo-button-publish-'.$id.' ';
               break;
 
             case 'delete':
               $link = 'node/' . $id . '/delete' . $destination;
-              $classes = $icon_pre . $config->get('icon_delete');
+              $classes = $icon_classes . $config->get('icon_delete');
               $classes .= ' mollo-button-delete-'.$id.' ';
 
               break;

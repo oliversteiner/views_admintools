@@ -17,7 +17,7 @@ use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
  *
  * @ViewsArea("vat_views_area_admin_tools")
  */
-class ViewsAdminTools extends TokenizeAreaPluginBase
+class ViewsAdminToolsArea extends TokenizeAreaPluginBase
 {
   /**
    * @return string[]
@@ -30,9 +30,9 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
   /**
    * @return string[]
    */
-  function getIconPrefixOption()
+  function getIconVariantOption()
   {
-    return ViewsAdmintoolsController::getIconPrefixOption();
+    return ViewsAdmintoolsController::getIconVariantOption();
   }
 
   /**
@@ -49,7 +49,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
     // View Info
     $view_path = $this->view->getPath();
-    $icon_prefix = $config->get('icon_prefix');
+    $icon_variant = $config->get('icon_variant');
 
 
     // Read first View Row get Content Type
@@ -71,7 +71,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     for ($i = 1; $i <= 10; $i++) {
       $options['button_b' . $i . '_active']['default'] = false;
       $options['button_b' . $i . '_label']['default'] = '';
-      $options['button_b' . $i . '_icon_prefix']['default'] = $icon_prefix;
+      $options['button_b' . $i . '_icon_variant']['default'] = $icon_variant;
       $options['button_b' . $i . '_icon']['default'] = '';
       $options['button_b' . $i . '_link']['default'] = '';
       $options['button_b' . $i . '_destination']['default'] = '';
@@ -83,17 +83,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     // Button new
     $options['button_b1_active']['default'] = true;
     $options['button_b1_label']['default'] = $this->t('New');
-    $options['button_b1_icon']['default'] = 'plus';
-    $options['button_b1_icon_prefix']['default'] = $icon_prefix;
+    $options['button_b1_icon']['default'] = $config->get('icon_new');
+    $options['button_b1_icon_variant']['default'] = $icon_variant;
     $options['button_b1_link']['default'] = '/node/add/' . $content_type;
     $options['button_b1_destination']['default'] = '/' . $view_path;
-    $options['button_b1_modal']['default'] = 1;
+    $options['button_b1_modal']['default'] = 0;
 
     // Button sort
     $options['button_b2_active']['default'] = false;
     $options['button_b2_label']['default'] = $this->t('Sort');
-    $options['button_b2_icon']['default'] = 'sort';
-    $options['button_b2_icon_prefix']['default'] = $icon_prefix;
+    $options['button_b2_icon']['default'] = $config->get('icon_sort');
+    $options['button_b2_icon_variant']['default'] = $icon_variant;
     $options['button_b2_link']['default'] = '/' . $view_path . '/sort';
     $options['button_b2_destination']['default'] = '/' . $view_path;
     $options['button_b2_modal']['default'] = 0;
@@ -101,11 +101,20 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
     // Button back
     $options['button_b3_active']['default'] = false;
     $options['button_b3_label']['default'] = $this->t('Back');
-    $options['button_b3_icon']['default'] = 'chevron-left';
-    $options['button_b3_icon_prefix']['default'] = $icon_prefix;
+    $options['button_b3_icon']['default'] = $config->get('icon_back');
+    $options['button_b3_icon_variant']['default'] = $icon_variant;
     $options['button_b3_link']['default'] = '/' . $view_path;
     $options['button_b3_destination']['default'] = '';
     $options['button_b2_modal']['default'] = 0;
+
+    // Button forward
+    $options['button_b4_active']['default'] = false;
+    $options['button_b4_label']['default'] = $this->t('Forward');
+    $options['button_b4_icon']['default'] = $config->get('icon_forward');
+    $options['button_b4_icon_variant']['default'] = $icon_variant;
+    $options['button_b4_link']['default'] = '/' . $view_path;
+    $options['button_b4_destination']['default'] = '';
+    $options['button_b4_modal']['default'] = 0;
 
     // Look
     $options['look_show_label']['default'] = true;
@@ -145,7 +154,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
   {
     parent::buildOptionsForm($form, $form_state);
 
-    $config = \Drupal::config('views_admintools.settings');
+    $views_defaults = ViewsAdmintoolsController::getViewsDefaults();
+
 
     // Prepare Options for Select Form
     // -------------------------------
@@ -193,16 +203,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       $this->t('Large'),
     ];
 
-
+    // Add Library
+    $form['#attached'] = array(
+      'library' => array('views_admintools/views_area'),
+      'drupalSettings' => ['viewsDefaults' => ViewsAdmintoolsController::getViewsDefaults()]
+    );
     // Options Icon Prefix
     // -------------------------------
-    $options_icon_prefix = $this->getIconPrefixOption();
+    $options_icon_variant = $this->getIconVariantOption();
 
     // Build Form
     // -------------------------------
 
-    // Add CSS and JS
-    $form['#attached']['library'][] = 'views_admintools/views_admintools.admin';
 
     // Title Text / Heading
     $form['title_text'] = [
@@ -271,27 +283,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       ];
 
 
-      // Render Icon if Font Awesome Module is installed
-      if (
-        $this->options['fontawesome'] &&
-        $this->options['button_b' . $i . '_icon']
-      ) {
-        $icon_prefix = $this->options['button_b' . $i . '_icon_prefix'];
-        $fontawesome_prefix = $options_icon_prefix[$icon_prefix];
-        $fontawesome_icon = $this->options['button_b' . $i . '_icon'];
-        $class_icon = $fontawesome_prefix . ' ' . $fontawesome_icon;
-        $form['button_b' . $i . 'fa'] = array(
-          '#theme' => 'fontawesomeicon',
-          '#tag' => 'span',
-          '#name' => $fontawesome_prefix . ' fa-' . $fontawesome_icon,
-          '#settings' => null,
-          '#transforms' => '2x',
-          '#mask' => null,
-          '#prefix' =>
-            '<span class="vat-options-button-inline vat-options-button-fa">',
-          '#suffix' => '</span>',
-        );
-      } else {
+
         $class_icon = $this->options['button_b' . $i . '_icon'];
 
         $form['button_b' . $i . 'no_fa'] = [
@@ -301,16 +293,17 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             '<span class="vat-options-button-inline vat-options-button-fa">',
           '#suffix' => '</span>',
         ];
-      }
+
 
       // Icon Prefix
-      $form['button_b' . $i . '_icon_prefix'] = [
+      $form['button_b' . $i . '_icon_variant'] = [
         '#title' => $this->labelFirstRow($i, $this->t('Prefix')),
         '#type' => 'select',
-        '#default_value' => $this->options['button_b' . $i . '_icon_prefix'],
-        '#options' => $options_icon_prefix,
+        '#default_value' => $this->options['button_b' . $i . '_icon_variant'],
+        '#options' => $options_icon_variant,
         '#prefix' => '<span class="vat-options-button-inline">',
         '#suffix' => '</span>',
+        '#attributes' => array('class' => ['vat-icon-variant']),
       ];
 
       // Icon
@@ -321,6 +314,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         '#default_value' => $this->options['button_b' . $i . '_icon'],
         '#prefix' => '<span class="vat-options-button-inline">',
         '#suffix' => '</span>',
+        '#attributes' => array('class' => ['vat-icon-name']),
+
       ];
 
       // Label
@@ -331,6 +326,8 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         '#default_value' => $this->options['button_b' . $i . '_label'],
         '#prefix' => '<span class="vat-options-button-inline">',
         '#suffix' => '</span>',
+        '#attributes' => array('class' => ['vat-button-label']),
+
       ];
 
       // Link
@@ -390,6 +387,18 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       '#value' => $this->t('Add more buttons'),
       '#attributes' => [
         'class' => ['button', 'add-more-buttons'],
+        'role' => 'button',
+      ],
+    ];
+
+    // Reset to defaults
+    // Add a submit button that handles the submission of the form.
+    $form['reset_to_defaults'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'a',
+      '#value' => $this->t('Reset to Defaults'),
+      '#attributes' => [
+        'class' => ['reset-to-defaults'],
         'role' => 'button',
       ],
     ];
@@ -574,6 +583,9 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
       '#value' => '',
       '#suffix' => '</fieldset>',
     ];
+
+
+
   }
 
   /**
@@ -582,6 +594,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
   public function render($empty = false)
   {
     $config = \Drupal::config('views_admintools.settings');
+
 
     if (!$empty || !empty($this->options['empty'])) {
       $view_path = $this->view->getPath();
@@ -648,31 +661,12 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         }
       }
 
-      //  Icon Set
+      //  Icon Set for Vocabulary
       // ----------------------------------------------------
       $icon_set = $config->get('icon_set');
-      $icon_prefix_1 = $config->get('icon_prefix');
+      $icon_variant = $config->get('icon_variant');
 
       $icon_vocabulary = $config->get('icon_vocabulary');
-
-
-      switch ($icon_set) {
-
-        case 'font_awesome': // 'Font Awesome 5'
-          $icon_prefix = 'fa-';
-          $icon_taxonomy = $icon_prefix_1 . ' fa-' . $icon_vocabulary;
-          break;
-
-        case 'bootstrap_3': // 'Bootstrap 3'
-          $icon_prefix = 'glyphicon glyphicon-';
-          $icon_taxonomy = "glyphicon glyphicon-" . $icon_vocabulary;
-          break;
-
-        default: // 'drupal' is default
-          $icon_prefix = 'ui-icon ui-icon-';
-          $icon_taxonomy = "ui-icon ui-icon-" . $icon_vocabulary;
-          break;
-      }
 
       // Look
       // ----------------------------------------------------
@@ -728,7 +722,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
 
       // Options Icon Prefix
       // -------------------------------
-      $options_icon_prefix = $this->getIconPrefixOption();
+      $options_icon_variant = $this->getIconVariantOption();
 
       // Buttons
       // -------------------------------
@@ -755,12 +749,30 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
           $classes = $button_classes;
         }
 
-        $fp = $this->options[$button_name . '_icon_prefix'];
+        $variant = $this->options[$button_name . '_icon_variant'];
+        $icon_set = $config->get('icon_set');
 
-        if (empty($fp)) {
-          $fp = 0;
+        // Prefix
+        switch ($icon_set) {
+
+          case 'fontawesome': // 'Font Awesome 5'
+            $icon_classes = $icon_variant . ' fa-';
+            break;
+
+          case 'bootstrap_3': // 'Bootstrap 3'
+            $icon_classes = 'glyphicon glyphicon-';
+            break;
+
+          default: // 'drupal' is default
+            $icon_classes = 'ui-icon ui-icon-';
+            break;
         }
-        $fontawesome_prefix = $fp;
+
+
+        if (empty($variant)) {
+          $variant = 0;
+        }
+        $icon_variant = $variant;
 
         foreach ($button_attributes as $button_attribute) {
           $option_name = $button_name . '_' . $button_attribute;
@@ -769,9 +781,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
             case 'icon':
               if ($this->options[$option_name]) {
                 $attribute =
-                  $fontawesome_prefix .
-                  ' ' .
-                  $icon_prefix .
+                  $icon_classes .
                   $this->options[$option_name];
               }
               break;
@@ -815,7 +825,7 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
           }
 
           $attr['active'] = true;
-          $attr['icon'] = $icon_taxonomy;
+          $attr['icon'] = $icon_classes.$icon_vocabulary; // TODO: take last of classes
           $attr['label'] = $label;
           $attr['$machine_name'] = $machine_name;
 
@@ -832,7 +842,10 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         $vocabularies[$i] = $attr;
       }
 
-      return [
+      // Add CSS and JS
+      // library is in Twig File
+
+      $build = [
         '#theme' => 'vat_area',
         '#access' => $access,
         '#buttons' => $buttons,
@@ -840,8 +853,13 @@ class ViewsAdminTools extends TokenizeAreaPluginBase
         '#modal' => $modal,
         '#content' => $content,
         '#look' => $look,
+        '#options' => $this->options,
       ];
+
+      return $build;
     }
+
+
     return [];
   }
 

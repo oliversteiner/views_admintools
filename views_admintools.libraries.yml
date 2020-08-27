@@ -35,3 +35,22 @@ views_admintools.vat_toggle_tag:
       css/vat_toggle_tag.css: {}
   js:
     js/vat_toggle_tag.js: {}
+#
+# Icon Sets
+#
+icon_sets:
+  css:
+    theme:
+      css/icon-sets.css: {}
+  js:
+    js/icon_sets.js: {}
+#
+# Views Area
+#
+views_area:
+  css:
+    theme:
+      css/vat_main.css: {}
+      css/vat-views-area.css: {}
+  js:
+    js/vat_views_area.js: {}

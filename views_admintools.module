@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
+
 /**
  * @file
  *
@@ -8,18 +10,29 @@
 
 function views_admintools_theme()
 {
-    return [
-        'vat_area' => [
-            'render element' => 'view',
-            'template' => 'vat-area',
-            'variables' => [
-                'access' => [],
-                'buttons' => [],
-                'vocabularies' => [],
-                'modal' => [],
-                'content' => [],
-                'look' => [],
-            ],
-        ],
-    ];
+  return [
+    'vat_area' => [
+      'render element' => 'view',
+      'template' => 'vat-area',
+      'variables' => [
+        'access' => [],
+        'buttons' => [],
+        'vocabularies' => [],
+        'modal' => [],
+        'content' => [],
+        'look' => [],
+        'options' => [],
+        'defaults' => ViewsAdmintoolsController::getViewsDefaults()
+      ],
+    ],
+    'icon_sets' => [
+      'render element' => 'children',
+      'template' => 'icon-sets',
+      'variables' => [
+        'icon_sets' => ViewsAdmintoolsController::getIconSets(),
+      ]
+    ],
+  ];
 }
+
+
