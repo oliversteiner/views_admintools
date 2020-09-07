@@ -12,11 +12,6 @@ views_admintools.admin:
   css:
     theme:
       css/vat_main.css: {}
-  js:
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
-    - core/drupal.dialog.ajax
 #
 # Group By
 #
@@ -53,6 +48,3 @@ views_area:
       css/vat-views-area.css: {}
   js:
     js/vat_views_area.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
