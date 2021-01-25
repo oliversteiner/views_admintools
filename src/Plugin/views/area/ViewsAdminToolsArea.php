@@ -665,8 +665,23 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       // ----------------------------------------------------
       $icon_set = $config->get('icon_set');
       $icon_variant = $config->get('icon_variant');
-
       $icon_vocabulary = $config->get('icon_vocabulary');
+
+      // Prefix
+      switch ($icon_set) {
+
+        case 'fontawesome': // 'Font Awesome 5'
+          $icon_classes = $icon_variant . ' fa-';
+          break;
+
+        case 'bootstrap_3': // 'Bootstrap 3'
+          $icon_classes = 'glyphicon glyphicon-';
+          break;
+
+        default: // 'drupal' is default
+          $icon_classes = 'ui-icon ui-icon-';
+          break;
+      }
 
       // Look
       // ----------------------------------------------------
@@ -707,7 +722,7 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       }
 
       // Combine Classes
-      $button_classes = $button_classes . ' ' . $css_class_size;
+      $button_classes .= ' ' . $css_class_size;
 
       // Modal
       // -------------------------------
@@ -720,9 +735,6 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
         ];
       }
 
-      // Options Icon Prefix
-      // -------------------------------
-      $options_icon_variant = $this->getIconVariantOption();
 
       // Buttons
       // -------------------------------
@@ -737,6 +749,8 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
         'modal',
       ];
 
+
+
       for ($i = 1; $i <= 10; $i++) {
         $attr = [];
         $button_name = 'button_b' . $i;
@@ -750,23 +764,8 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
         }
 
         $variant = $this->options[$button_name . '_icon_variant'];
-        $icon_set = $config->get('icon_set');
 
-        // Prefix
-        switch ($icon_set) {
 
-          case 'fontawesome': // 'Font Awesome 5'
-            $icon_classes = $icon_variant . ' fa-';
-            break;
-
-          case 'bootstrap_3': // 'Bootstrap 3'
-            $icon_classes = 'glyphicon glyphicon-';
-            break;
-
-          default: // 'drupal' is default
-            $icon_classes = 'ui-icon ui-icon-';
-            break;
-        }
 
 
         if (empty($variant)) {
@@ -815,6 +814,7 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
         $attr['active'] = false;
 
         $vocabulary_name = 'vocabulary_' . $i;
+
 
         if ($this->options[$vocabulary_name] !== '') {
           $machine_name = $this->options[$vocabulary_name];
