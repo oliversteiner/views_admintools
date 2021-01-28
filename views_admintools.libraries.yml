@@ -1,21 +1,21 @@
 #
 # Main
 #
-views_admintools.main:
+main:
   css:
     theme:
       css/vat_main.css: {}
 #
 # Admin
 #
-views_admintools.admin:
+admin:
   css:
     theme:
       css/vat_main.css: {}
 #
 # Group By
 #
-views_admintools.group_by:
+group_by:
   css:
     theme:
       css/vat_main.css: {}
@@ -23,7 +23,7 @@ views_admintools.group_by:
 #
 # toggle tag
 #
-views_admintools.vat_toggle_tag:
+vat_toggle_tag:
   css:
     theme:
       css/vat_toggle_tag.css: {}
@@ -45,6 +45,7 @@ views_area:
   css:
     theme:
       css/vat_main.css: {}
+      css/vat_group_by.css: { }
       css/vat-views-area.css: {}
   js:
     js/vat_views_area.js: {}
