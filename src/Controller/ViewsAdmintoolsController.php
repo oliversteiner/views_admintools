@@ -100,9 +100,14 @@ class ViewsAdmintoolsController
       ])
     );
 
-    // Button
+    // Button icon replace
     $response->addCommand(
-      new ReplaceCommand('.mollo-button-publish-' . $nid, $icon)
+      new ReplaceCommand('.mollo-button-publish-' . $nid.' a span', $icon)
+    );
+
+    // Button icon replace FontAwesome
+    $response->addCommand(
+      new ReplaceCommand('.mollo-button-publish-' . $nid.' a svg', $icon)
     );
 
     // Message
