@@ -529,6 +529,21 @@ class VatFieldAdminButtons extends FieldPluginBase
               ])
             ];
           }
+
+          // Publish is always modal
+            $elements['publish']['#attributes'] = [
+              'class' => 'use-ajax ' . $class_show_as . ' ' . $class_size,
+              'data-dialog-type' => 'modal',
+
+            ];
+
+          // Delete is always modal
+          $elements['delete']['#attributes'] = [
+            'class' => 'use-ajax ' . $class_show_as . ' ' . $class_size,
+            'data-dialog-type' => 'modal',
+
+          ];
+
         }
       }
 

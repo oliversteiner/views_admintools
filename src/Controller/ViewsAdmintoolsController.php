@@ -100,9 +100,14 @@ class ViewsAdmintoolsController
       ])
     );
 
-    // Button
+    // Button icon replace
     $response->addCommand(
-      new ReplaceCommand('.mollo-button-publish-' . $nid, $icon)
+      new ReplaceCommand('.mollo-button-publish-' . $nid.' a span', $icon)
+    );
+
+    // Button icon replace FontAwesome
+    $response->addCommand(
+      new ReplaceCommand('.mollo-button-publish-' . $nid.' a svg', $icon)
     );
 
     // Message
@@ -110,10 +115,10 @@ class ViewsAdmintoolsController
       new ReplaceCommand(
         '.ajax-container-' . $nid . '',
         '<div class="mollo-message-' .
-        $nid .
-        ' ajax-message-ok">' .
-        $message .
-        '</div>'
+          $nid .
+          ' ajax-message-ok">' .
+          $message .
+          '</div>'
       )
     );
     return $response;
@@ -384,26 +389,25 @@ class ViewsAdmintoolsController
 
   public static function getViewsDefaults()
   {
-
     $config = \Drupal::config('views_admintools.settings');
 
     $list = [
-'set',
-'variant',
-'new',
-'sort',
-'search',
-'edit',
-'publish',
-'unpublish',
-'delete',
-'vocabulary',
-'back',
-'forward',
-];
+      'set',
+      'variant',
+      'new',
+      'sort',
+      'search',
+      'edit',
+      'publish',
+      'unpublish',
+      'delete',
+      'vocabulary',
+      'back',
+      'forward'
+    ];
 
-    foreach($list as $item){
-      $output[$item] = $config->get('icon_'.$item);
+    foreach ($list as $item) {
+      $output[$item] = $config->get('icon_' . $item);
     }
     return $output;
   }
