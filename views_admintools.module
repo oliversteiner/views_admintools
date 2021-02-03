@@ -8,8 +8,7 @@ use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
  */
 
 
-function views_admintools_theme()
-{
+function views_admintools_theme() {
   return [
     'vat_area' => [
       'render element' => 'view',
@@ -22,7 +21,7 @@ function views_admintools_theme()
         'content' => [],
         'look' => [],
         'options' => [],
-        'defaults' => ViewsAdmintoolsController::getViewsDefaults()
+        'defaults' => ViewsAdmintoolsController::getViewsDefaults(),
       ],
     ],
     'icon_sets' => [
@@ -30,9 +29,34 @@ function views_admintools_theme()
       'template' => 'icon-sets',
       'variables' => [
         'icon_sets' => ViewsAdmintoolsController::getIconSets(),
-      ]
+      ],
     ],
   ];
 }
 
 
+/**
+ * Implements hook_views_pre_render().
+ */
+function views_admintools_views_pre_render(\Drupal\views\ViewExecutable $view) {
+  // Get the current display.
+  $display = $view->getDisplay();
+
+  // And get the list of extenders for this display.
+  $extenders = $display->getExtenders();
+  if (!isset($extenders['views_admintools_icon'])) {
+    // If the id of our plugin is not in the list something is wrong.
+    return;
+  }
+
+  // Retrieve the settings of our plugins using our custom plugin method.
+  $iconExtenderValues = $extenders['views_admintools_icon']->getIconExtenderValues();
+
+  // Add the metadata tag for the title value.
+  if (!empty($iconExtenderValues['icon'])) {
+    // Generate a tag name unique for this display.
+   // $view->element['icon'] = $iconExtenderValues['icon'];
+  }
+
+
+}
