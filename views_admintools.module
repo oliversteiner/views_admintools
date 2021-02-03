@@ -54,8 +54,7 @@ function views_admintools_views_pre_render(\Drupal\views\ViewExecutable $view) {
 
   // Add the metadata tag for the title value.
   if (!empty($iconExtenderValues['icon'])) {
-    // Generate a tag name unique for this display.
-   // $view->element['icon'] = $iconExtenderValues['icon'];
+    $view->element['#attached']['drupalSettings']['icon'] = $iconExtenderValues['icon'];
   }
 
 
