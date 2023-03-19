@@ -283,16 +283,15 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       ];
 
 
+      $class_icon = $this->options['button_b' . $i . '_icon'];
 
-        $class_icon = $this->options['button_b' . $i . '_icon'];
-
-        $form['button_b' . $i . 'no_fa'] = [
-          '#type' => 'html',
-          '#value' => '<i class="' . $class_icon . '"></i>',
-          '#prefix' =>
-            '<span class="vat-options-button-inline vat-options-button-fa">',
-          '#suffix' => '</span>',
-        ];
+      $form['button_b' . $i . 'no_fa'] = [
+        '#type' => 'html',
+        '#value' => '<i class="' . $class_icon . '"></i>',
+        '#prefix' =>
+          '<span class="vat-options-button-inline vat-options-button-fa">',
+        '#suffix' => '</span>',
+      ];
 
 
       // Icon Prefix
@@ -585,7 +584,6 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
     ];
 
 
-
   }
 
   /**
@@ -603,8 +601,11 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       // -------------------------------
       $content = false;
 
-      if ($this->options['content_type']) {
+      if (is_array($this->options['content_type'])) {
         $content['type'] = $this->options['content_type'];
+      } else {
+        $content['type'] = [];
+
       }
 
       // Look
@@ -750,7 +751,6 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       ];
 
 
-
       for ($i = 1; $i <= 10; $i++) {
         $attr = [];
         $button_name = 'button_b' . $i;
@@ -764,8 +764,6 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
         }
 
         $variant = $this->options[$button_name . '_icon_variant'];
-
-
 
 
         if (empty($variant)) {
@@ -825,7 +823,7 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
           }
 
           $attr['active'] = true;
-          $attr['icon'] = $icon_classes.$icon_vocabulary; // TODO: take last of classes
+          $attr['icon'] = $icon_classes . $icon_vocabulary; // TODO: take last of classes
           $attr['label'] = $label;
           $attr['$machine_name'] = $machine_name;
 
