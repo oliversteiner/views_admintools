@@ -77,7 +77,6 @@ function views_admintools_views_data_alter(array &$data) {
  * @param $variables
  */
 function views_admintools_preprocess_views_view(&$variables) {
- // $variables['debug'][] = 'views_admintools_preprocess_views_view';
 
   if (!isset($variables['view'])) {
     return;
@@ -85,6 +84,7 @@ function views_admintools_preprocess_views_view(&$variables) {
   $view = $variables['view'];
   // Get the current display.
   $display = $view->getDisplay();
+
 
   // And get the list of extenders for this display.
   $extenders = $display->getExtenders();
