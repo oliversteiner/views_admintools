@@ -132,7 +132,7 @@ class IconExtender extends DisplayExtenderPluginBase {
    *   The head metadata values.
    */
   public function getIconExtenderValues() {
-    return $this->options['views_admintools_icon'] ?? '';
+    return $this->options['views_admintools_icon'] ?? [];
   }
 
 

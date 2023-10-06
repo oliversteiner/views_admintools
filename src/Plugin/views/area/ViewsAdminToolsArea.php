@@ -7,6 +7,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
+use Drupal\views\Plugin\views\area\AreaPluginBase;
 use Drupal\views\Plugin\views\area\TokenizeAreaPluginBase;
 use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
 
@@ -17,7 +18,7 @@ use Drupal\views_admintools\Controller\ViewsAdmintoolsController;
  *
  * @ViewsArea("vat_views_area_admin_tools")
  */
-class ViewsAdminToolsArea extends TokenizeAreaPluginBase
+class ViewsAdminToolsArea extends AreaPluginBase
 {
   /**
    * @return string[]
@@ -589,7 +590,7 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
   /**
    * {@inheritdoc}
    */
-  public function render($empty = false)
+  public function render($empty = false): array
   {
     $config = \Drupal::config('views_admintools.settings');
 
@@ -843,16 +844,20 @@ class ViewsAdminToolsArea extends TokenizeAreaPluginBase
       // Add CSS and JS
       // library is in Twig File
 
+
+
+
       $build = [
-        '#theme' => 'vat_area',
+       // '#theme' => 'vat_area',
         '#access' => $access,
         '#buttons' => $buttons,
         '#vocabularies' => $vocabularies,
         '#modal' => $modal,
-        '#content' => $content,
         '#look' => $look,
         '#options' => $this->options,
+      //  '#content' => $content,
       ];
+
 
       return $build;
     }
